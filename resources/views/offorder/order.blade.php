@@ -250,7 +250,7 @@
 
             // order Submitted
 
-            $('#submip').click(function() {
+            $('#submitp').click(function() {
                 var items = [];
                 var totalbill = $('#total-order').text();
                 $('#orders .order-item').each(function() {
@@ -272,7 +272,7 @@
                 });
 
                 $.ajax({
-                    url: 'http://127.0.0.1:8000/offorder',
+                    url: '{{ url('offorder') }}',
                     type: 'POST',
                     data: {
                         items: items,

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\OffOrderDetails;
 use App\Http\Controllers\Controller;
+use App\Models\OffOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class OffOrderDetailsController extends Controller
 {
@@ -13,9 +15,20 @@ class OffOrderDetailsController extends Controller
      */
     public function index()
     {
-        $items = OffOrderDetails::with('offorder','menu')->get();
+        $items = OffOrderDetails::with('offorder', 'menu')->get();
 
         return view('offorderdetails.index', compact('items'));
+    }
+    public function dailyreport()
+    {
+        $currentDate = Carbon::now();
+        // dd($currentDate);
+        $orderCountD = OffOrderDetails::whereDate('created_at', $currentDate)->count();
+
+        $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
+        $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
+
+        return view('offorderdetails.dailyreport', compact('items', 'orderCountD', 'totalSalesD'));
     }
 
     /**

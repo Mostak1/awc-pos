@@ -17,7 +17,7 @@ class OffOrderController extends Controller
      */
     public function index()
     {
-        $items = OffOrder::with('tab')->get();
+        $items = OffOrder::with('tab','user')->get();
         return view('offorder.index')->with('items', $items);
     }
 

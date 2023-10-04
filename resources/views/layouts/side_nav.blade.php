@@ -33,22 +33,15 @@
                             <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>Table
                             Set
                         </a>
-                        <a href="{{ url('offorder') }}" class="nav-link" rel="noopener noreferrer">
-                            <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>Order
-                            Table
-                        </a>
-                        <a href="{{ url('offorderdetails') }}" class="nav-link" rel="noopener noreferrer">
-                            <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>Order
-                            Details Table
-                        </a>
+
                     </nav>
                 </div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                {{-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                     aria-expanded="false" aria-controls="collapsePages">
                     <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                     Pages
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
+                </a> --}}
                 {{-- <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                     data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
@@ -85,15 +78,15 @@
 
                 <a class="nav-link" href="{{ url('menus') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-utensils"></i></div>
-                    Menu
+                    Food Menu
                 </a>
                 <a class="nav-link" href="{{ url('order') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
-                    Order
+                    Place Order
                 </a>
                 <a class="nav-link" href="{{ url('material') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Material
+                    Food Material
                 </a>
                 <a class="nav-link" href="{{ url('supplier') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-truck-field"></i></div>
@@ -101,28 +94,56 @@
                 </a>
                 <a class="nav-link" href="{{ url('purchase') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i></div>
-                    Purchase
+                    Purchase Material
                 </a>
 
                 <div class="sb-sidenav-menu-heading wc">Addons</div>
-{{-- @dd($roles) --}}
-                <a class="nav-link" href="{{ url('user') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Users
-                </a>
-
-                <a class="nav-link" href="{{ url('role') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Role Set
-                </a>
-                <a class="nav-link" href="{{ url('setting') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Settings
-                </a>
+                {{-- @dd($roles) --}}
+                @if (Auth::check() && Auth::user()->role == 2)
+                    <a class="nav-link" href="{{ url('user') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Users
+                    </a>
 
 
 
+                    <a class="nav-link" href="{{ url('role') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Role Set
+                    </a>
+                    <a class="nav-link" href="{{ url('setting') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Settings
+                    </a>
 
+
+
+                    {{-- report --}}
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Report Manage
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne"
+                        data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested  nav">
+
+                            <a href="{{ url('offorder') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
+                                Table
+                            </a>
+                            <a href="{{ url('offorderdetails') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
+                                Details Table
+                            </a>
+                            <a href="{{ url('dailyreport') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
+                                Daily Sale Report
+                            </a>
+                        </nav>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="sb-sidenav-footer">
