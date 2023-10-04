@@ -41,7 +41,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('subcats/{cid}', [SubcategoryController::class, 'subcats']);
-Route::get('order', [MenuController::class, 'order'])->middleware('checkRole:1');
+Route::get('order', [MenuController::class, 'order']);
+Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
 Route::resources([
     'category' => CategoryController::class,
     'subcategory' =>SubcategoryController ::class,

@@ -17,7 +17,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th colspan="5" class="tablebtn">
+                            <th colspan="5" class="tablebtn text-end">
                             </th>
                         </tr>
                         <tr>
@@ -27,14 +27,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>#</th>
-                            <th>Table Name</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
+                    
                     <tbody>
                         @foreach ($items as $offorder)
                             <tr>

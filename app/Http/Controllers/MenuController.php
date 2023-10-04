@@ -23,14 +23,19 @@ class MenuController extends Controller
     }
     public function order()
     {
-       
+
         $lastOrderId = OffOrder::orderBy('id', 'DESC')->value('id');
         $cats = Category::get();
-        
-        $menus = Menu::with(['category', 'subcategory'])->get();
-        return view('offorder.order', compact('menus', 'lastOrderId','cats'))->with('user', Auth::user());
-    }
 
+        $menus = Menu::with(['category', 'subcategory'])->get();
+        return view('offorder.order', compact('menus', 'lastOrderId', 'cats'))->with('user', Auth::user());
+    }
+    public function catmenu($id)
+    {
+        $catmenu = Menu::where('category_id', $id)->get();
+
+        return response()->json($catmenu);
+    }
 
     public function create()
     {

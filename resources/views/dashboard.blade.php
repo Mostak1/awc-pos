@@ -71,11 +71,11 @@
                         <i class="fas fa-table me-1"></i>
                         Employee List
                     </div>
-                    <div class="card-body">
-                        <table id="dataTable">
+                    <div class="card-body ">
+                        <table id="dataTable" class="w-100">
                             <thead>
                                 <tr>
-                                    <th colspan="6" class="tablebtn">
+                                    <th colspan="6" class="tablebtn text-end">
                                     </th>
                                 <tr>
                                     <th>Name</th>
@@ -86,16 +86,7 @@
                                     <th>Salary</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </tfoot>
+                            
                             <tbody>
                                 <tr>
                                     <td>Tiger Nixon</td>

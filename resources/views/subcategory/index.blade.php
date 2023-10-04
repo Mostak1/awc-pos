@@ -17,7 +17,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th colspan="6" class="tablebtn text-center">
+                        <th colspan="6" class="tablebtn text-end">
                         </th>
                     </tr>
                     <tr>
@@ -27,14 +27,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Category</th>
-                        <th>Name</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
+               
                 <tbody>
                     @foreach ($allsubcat as $subcat)
                         <tr>

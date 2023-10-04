@@ -17,7 +17,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th colspan="5" class="tablebtn">
+                            <th colspan="5" class="tablebtn text-end">
                             </th>
                         </tr>
                         <tr>
@@ -27,15 +27,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                           
-                            <th>Capacity</th>
-                            <th>Action</th>
-                        </tr>
-                    </tfoot>
+                    
                     <tbody>
                         @foreach ($alls as $tab)
                             <tr>

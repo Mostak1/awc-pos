@@ -3,6 +3,9 @@
 @section('css')
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Share+Tech+Mono&display=swap');
+        .r-text{
+            font-size: 18px;
+        }
         @media print {
             * {
                 font-family: 'Oranienbaum', serif;
@@ -28,28 +31,62 @@
     <div class="my-5">
         <div class="card">
             <div class="row m-3">
-                <div class="col-md-3">
-                    <div id="print">
 
-
-                        <div class="fs-3 text-center r-heading">Green Kitchen</div>
-                        <div class="r-text text-center">Islam Tower,Dhanmondi-32(Sukrabad), Mirpur Road,Dhaka-1207 <br>
-                            Mobile No:
-                            09666747470
+                <div class="col-md-8">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search Product" aria-label="Username" aria-describedby="basic-addon1">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+                      </div>
+                    <div class="">
+                        <div class="row row-cols-1 row-cols-md-4 g-4" id="fitem">
+                            @foreach ($menus as $menu)
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <img src="{{ asset('assets/img/menu') }}/{{ $menu->image }}" height="130px"
+                                            class="card-img-top" alt="{{ $menu->image }}">
+                                        <div class="card-body">
+                                            <span class="id d-none">{{ $menu->id }}</span>
+                                            <h5 class="card-title clr name">{{ $menu->name }}</h5>
+                                            <div class="card-text ">
+                                                <span>Price: </span><span class="price"> {{ $menu->price }}</span>TK
+                                                {{-- <span>Quantity:{{ $menu->quantity }}</span> --}}
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button class="btn btn-outline-danger select">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="d-flex justify-content-between my-2">
-                            <div class="r-text ">
-                                Date: @php
-                                    $currentDateTime = date('Y-m-d H:i:s');
-                                    echo $currentDateTime;
-                                @endphp
+                    </div>
 
+                </div>
+                <div class="col-md-4">
+                    <div id="print" class="card p-2">
+
+                        <div class="d-none d-print-block">
+
+
+                            <div class="fs-3 text-center r-heading">Green Kitchen</div>
+                            <div class="r-text text-center">Islam Tower,Dhanmondi-32(Sukrabad), Mirpur Road,Dhaka-1207 <br>
+                                Mobile No:
+                                09666747470
                             </div>
+                            <div class="d-flex justify-content-between my-2">
+                                <div class="r-text ">
+                                    Date: @php
+                                        $currentDateTime = date('Y-m-d H:i:s');
+                                        echo $currentDateTime;
+                                    @endphp
 
-                            <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}</div>
+                                </div>
+
+                                <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}</div>
+                            </div>
                         </div>
                         <ol>
-                            <div class="row r-text">
+                            <div class="row r-text mb-2">
                                 <div class="col-3">
                                     Item Name
                                 </div>
@@ -71,7 +108,7 @@
                             <span id="total-order"></span>
                             <span>TK</span>
                         </div>
-                        <div>
+                        {{-- <div>
                             <span>Tax: </span>
                             <span id="tax">50</span>
                             <span>TK</span>
@@ -85,7 +122,7 @@
                             <span>Ammount to Pay: </span>
                             <span id="total-order2"></span>
                             <span>TK</span>
-                        </div>
+                        </div> --}}
                         <div class="text-center d-none d-print-block">
                             Thank You <br> Please Visit Again <br> Print By:
                             @if (Auth::Check())
@@ -94,49 +131,10 @@
                             <br>
                             <img height="70px" src="{{ asset('assets/img/pngegg.png') }}" alt="">
                         </div>
-                        <button class="btn btn-outline-danger pnone mt-5" id="submitp">Submit Order</button>
                     </div>
+                    <button class="btn btn-outline-danger pnone mt-5" id="submitp">Submit Order</button>
                 </div>
-                <div class="col-md-7">
 
-                    <div class="">
-                        <div class="row row-cols-1 row-cols-md-4 g-4" id="fitem">
-                            @foreach ($menus as $menu)
-                                <div class="col" >
-                                    <div class="card h-100">
-                                        <img src="{{ asset('assets/img/menu') }}/{{ $menu->image }}" height="130px" class="card-img-top" alt="{{ $menu->image }}">
-                                        <div class="card-body">
-                                            <span class="id d-none">{{ $menu->id }}</span>
-                                            <h5 class="card-title clr name">{{ $menu->name }}</h5>
-                                            <div class="card-text ">
-                                                <span>Price: </span><span class="price"> {{ $menu->price }}</span>TK
-                                                {{-- <span>Quantity:{{ $menu->quantity }}</span> --}}
-                                            </div>
-                                            <div class="text-center mt-3">
-                                                <button class="btn btn-outline-danger select">Add</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                   
-                </div>
-                <div class="col-md-2">
-                    <div class="card" style="">
-                        <div class="card-header">
-                            Food Category
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            @foreach ($cats as $cat)
-                                
-                            <li class="list-group-item btn" data-cid="{{$cat->id}}">{{$cat->name}} </li>
-                            @endforeach
-                          
-                        </ul>
-                      </div>
-                </div>
             </div>
 
         </div>
@@ -252,7 +250,7 @@
 
             // order Submitted
 
-            $('#submitp').click(function() {
+            $('#submip').click(function() {
                 var items = [];
                 var totalbill = $('#total-order').text();
                 $('#orders .order-item').each(function() {
@@ -294,7 +292,7 @@
                 location.reload();
             });
 
-            
+
 
         });
     </script>
