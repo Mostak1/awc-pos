@@ -3,9 +3,11 @@
 @section('css')
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Share+Tech+Mono&display=swap');
-        .r-text{
+
+        .r-text {
             font-size: 18px;
         }
+
         @media print {
             * {
                 font-family: 'Oranienbaum', serif;
@@ -34,9 +36,10 @@
 
                 <div class="col-md-8">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Search Product" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" placeholder="Search Product" aria-label="Username"
+                            aria-describedby="basic-addon1">
                         <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
-                      </div>
+                    </div>
                     <div class="">
                         <div class="row row-cols-1 row-cols-md-4 g-4" id="fitem">
                             @foreach ($menus as $menu)
@@ -58,6 +61,10 @@
                                     </div>
                                 </div>
                             @endforeach
+                            <div class="text-end">
+
+                                {{ $menus->links() }}
+                            </div>
                         </div>
                     </div>
 
@@ -112,17 +119,32 @@
                             <span>Tax: </span>
                             <span id="tax">50</span>
                             <span>TK</span>
-                        </div>
+                        </div> --}}
                         <div>
+
+                            <div class="d-print-none">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="dis_input"
+                                        placeholder="Discount Amount In TK" aria-label="Username"
+                                        aria-describedby="basic-addon1">
+                                    <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply
+                                        Discount</span>
+                                </div>
+                                <input type="text" class="form-control" id="reason" placeholder="Reason Of Discount">
+                            </div>
+
+
+                        </div>
+                        <div class="">
                             <span>Discount: </span>
-                            <span id="discount">10</span>
+                            <span id="discount">0</span>
                             <span>TK</span>
                         </div>
                         <div>
                             <span>Ammount to Pay: </span>
                             <span id="total-order2"></span>
                             <span>TK</span>
-                        </div> --}}
+                        </div>
                         <div class="text-center d-none d-print-block">
                             Thank You <br> Please Visit Again <br> Print By:
                             @if (Auth::Check())
@@ -227,32 +249,55 @@
                 $('#total-order').text(subtotal.toFixed(2));
             }
 
-            function payAmount() {
+            $('#apply_dis').click(function() {
+                var disc = parseInt($('#dis_input').val());
+                $('#discount').text(disc);
                 var tbill = parseFloat($('#total-order').text());
                 var tax = parseFloat($('#tax').text());
                 var dis = parseFloat($('#discount').text());
 
-                var pay = (tbill + tax) - (tbill * (dis /
-                    100)); // Adjusted parentheses for correct order of operations
+                var pay = tbill - dis;
+                $('#total-order2').text(pay);
+            })
+
+            function payAmount() {
+
+
+                var tbill = parseFloat($('#total-order').text());
+                var tax = parseFloat($('#tax').text());
+                var dis = parseFloat($('#discount').text());
+
+                var pay = tbill - dis;
                 $('#total-order2').text(pay);
             }
 
 
-            // Printn
-            $('#submitp').click(function() {
-                var printContents = $('#print').html();
-                $(".order-q").removeClass("d-none");
-                var originalContents = document.body.innerHTML;
-                document.body.innerHTML = printContents;
-                window.print();
-                document.body.innerHTML = originalContents;
-            });
+
 
             // order Submitted
 
             $('#submitp').click(function() {
                 var items = [];
                 var totalbill = $('#total-order').text();
+                var discount = $('#discount').text();
+                var reason = $('#reason').val();
+
+
+                if (discount > 0 && reason === "") {
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Input Discount Reason',
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        }
+                    });
+                    // alert('Input Discount Reason');
+                    return; // This will exit the function and prevent further execution
+                }
                 $('#orders .order-item').each(function() {
                     var id = $(this).data('id');
                     var quantity = $(this).find('.order-q').html();
@@ -276,7 +321,9 @@
                     type: 'POST',
                     data: {
                         items: items,
-                        totalbill: totalbill
+                        totalbill: totalbill,
+                        discount: discount,
+                        reason: reason
                     },
                     success: function(response) {
                         if (response.success) {
@@ -288,10 +335,33 @@
                     }
                 });
 
+                // print section
+
+                var printContents = $('#print').html();
+                $(".order-q").removeClass("d-none");
+                var originalContents = document.body.innerHTML;
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+
+
                 $("#orders").empty();
                 location.reload();
-            });
 
+            });
+            // Printn
+            // $('#submitp').click(function() {
+            //     var printContents = $('#print').html();
+            //     $(".order-q").removeClass("d-none");
+            //     var originalContents = document.body.innerHTML;
+            //     document.body.innerHTML = printContents;
+            //     window.print();
+            //     document.body.innerHTML = originalContents;
+
+
+            //     $("#orders").empty();
+            //     location.reload();
+            // });
 
 
         });

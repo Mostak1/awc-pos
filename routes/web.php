@@ -46,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+    Route::get('offorderdaily', [OffOrderController::class, 'dailyreport']);
     Route::get('dailyreport', [OffOrderDetailsController::class, 'dailyreport']);
     Route::get('subcats/{cid}', [SubcategoryController::class, 'subcats']);
     Route::get('order', [MenuController::class, 'order']);

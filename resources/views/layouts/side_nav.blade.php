@@ -12,30 +12,35 @@
                     Dashboard
                 </a>
                 <div class="sb-sidenav-menu-heading wc">Interface</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
-                    aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                    Manage Tables
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                    data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested  nav">
-                        <a href="{{ url('category') }}" class="nav-link" rel="noopener noreferrer">
-                            <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>
-                            Category
-                        </a>
-                        <a href="{{ url('subcategory') }}" class="nav-link" rel="noopener noreferrer">
-                            <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>Sub
-                            Category
-                        </a>
-                        <a href="{{ url('tab') }}" class="nav-link" rel="noopener noreferrer">
-                            <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>Table
-                            Set
-                        </a>
 
-                    </nav>
-                </div>
+                @if (Auth::check() && Auth::user()->role == 2)
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Manage Tables
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                        data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested  nav">
+                            <a href="{{ url('category') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>
+                                Category
+                            </a>
+                            <a href="{{ url('subcategory') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>
+                                Sub
+                                Category
+                            </a>
+                            <a href="{{ url('tab') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-brands fa-mendeley fa-beat-fade"></i></div>
+                                Table
+                                Set
+                            </a>
+
+                        </nav>
+                    </div>
+                @endif
                 {{-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                     aria-expanded="false" aria-controls="collapsePages">
                     <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
@@ -84,22 +89,23 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
                     Place Order
                 </a>
-                <a class="nav-link" href="{{ url('material') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Food Material
-                </a>
-                <a class="nav-link" href="{{ url('supplier') }}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-truck-field"></i></div>
-                    Supplier
-                </a>
-                <a class="nav-link" href="{{ url('purchase') }}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i></div>
-                    Purchase Material
-                </a>
-
-                <div class="sb-sidenav-menu-heading wc">Addons</div>
-                {{-- @dd($roles) --}}
                 @if (Auth::check() && Auth::user()->role == 2)
+                    <a class="nav-link" href="{{ url('material') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Food Material
+                    </a>
+                    <a class="nav-link" href="{{ url('supplier') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-truck-field"></i></div>
+                        Supplier
+                    </a>
+                    <a class="nav-link" href="{{ url('purchase') }}">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i></div>
+                        Purchase Material
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading wc">Report</div>
+                    {{-- @dd($roles) --}}
+
                     <a class="nav-link" href="{{ url('user') }}">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                         Users
@@ -131,16 +137,21 @@
 
                             <a href="{{ url('offorder') }}" class="nav-link" rel="noopener noreferrer">
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
-                                Table
+                                History Report
+                            </a>
+                            <a href="{{ url('offorderdaily') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>
+                                Daily Sale Report of Order
                             </a>
                             <a href="{{ url('offorderdetails') }}" class="nav-link" rel="noopener noreferrer">
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
                                 Details Table
                             </a>
                             <a href="{{ url('dailyreport') }}" class="nav-link" rel="noopener noreferrer">
-                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
-                                Daily Sale Report
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>
+                                Daily Sale Report Order Details
                             </a>
+
                         </nav>
                     </div>
                 @endif

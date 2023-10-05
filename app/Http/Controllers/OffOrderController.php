@@ -9,7 +9,7 @@ use App\Models\OffOrderDetails;
 use App\Models\Tab;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Carbon;
 class OffOrderController extends Controller
 {
     /**
@@ -20,7 +20,19 @@ class OffOrderController extends Controller
         $items = OffOrder::with('tab','user')->get();
         return view('offorder.index')->with('items', $items);
     }
+    public function dailyreport()
+    {
+        $currentDate = Carbon::now();
+        // dd($currentDate);
+        $orderCountD = OffOrder::whereDate('created_at', $currentDate)->count();
 
+        $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
+        $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
+        $items = OffOrder::with('tab','user')->whereDate('created_at', $currentDate)->get();
+        // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
+
+        return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD','totalDisD'));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -39,6 +51,8 @@ class OffOrderController extends Controller
         $order->tab_id = '1';
         $order->user_id = Auth::user()->id;
         $order->total = $request->totalbill;
+        $order->discount = $request->discount;
+        $order->reason = $request->reason;
         $order->save();
 
         foreach ($request->items as $item) {

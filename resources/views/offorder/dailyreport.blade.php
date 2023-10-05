@@ -4,12 +4,12 @@
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h4 class="m-0 font-weight-bold text-info">List of Classes</h4>
-            <div class="">
-                <a class="btn btn-sm btn-info" href="{{ url('order') }}">
-                    <i class="fa-solid fa-plus"></i>
-                    Go To Order
-                </a>
+            <div class="fs-4 text-danger">
+                <span class="me-4">Total Order Item: {{$orderCountD}}</span> 
+                <span class="me-4">Total Sale: {{$totalSalesD}} TK</span> 
+                <span>Total Discount: {{$totalDisD}} TK</span> 
             </div>
+            
         </div>
         <!-- Card Body -->
         <div class="card-body mt-4">

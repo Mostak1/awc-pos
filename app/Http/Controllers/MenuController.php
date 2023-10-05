@@ -27,7 +27,7 @@ class MenuController extends Controller
         $lastOrderId = OffOrder::orderBy('id', 'DESC')->value('id');
         $cats = Category::get();
 
-        $menus = Menu::with(['category', 'subcategory'])->get();
+        $menus = Menu::with(['category', 'subcategory'])->paginate(12);
         return view('offorder.order', compact('menus', 'lastOrderId', 'cats'))->with('user', Auth::user());
     }
     public function catmenu($id)

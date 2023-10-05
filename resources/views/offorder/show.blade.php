@@ -12,7 +12,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr class="text-center">
-                        <th colspan="7" class="tablebtn text-center">
+                        <th colspan="7" class="tablebtn text-end">
                         </th>
                     </tr>
                     <tr>
@@ -25,17 +25,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Order ID</th>
-                        <th>Name</th>
-                        <th>Image</th>
-                        <th>Details</th>
-                        <th>Price</th>>
-                        <th>Action</th>>
-                    </tr>
-                </tfoot>
+                
                 <tbody>
                     @foreach ($items as $item)
                         <tr>
