@@ -27,23 +27,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+// Route::get('/linkstorage', function () {
+//     $targetFolder = base_path().'/storage/app/public';
+//     $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage';
+//     symlink($targetFolder, $linkFolder);
+    
+//  });
 
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+
     Route::get('/',[HomeController::class, 'adminHome'])->name('dashboard');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
-
 
 
     Route::get('offorderdaily', [OffOrderController::class, 'dailyreport']);
@@ -65,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
         'role' => RoleController::class,
         'urole' => UserRoleController::class,
     ]);
+    Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__.'/auth.php';

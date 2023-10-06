@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use Intervention\Image\ImageManagerStatic as Image;
 class MenuController extends Controller
 {
 
@@ -53,7 +53,8 @@ class MenuController extends Controller
             $file = $request->file('image');
             $extention = $file->extension();
             $filename = Str::random(5) . '.' . $extention;
-            $request->image->move(public_path('/assets/img/menu/'), $filename);
+            // $request->image->move(public_path('/assets/img/menu/'), $filename);
+            $path = $request->file('image')->storeAs('menu', $filename, 'public');
         }
         $data = [
             'category_id' => $request->category_id,
@@ -101,18 +102,23 @@ class MenuController extends Controller
         if ($request->hasFile('image')) {
             if ($menu->image) {
                 $exfile = $menu->image;
-                $filePath = public_path('/assets/img/menu/') . $exfile;
-                // Change this to the actual path of the image you want to delete
-                if (File::exists($filePath)) {
-                    File::delete($filePath);
+                if (Storage::disk('public')->exists('menu/' . $exfile)) {
+                    Storage::disk('public')->delete('menu/' . $exfile);
                 }
-                Storage::delete($menu->image);
+                
+                // $filePath = storage_path('menu/') . $exfile;
+                // if (File::exists($filePath)) {
+                //     File::delete($filePath);
+                // }
+                // Storage::delete($menu->image);
             }
             $file = $request->file('image');
             $extention = $file->extension();
 
             $filename = Str::random(5) . '.' . $extention;
-            $request->image->move(public_path('/assets/img/menu/'), $filename);
+            // $request->image->move(public_path('/assets/img/menu/'), $filename);
+            $path = $request->file('image')->storeAs('menu', $filename, 'public');
+
         }
         $data = [
             'category_id' => $request->category_id,

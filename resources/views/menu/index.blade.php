@@ -44,7 +44,7 @@
                                 <td>{{ $menu->category->name }}</td>
                                 <td>{{ $menu->subcategory->name }}</td>
                                 <td> <img class="" height="50px"
-                                        src="{{ asset('assets/img/menu') }}/{{ $menu->image }}"
+                                        src="{{ asset('storage/menu') }}/{{ $menu->image }}"
                                         alt="{{ $menu->image }}" /></td>
                                 <td>{{ $menu->details }}</td>
                                 <td>{{ $menu->price }}</td>
