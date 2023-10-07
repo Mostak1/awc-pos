@@ -8,67 +8,34 @@
             rel="stylesheet"
             href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
         />
-        <!-- <link rel="stylesheet" href="https:/resources/demos/style.css" /> -->
         <style>
             .ui-autocomplete-loading {
                 background: white url("images/ui-anim_basic_16x16.gif") right
                     center no-repeat;
             }
         </style>
-        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="jquery-ui.min.js"></script>
         <script>
             $(document).ready(function () {
                 var data = [];
-                function getData() {
-                    $.getJSON(
-                        "http://127.0.0.1:8000/api/catmenu/1",
-                        function (res) {
-                            $.each(res.entries, function (index, val) {
-                                data.push(val);
-                            });
-                            console.log(data);
-                        }
-                    );
-                    getData();
-                }
+                $.getJSON("http://127.0.0.1:8000/api/catmenu/1", function (result) {
+                    $.each(result, function (i, val) {
+                        data.push(val.name);
+                    });
+                    console.log(data);
+                    $("#birds").autocomplete({
+                        source: data,
+                        minLength: 1
+                    });
+                });
             });
-
-            // $(document).ready(function () {
-            //     alert("okk");
-            //     var data = []; // Initialize an empty array to store the JSON data
-
-            //     $.ajax({
-            //         url: "http://127.0.0.1:8000/catmenu/1", // Replace with your actual URL
-            //         dataType: "json",
-            //         success: function (res) {
-            //             const dataElement = $("#data");
-            //             dataElement.text(JSON.stringify(res, null, 2));
-
-            //             data.push(res); // Push the received JSON data into the 'data' array
-            //         },
-            //         error: function (error) {
-            //             console.error("Error:", error);
-            //         },
-            //     });
-
-            //     console.log(data);
-            // });
         </script>
     </head>
     <body>
         <div class="ui-widget">
             <label for="birds">Birds: </label>
             <input id="birds" />
-        </div>
-
-        <div class="ui-widget" style="margin-top: 2em; font-family: Arial">
-            Result:
-            <div
-                id="log"
-                style="height: 200px; width: 300px; overflow: auto"
-                class="ui-widget-content"
-            ></div>
         </div>
     </body>
 </html>

@@ -40,22 +40,28 @@
                             aria-describedby="basic-addon1">
                         <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
                     </div>
-                    <div class="card  mb-1">
-                        <div class="card-header py-3 d-flex justify-content-between">
-                          
-                            @foreach ($cats as $item)
-                                <div class="btn btn-outline-success catbtn " id="catbtn"><span
-                                        class="cid d-none">{{ $item->id }}</span>{{ $item->name }}</div>
-                            @endforeach
-
-                        </div>
-                    </div>
                     <div class="">
-                        <div class="row row-cols-1 row-cols-md-4 g-4" id="menuContainer">
-
-
-
-
+                        <div class="row row-cols-1 row-cols-md-4 g-4" id="fitem">
+                            @foreach ($menus as $menu)
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <img src="{{ asset('storage/menu') }}/{{ $menu->image }}" height="130px"
+                                            class="card-img-top" alt="{{ $menu->image }}">
+                                        <div class="card-body">
+                                            <span class="id d-none">{{ $menu->id }}</span>
+                                            <h5 class="card-title clr name">{{ $menu->name }}</h5>
+                                            <div class="card-text ">
+                                                <span>Price: </span><span class="price"> {{ $menu->price }}</span>TK
+                                                {{-- <span>Quantity:{{ $menu->quantity }}</span> --}}
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button class="btn btn-outline-danger select">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                           
                         </div>
                     </div>
 
@@ -163,68 +169,7 @@
             }
         });
         $(document).ready(function() {
-            // product show by category
-            function render_quiz_questions(quizzes) {
-                let q = "";
-                quizzes.forEach(menu => {
-                    let html = '';
-
-
-
-                    html +=
-
-                        `<div class="col" >
-                            <div class="card h-100">
-                                    <img src="{{ asset('storage/menu') }}/${ menu.image }" height="130px"
-                                        class="card-img-top" alt="${ menu.image }">
-                                    <div class="card-body">
-                                        <span class="id d-none">${ menu.id }</span>
-                                        <h5 class="card-title clr name">${ menu.name }</h5>
-                                        <div class="card-text ">
-                                            <span>Price: </span><span class="price"> ${ menu.price }</span>TK
-                                            
-                                        </div>
-                                        <div class="text-center mt-3">
-                                            <button class="btn btn-outline-danger select">Add</button>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                        `;
-
-                    q += html;
-
-                });
-                $("#menuContainer").html(q);
-
-            }
-            // mostak
-            $(".catbtn").click(function() {
-                var id = $(this).find('.cid').html();
-                console.log(id);
-                $.ajax({
-                        method: "GET",
-                        url: "{{ url('catmenu') }}/" + (id ?? 1),
-
-
-                        dataType: "json",
-                        success: function(response) {
-                            render_quiz_questions(response);
-                        }
-                    })
-                    .done(function(data) {
-                        if (data.length != 0) {
-                            //show the quiz
-                        } else {
-                            console.log("no quiz in the databaes");
-                        }
-                    });
-            });
-            $("#catbtn").trigger('click');
-
-            // select product from card and input into menu
-            $(document).on('click', '.select', function() {
-            // $('.select').click(function() {
+            $('.select').click(function() {
                 var id = $(this).closest('.col').find('.id').text();
                 var name = $(this).closest('.col').find('.name').text();
                 var price = $(this).closest('.col').find('.price').text();

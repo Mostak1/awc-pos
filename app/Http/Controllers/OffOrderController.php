@@ -46,10 +46,10 @@ class OffOrderController extends Controller
     public function store(Request $request)
     {
 
-        
+        // dd($request->all()); db tranjections
         $order = new OffOrder();
         $order->tab_id = '1';
-        $order->user_id = Auth::user()->id;
+        $order->user_id = Auth::user()->id ?? 1;
         $order->total = $request->totalbill;
         $order->discount = $request->discount;
         $order->reason = $request->reason;

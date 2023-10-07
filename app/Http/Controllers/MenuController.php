@@ -105,12 +105,6 @@ class MenuController extends Controller
                 if (Storage::disk('public')->exists('menu/' . $exfile)) {
                     Storage::disk('public')->delete('menu/' . $exfile);
                 }
-                
-                // $filePath = storage_path('menu/') . $exfile;
-                // if (File::exists($filePath)) {
-                //     File::delete($filePath);
-                // }
-                // Storage::delete($menu->image);
             }
             $file = $request->file('image');
             $extention = $file->extension();

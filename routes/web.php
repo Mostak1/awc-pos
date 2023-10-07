@@ -14,6 +14,7 @@ use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TabController;
 use App\Http\Controllers\UserRoleController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,9 +36,10 @@ use Illuminate\Support\Facades\Route;
 //  });
 
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/catorder', function () {
+    $cats = Category::get();
+    return view('offorder.catorder', compact('cats'));
+});
 
 
     Route::get('/',[HomeController::class, 'adminHome'])->name('dashboard');
@@ -53,6 +55,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('subcats/{cid}', [SubcategoryController::class, 'subcats']);
     Route::get('order', [MenuController::class, 'order']);
     Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
+
+    Route::post('order',[OffOrderController::class, '']);
     Route::resources([
         'category' => CategoryController::class,
         'subcategory' =>SubcategoryController ::class,
@@ -67,6 +71,7 @@ use Illuminate\Support\Facades\Route;
         'role' => RoleController::class,
         'urole' => UserRoleController::class,
     ]);
+
     Route::middleware(['auth'])->group(function () {
 });
 
