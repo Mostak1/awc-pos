@@ -6,10 +6,14 @@ use App\Models\OffOrder;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\OffOrderDetails;
+use App\Models\OrderLog;
 use App\Models\Tab;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
 class OffOrderController extends Controller
 {
     /**
@@ -17,7 +21,7 @@ class OffOrderController extends Controller
      */
     public function index()
     {
-        $items = OffOrder::with('tab','user')->get();
+        $items = OffOrder::with('tab', 'user')->get();
         return view('offorder.index')->with('items', $items);
     }
     public function dailyreport()
@@ -28,10 +32,10 @@ class OffOrderController extends Controller
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
-        $items = OffOrder::with('tab','user')->whereDate('created_at', $currentDate)->get();
+        $items = OffOrder::with('tab', 'user')->whereDate('created_at', $currentDate)->get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
-        return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD','totalDisD'));
+        return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));
     }
     /**
      * Show the form for creating a new resource.
@@ -45,8 +49,10 @@ class OffOrderController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
 
-        // dd($request->all()); db tranjections
+        try {
+        
         $order = new OffOrder();
         $order->tab_id = '1';
         $order->user_id = Auth::user()->id ?? 1;
@@ -68,8 +74,14 @@ class OffOrderController extends Controller
                 $menu->save();
             }
         }
-        return back()->with('success','Order Details Added');
-        // return response()->json(['success' => true]);
+        
+            DB::commit();
+
+            return back()->with('success', 'Order Details Added');
+        }catch (Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'An error occurred while processing the order.');
+        }
     }
     // return view('offorder.order')->with('success','Order Details Added');
 
@@ -100,23 +112,102 @@ class OffOrderController extends Controller
      */
     public function update(Request $request, OffOrder $offorder)
     {
+        $uid = Auth::user()->id;
+
         $data = [
             'tab_id' => $request->tab_id,
             'total' => $request->total,
+            'discount' => $request->discount,
+            'reason' => $request->reason
         ];
-        $offorder->update($data);
-        if ($offorder->save()) {
+        $old = OffOrder::find($offorder->id);
+
+
+        // Perform the update
+        $updateSuccess = $offorder->update($data);
+
+        if ($updateSuccess) {
+
+
+            if ($request->total !== $old->total) {
+                $logData = [
+                    'off_order_id' => $offorder->id,
+                    'user_id' => $uid,
+                    'old' => 'Total Old ' . $offorder->total,
+                    'new' => 'Total New ' . $request->total,
+                    'methode' => 'Update Total'
+                ];
+                $log = OrderLog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+
+            if ($request->discount !== $old->discount) {
+                $logData = [
+                    'off_order_id' => $offorder->id,
+                    'user_id' => $uid,
+                    'old' => 'Discount Old ' . $offorder->discount,
+                    'new' => 'Discount New ' . $request->discount,
+                    'methode' => 'Update Discount'
+                ];
+                $log = OrderLog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+
+            if ($request->reason !== $old->reason) {
+                $logData = [
+                    'off_order_id' => $offorder->id,
+                    'user_id' => $uid,
+                    'old' => 'Reason Old ' . $offorder->reason,
+                    'new' => 'Reason New ' . $request->reason,
+                    'methode' => 'Update Reason'
+                ];
+                $log = OrderLog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+
+            // Insert log entries
+
             return back()->with('success', "Update Successfully!");
         } else {
             return back()->with('error', "Update Failed!!!");
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(OffOrder $offOrder)
     {
-        //
+        if (OffOrder::destroy($offOrder->id)) {
+            $logData = [
+                'off_order_id' => $offOrder->id,
+                'user_id' => Auth::user()->id,
+                'methode' => 'Delete'
+            ];
+            $log = OrderLog::create($logData);
+            if ($log) {
+            } else {
+                return back()->with('info',$log . "Not Insert!");
+            }
+            return back()->with('success', $offOrder->id . ' Deleted!!!!');
+        } else {
+
+            return back()->with('error', $offOrder->id . 'Not Deleted!!!!');
+        }
+    }
+
+
+    // log methode 
+    public function logs(){
+        $items = OrderLog::get();
+        return view('offorder.log', compact('items'));
     }
 }

@@ -30,6 +30,9 @@ class HomeController extends Controller
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)
             
             ->sum('total');
+        $totalDisD = OffOrder::whereDate('created_at', $currentDate)
+            
+            ->sum('discount');
         
 
 
@@ -43,11 +46,17 @@ class HomeController extends Controller
         $totalSalesW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])
             
             ->sum('total');
+        $totalDisW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])
+            
+            ->sum('discount');
 
         // Calculate total sales for the last 30 days
         $totalSalesM = OffOrder::whereBetween('created_at', [$thirtyDaysAgo, $currentDate])
             
             ->sum('total');
+        $totalDisM = OffOrder::whereBetween('created_at', [$thirtyDaysAgo, $currentDate])
+            
+            ->sum('discount');
 
             $salesCountD = OffOrder::whereDate('created_at', $currentDate)
             
@@ -63,7 +72,7 @@ class HomeController extends Controller
           
            
             // dd($role);
-        return view('dashboard')
+        return view('dashboard', compact('totalDisM','totalDisD','totalDisW'))
         ->with('orderCountD', $orderCountD)
         ->with('totalSalesD', $totalSalesD)
         ->with('salesCountD', $salesCountD)

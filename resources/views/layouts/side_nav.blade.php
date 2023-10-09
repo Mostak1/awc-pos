@@ -139,6 +139,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order
                                 History Report
                             </a>
+                            <a href="{{ url('offorderlog') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order Log
+                                History Report
+                            </a>
                             <a href="{{ url('offorderdaily') }}" class="nav-link" rel="noopener noreferrer">
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>
                                 Daily Sale Report of Order
@@ -164,6 +168,6 @@
                 {{ Auth::user()->name }}
             @endif
         </div>
-        <div class="text-muted">Copyright &copy; Test BD 2023</div>
+        <div class="text-muted">Copyright &copy; Green Kitchen 2023</div>
     </nav>
 </div>

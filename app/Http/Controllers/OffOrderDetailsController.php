@@ -76,6 +76,8 @@ class OffOrderDetailsController extends Controller
      */
     public function destroy(OffOrderDetails $offOrderDetails)
     {
-        //
+        if (OffOrderDetails::destroy($offOrderDetails->id)) {
+            return back()->with('success', $offOrderDetails->id . ' Deleted!!!!');
+        }
     }
 }

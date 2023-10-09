@@ -18,7 +18,11 @@
 
                                 Daily Order {{$orderCountD ?? 00}}
 
-                                <div class="card-body">Daily Sell = {{$totalSalesD ?? 00}}TK From {{$salesCountD ?? 00}} Orders</div>
+                                <div class="card-body">
+                                    Daily Sell = {{$totalSalesD ?? 00}}TK From {{$salesCountD ?? 00}} Orders
+                                   <br> <span>Daily Discount = {{$totalDisD ?? 00}}TK </span>
+                                   <br><span>Net Sales = {{$totalSalesD - $totalDisD ?? 00}}TK</span>
+                                </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>
@@ -31,8 +35,11 @@
                             <div class="card-body">
 
                                 Weekly Order {{$orderCountW ?? 00}}
-
-                                <div class="card-body">Weekly Sell = {{$totalSalesW ?? 00}}TK From {{$salesCountW ?? 00}} Orders</div>
+                                <div class="card-body">
+                                    Weekly Sell = {{$totalSalesW ?? 00}}TK From {{$salesCountW ?? 00}} Orders
+                                   <br> <span>Weekly Discount = {{$totalDisW ?? 00}}TK </span>
+                                   <br><span>Net Sales = {{$totalSalesW - $totalDisW ?? 00}}TK</span>
+                                </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>
@@ -47,7 +54,11 @@
 
                                 Monthly Order {{$orderCountM ?? 00}}
 
-                                <div class="card-body">Monthly Sell = {{$totalSalesM ?? 00}}TK From {{$salesCountM ?? 00}} Orders</div>
+                                <div class="card-body">
+                                    Monthly Sell = {{$totalSalesW ?? 00}}TK From {{$salesCountW ?? 00}} Orders
+                                   <br> <span>Monthly Discount = {{$totalDisW ?? 00}}TK </span>
+                                   <br><span>Monthly Sales = {{$totalSalesW - $totalDisW ?? 00}}TK</span>
+                                </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
                                 <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>

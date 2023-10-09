@@ -55,6 +55,10 @@ Route::get('/catorder', function () {
     Route::get('subcats/{cid}', [SubcategoryController::class, 'subcats']);
     Route::get('order', [MenuController::class, 'order']);
     Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
+    Route::get('menu', [MenuController::class, 'menu']);
+
+    // all logs
+    Route::get('offorderlog', [OffOrderController::class, 'logs']);
 
     Route::post('order',[OffOrderController::class, '']);
     Route::resources([

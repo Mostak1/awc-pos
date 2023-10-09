@@ -45,6 +45,7 @@
                             @foreach ($menus as $menu)
                                 <div class="col">
                                     <div class="card h-100">
+                                        
                                         <img src="{{ asset('storage/menu') }}/{{ $menu->image }}" height="130px"
                                             class="card-img-top" alt="{{ $menu->image }}">
                                         <div class="card-body">
@@ -61,7 +62,10 @@
                                     </div>
                                 </div>
                             @endforeach
-                           
+                            <div class="text-end">
+
+                                {{ $menus->links() }}
+                            </div>
                         </div>
                     </div>
 
@@ -185,8 +189,8 @@
                     existingItem.find('.total').text(total);
                 } else {
                     var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
-                        <div class="row">
+                <li class="order-item mb-2" data-id="${id}">
+                    <div class="row">
                                         <div class="col-3">
                                             <div class="order-info d-inline">
                                                 <span class="order-name">${name}</span>
@@ -205,11 +209,11 @@
                                         <div class="col-3">
                                             <button class="pnone btn btn-outline-danger remove-item">Remove</button>
                                         </div>
-                        </div>
+                    </div>
                     
                    
-                    </li> `;
-                                            
+                </li>
+            `;
 
                     $('#orders').append(orderItem);
                 }
@@ -284,7 +288,7 @@
 
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Input Discount Reason'+discount + reason,
+                        title: 'Input Discount Reason',
                         showCancelButton: false,
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
@@ -292,8 +296,8 @@
                             confirmButton: 'btn btn-primary'
                         }
                     });
-                  
-                    return; 
+                    // alert('Input Discount Reason');
+                    return; // This will exit the function and prevent further execution
                 }
                 $('#orders .order-item').each(function() {
                     var id = $(this).data('id');

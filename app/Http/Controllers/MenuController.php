@@ -30,6 +30,11 @@ class MenuController extends Controller
         $menus = Menu::with(['category', 'subcategory'])->paginate(12);
         return view('offorder.order', compact('menus', 'lastOrderId', 'cats'))->with('user', Auth::user());
     }
+    public function menu()
+    {
+        $menus = Menu::with(['category', 'subcategory'])->get();
+        return response()->json($menus);
+    }
     public function catmenu($id)
     {
         $catmenu = Menu::where('category_id', $id)->get();
