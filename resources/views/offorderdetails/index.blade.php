@@ -37,7 +37,7 @@
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->off_order_id }}</td>
                             <td>{{ $item->menu->name }}</td>
-                            <td> <img class="" height="50px" src="{{asset('assets/img/menu')}}/{{ $item->menu->image }}" alt="{{ $item->menu->image }}" /></td>
+                            <td> <img class="" height="50px" src="{{asset('storage/menu')}}/{{ $item->menu->image }}" alt="{{ $item->menu->image }}" /></td>
                             <td>{{ $item->menu->details }}</td>
                             <td>{{ $item->menu->price }}</td>
 

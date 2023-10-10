@@ -85,6 +85,14 @@
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-utensils"></i></div>
                     Food Menu
                 </a>
+                <a class="nav-link" href="{{ url('card') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
+                   Customer Prepaid Card
+                </a>
+                <a class="nav-link" href="{{ url('cardp') }}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
+                   Customer Card Product
+                </a>
                 <a class="nav-link" href="{{ url('order') }}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
                     Place Order

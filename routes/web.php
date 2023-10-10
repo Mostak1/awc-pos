@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CardProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerPrepaidCardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MenuController;
@@ -74,6 +76,8 @@ Route::get('/catorder', function () {
         'purchase' => PurchaseController::class,
         'role' => RoleController::class,
         'urole' => UserRoleController::class,
+        'card' => CustomerPrepaidCardController::class,
+        'cardp' => CardProductController::class
     ]);
 
     Route::middleware(['auth'])->group(function () {
