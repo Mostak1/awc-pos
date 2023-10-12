@@ -15,43 +15,36 @@
 
             <div class="form-group row g-4">
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <div class="col-sm-3 mb-3">
-                        <label for="customer_prepaid_card_id" class="control-label">Card Holder</label>
-                        {!! Form::select('customer_prepaid_card_id', $subscriber, null, [
-                            'required',
-                            'class' => 'form-control',
-                            'id' => 'customer_prepaid_card_id',
-                            'placeholder' => 'Customer Card',
-                        ]) !!}
-    
-                    </div>
+                    <label for="customer_prepaid_card_id" class="control-label">Card Holder</label>
+                    {!! Form::select('customer_prepaid_card_id', $subscriber, null, [
+                        'required',
+                        'class' => 'form-control',
+                        'id' => 'customer_prepaid_card_id',
+                    ]) !!}
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <div class="col-sm-3 mb-3">
-                        <label for="menu_id" class="form-label">Menu :</label>
-                        {!! Form::select('menu_id', $menu, null, [
-                            'required',
-                            'class' => 'form-control',
-                            'id' => 'menu_id',
-                            'placeholder' => 'Menu',
-                        ]) !!}
-    
-                    </div>
+                    <label for="menu_id" class="control-label">Menu :</label>
+                    {!! Form::select('menu_id', $menu, null, [
+                        'required',
+                        'class' => 'form-control',
+                        'id' => 'menu_id',
+                        'placeholder' => 'Menu',
+                    ]) !!}
                 </div>
                 <div class="col-sm-4 mb-3 mb-sm-0">
-                    <label for="total_meal" class="form-label">Total Meal :</label>
+                    <label for="total_meal" class="control-label">Total Meal :</label>
                     {!! Form::number('total_meal', null, [
                         'required',
                         'class' => 'form-control form-control-profile',
                         'id' => 'total_meal',
-                        'placeholder' => 'total_meal',
+                        'placeholder' => 'Total Meal',
                     ]) !!}
                 </div>
-               
-                
+
+
             </div>
 
-           
+
 
             <div class="form-group mt-3">
                 {!! Form::submit('Add card Information', ['class' => 'my-3 btn btn-info']) !!}

@@ -151,6 +151,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Order Log
                                 History Report
                             </a>
+                            <a href="{{ url('menulog') }}" class="nav-link" rel="noopener noreferrer">
+                                <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>Menu Log
+                                History Report
+                            </a>
                             <a href="{{ url('offorderdaily') }}" class="nav-link" rel="noopener noreferrer">
                                 <div class="sb-nav-link-icon"><i class="fa-regular fa-flag"></i></div>
                                 Daily Sale Report of Order

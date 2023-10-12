@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('card_products', function (Blueprint $table) {
+        Schema::create('menulogs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('customer_prepaid_card_id')->unsigned();
-            $table->foreign('customer_prepaid_card_id')->references('id')->on('customer_prepaid_cards');
-            $table->integer('total_meal');
-            $table->integer('consumrd_meal')->nullable();
             $table->bigInteger('menu_id')->unsigned();
             $table->foreign('menu_id')->references('id')->on('menus');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('old');
+            $table->string('new');
+            $table->string('methode');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('card_products');
+        Schema::dropIfExists('menulogs');
     }
 };

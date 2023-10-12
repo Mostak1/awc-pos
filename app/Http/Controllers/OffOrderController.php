@@ -133,8 +133,8 @@ class OffOrderController extends Controller
                 $logData = [
                     'off_order_id' => $offorder->id,
                     'user_id' => $uid,
-                    'old' => 'Total Old ' . $offorder->total,
-                    'new' => 'Total New ' . $request->total,
+                    'old' => 'Total Old: ' . $old->total,
+                    'new' => 'Total New: ' . $request->total,
                     'methode' => 'Update Total'
                 ];
                 $log = OrderLog::create($logData);
@@ -148,8 +148,8 @@ class OffOrderController extends Controller
                 $logData = [
                     'off_order_id' => $offorder->id,
                     'user_id' => $uid,
-                    'old' => 'Discount Old ' . $offorder->discount,
-                    'new' => 'Discount New ' . $request->discount,
+                    'old' => 'Discount Old: ' . $old->discount,
+                    'new' => 'Discount New: ' . $request->discount,
                     'methode' => 'Update Discount'
                 ];
                 $log = OrderLog::create($logData);
@@ -163,8 +163,8 @@ class OffOrderController extends Controller
                 $logData = [
                     'off_order_id' => $offorder->id,
                     'user_id' => $uid,
-                    'old' => 'Reason Old ' . $offorder->reason,
-                    'new' => 'Reason New ' . $request->reason,
+                    'old' => 'Reason Old: ' . $old->reason,
+                    'new' => 'Reason New: ' . $request->reason,
                     'methode' => 'Update Reason'
                 ];
                 $log = OrderLog::create($logData);
@@ -207,7 +207,7 @@ class OffOrderController extends Controller
 
     // log methode 
     public function logs(){
-        $items = OrderLog::get();
+        $items = OrderLog::with('user')->get();
         return view('offorder.log', compact('items'));
     }
 }

@@ -58,9 +58,13 @@ Route::get('/catorder', function () {
     Route::get('order', [MenuController::class, 'order']);
     Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
     Route::get('menu', [MenuController::class, 'menu']);
+    Route::post('cardcheck', [CustomerPrepaidCardController::class, 'cardcheck'])->name('cardcheck');
+    Route::get('cardinfo', [CustomerPrepaidCardController::class, 'cardinfo']);
+    Route::post('getcardinfo', [CustomerPrepaidCardController::class, 'getcardinfo'])->name('getcardinfo');
 
     // all logs
     Route::get('offorderlog', [OffOrderController::class, 'logs']);
+    Route::get('menulog', [MenuController::class, 'logs']);
 
     Route::post('order',[OffOrderController::class, '']);
     Route::resources([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Menulog;
 use App\Models\OffOrder;
 use App\Models\Subcategory;
 use Illuminate\Support\Facades\File;
@@ -115,7 +116,6 @@ class MenuController extends Controller
             $extention = $file->extension();
 
             $filename = Str::random(5) . '.' . $extention;
-            // $request->image->move(public_path('/assets/img/menu/'), $filename);
             $path = $request->file('image')->storeAs('menu', $filename, 'public');
 
         }
@@ -132,20 +132,82 @@ class MenuController extends Controller
             'status' => $request->status ?? 1,
             'featured' => $request->featured ?? 0,
         ];
-
+        $uid = Auth::user()->id;
+        $old = Menu::find($menu->id);
         $menu->update($data);
         if ($menu->save()) {
+            if ($request->name !== $old->name) {
+                $logData = [
+                    'menu_id' => $menu->id,
+                    'user_id' => $uid,
+                    'old' => 'Name Old:'.$old->name,
+                    'new' => 'Name New:'.$request->name,
+                    'methode' => 'Update Name'
+                ];
+                $log = Menulog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+
+            if ($request->price !== $old->price) {
+                $logData = [
+                    'menu_id' => $menu->id,
+                    'user_id' => $uid,
+                    'old' => 'Price Old: ' . $old->price,
+                    'new' => 'Price New: ' . $request->price,
+                    'methode' => 'Update Price'
+                ];
+                $log = Menulog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+            if ($request->quantity !== $old->quantity) {
+                $logData = [
+                    'menu_id' => $menu->id,
+                    'user_id' => $uid,
+                    'old' => 'Quantity Old:'.$old->quantity,
+                    'new' => 'Quantity New:'.$request->quantity,
+                    'methode' => 'Update Quantity'
+                ];
+                $log = Menulog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+            if ($request->discount !== $old->discount) {
+                $logData = [
+                    'menu_id' => $menu->id,
+                    'user_id' => $uid,
+                    'old' => 'Discount Old: ' . $old->discount,
+                    'new' => 'Discount New: ' . $request->discount,
+                    'methode' => 'Update Discount'
+                ];
+                $log = Menulog::create($logData);
+                if ($log) {
+                } else {
+                    return back()->with('info',$log . "Not Insert!");
+                }
+            }
+
             return back()->with('success', "Update Successfully!");
         } else {
             return back()->with('error', "Update Failed!");
         }
     }
 
-
     public function destroy(Menu $menu)
     {
         if (Menu::destroy($menu->id)) {
             return back()->with('success', $menu->id . ' Deleted!!!!');
         }
+    }
+    public function logs(){
+        $items = Menulog::with('user')->get();
+        return view('menu.log', compact('items'));
     }
 }
