@@ -55,3 +55,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div> --}}
 @endif
+{{-- For Laravel Controller Validation --}}
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            title: 'Oops!',
+            text: 'There were some errors with your form.',
+            html: '@foreach ($errors->all() as $error) <div class="alert alert-danger">{{ $error }}</div>@endforeach',
+        });
+    </script>
+@endif
+

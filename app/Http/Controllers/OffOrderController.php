@@ -55,7 +55,7 @@ class OffOrderController extends Controller
         
         $order = new OffOrder();
         $order->tab_id = '1';
-        $order->user_id = Auth::user()->id ?? 1;
+        $order->user_id = Auth::user()->id;
         $order->total = $request->totalbill;
         $order->discount = $request->discount;
         $order->reason = $request->reason;
@@ -80,7 +80,7 @@ class OffOrderController extends Controller
             return back()->with('success', 'Order Details Added');
         }catch (Exception $e) {
             DB::rollback();
-            return back()->with('error', 'An error occurred while processing the order.');
+            return back()->with('error',  'An error  occurred while processing the order.');
         }
     }
     // return view('offorder.order')->with('success','Order Details Added');

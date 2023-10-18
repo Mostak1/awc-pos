@@ -44,7 +44,7 @@
                                 <td>{{ $offorder->created_at}}</td>
                                 
                                 <td class="skip d-flex justify-content-center">
-                                    @if (Auth::check() && Auth::user()->role==2)
+                                
                                     {!! Form::open(['method' => 'delete', 'route' => ['offorder.destroy', $offorder->id], 'id' => 'deleteform']) !!}
                                     <a href="javascript:void(0)" class="btn btn-danger  btn-sm" title="Delete"
                                         onclick="event.preventDefault();if (!confirm('Are you sure?')) return; document.getElementById('deleteform').submit();">
@@ -61,9 +61,9 @@
                                         title="View">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    @else
-                                        Not Available
-                                    @endif
+                                    
+                                        
+                                   
                                     
                                 </td>
                             </tr>

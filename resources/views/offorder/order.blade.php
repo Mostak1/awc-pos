@@ -178,7 +178,7 @@
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Card Number</label>
-                            <input type="text" class="form-control" id="" name="customer_card_number">
+                            <input type="text" class="form-control" id="" name="card_number">
                         </div>
                         <button type="submit" class="btn btn-outline-info">Submit</button>
                     </form>

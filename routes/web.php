@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CardProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerPrepaidCardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MaterialController;
@@ -37,13 +38,15 @@ use Illuminate\Support\Facades\Route;
     
 //  });
 
-
+// Public User Route
+Route::get('cardinfo', [CustomerController::class, 'cardinfo']);
+Route::post('getcardinfo', [CustomerController::class, 'getcardinfo'])->name('getcardinfo');
+// Route::group(['middleware' => ['auth', 'permission']], function() {
+Route::middleware(['auth'])->group(function () {
 Route::get('/catorder', function () {
     $cats = Category::get();
     return view('offorder.catorder', compact('cats'));
 });
-
-
     Route::get('/',[HomeController::class, 'adminHome'])->name('dashboard');
 
 
@@ -58,9 +61,8 @@ Route::get('/catorder', function () {
     Route::get('order', [MenuController::class, 'order']);
     Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
     Route::get('menu', [MenuController::class, 'menu']);
-    Route::post('cardcheck', [CustomerPrepaidCardController::class, 'cardcheck'])->name('cardcheck');
-    Route::get('cardinfo', [CustomerPrepaidCardController::class, 'cardinfo']);
-    Route::post('getcardinfo', [CustomerPrepaidCardController::class, 'getcardinfo'])->name('getcardinfo');
+    Route::post('cardcheck', [CustomerController::class, 'cardcheck'])->name('cardcheck');
+   
 
     // all logs
     Route::get('offorderlog', [OffOrderController::class, 'logs']);
@@ -81,10 +83,11 @@ Route::get('/catorder', function () {
         'role' => RoleController::class,
         'urole' => UserRoleController::class,
         'card' => CustomerPrepaidCardController::class,
-        'cardp' => CardProductController::class
+        'cardp' => CardProductController::class,
+        'customer' => CustomerController::class
     ]);
 
-    Route::middleware(['auth'])->group(function () {
+   
 });
 
 require __DIR__.'/auth.php';

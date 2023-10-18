@@ -26,7 +26,7 @@
             </a>
         </div>
 
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div class="w-full  sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             {{ $slot }}
         </div>
     </div>
@@ -51,7 +51,22 @@
             });
         </script>
     @endif
-
+    @if (session('customer'))
+        <script>
+            Swal.fire({
+                title: 'Customer Information',
+                text: 'There were some errors with your form.',
+                html: `
+                <div class = "text-red-500" >
+                    <p> Name: {{ session('customer.user.name') }}</p>
+                    <p> Email: {{ session('customer.user.email') }}</p>
+                    <p> Consumed Meal: {{ session('customer.consumed_meal') }}</p>
+                    <p>Meal Validity: {{ session('customer.valid_date') }}</p>
+                    </div>
+                    `,
+            });
+        </script>
+    @endif
 </body>
 
 </html>

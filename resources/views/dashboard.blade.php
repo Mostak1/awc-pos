@@ -9,69 +9,75 @@
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
-{{-- @dd(Auth::user()->remember_token) --}}
+                {{-- @dd(Auth::user()->remember_token) --}}
                 <div class="row">
                     <div class="col-xl-3 col-md-6">
-                        <div class="card  h-100 bg-primary text-white mb-4">
+                        <div class="card  h-100 rounded-4 Larger shadow bg-white text-info mb-4">
 
                             <div class="card-body">
-
-                                Daily Order {{$orderCountD ?? 00}}
+                                <i class="fa-solid fa-calendar"></i>
+                                Daily Order {{ $orderCountD ?? 00 }}
 
                                 <div class="card-body">
-                                    Daily Sell = {{$totalSalesD ?? 00}}TK From {{$salesCountD ?? 00}} Orders
-                                   <br> <span>Daily Discount = {{$totalDisD ?? 00}}TK </span>
-                                   <br><span>Net Sales = {{$totalSalesD - $totalDisD ?? 00}}TK</span>
+                                    <i class="fa-solid fa-weight-scale"></i>
+                                    Daily Sell = {{ $totalSalesD ?? 00 }}TK From {{ $salesCountD ?? 00 }} Orders
+                                    <br> <span><i class="fa-solid fa-tags"></i> Daily Discount = {{ $totalDisD ?? 00 }}TK
+                                    </span>
+                                    <br><span><i class="fa-solid fa-cart-arrow-down"></i> Net Sales =
+                                        {{ $totalSalesD - $totalDisD ?? 00 }}TK</span>
                                 </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <a class="small nav-link stretched-link" href="{{ url('offorder') }}">View Details</a>
+                                <div class="small "><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6">
-                        <div class="card h-100 bg-warning text-white mb-4">
-                            <div class="card-body">
+                        <div class="card  h-100 rounded-4 Larger shadow  bg-white text-warning mb-4">
 
-                                Weekly Order {{$orderCountW ?? 00}}
+                            <div class="card-body">
+                                <i class="fa-regular fa-calendar-check"></i>
+                                Weekly Order {{ $orderCountW ?? 00 }}
                                 <div class="card-body">
-                                    Weekly Sell = {{$totalSalesW ?? 00}}TK From {{$salesCountW ?? 00}} Orders
-                                   <br> <span>Weekly Discount = {{$totalDisW ?? 00}}TK </span>
-                                   <br><span>Net Sales = {{$totalSalesW - $totalDisW ?? 00}}TK</span>
+                                    <i class="fa-solid fa-weight-scale"></i>
+                                    Weekly Sell = {{ $totalSalesW ?? 00 }}TK From {{ $salesCountW ?? 00 }} Orders
+                                    <br> <span><i class="fa-solid fa-tags"></i> Weekly Discount = {{ $totalDisW ?? 00 }}TK </span>
+                                    <br><span><i class="fa-solid fa-cart-arrow-down"></i> Net Sales = {{ $totalSalesW - $totalDisW ?? 00 }}TK</span>
                                 </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <a class="small nav-link stretched-link" href="{{ url('offorder') }}">View Details</a>
+                                <div class="small "><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6">
-                        <div class="card h-100 bg-success text-white mb-4">
+                        <div class="card  h-100 rounded-4 Larger shadow bg-white text-success mb-4">
 
                             <div class="card-body">
-
-                                Monthly Order {{$orderCountM ?? 00}}
+                                <i class="fa-regular fa-calendar-days"></i>
+                                Monthly Order {{ $orderCountM ?? 00 }}
 
                                 <div class="card-body">
-                                    Monthly Sell = {{$totalSalesW ?? 00}}TK From {{$salesCountW ?? 00}} Orders
-                                   <br> <span>Monthly Discount = {{$totalDisW ?? 00}}TK </span>
-                                   <br><span>Monthly Sales = {{$totalSalesW - $totalDisW ?? 00}}TK</span>
+                                    <i class="fa-solid fa-weight-scale"></i>
+                                    Monthly Sell = {{ $totalSalesW ?? 00 }}TK From {{ $salesCountW ?? 00 }} Orders
+                                    <br> <span><i class="fa-solid fa-tags"></i> Monthly Discount = {{ $totalDisW ?? 00 }}TK </span>
+                                    <br><span><i class="fa-solid fa-cart-arrow-down"></i> Monthly Sales = {{ $totalSalesW - $totalDisW ?? 00 }}TK</span>
                                 </div>
                             </div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <a class="small nav-link stretched-link" href="{{ url('offorder') }}">View Details</a>
+                                <div class="small "><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-3 col-md-6">
-                        <div class="card h-100 bg-danger text-white mb-4">
+                        <div class="card  h-100 rounded-4 Larger shadow bg-white text-danger mb-4">
                             <div class="card-body">Danger Card</div>
                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" href="{{ url('offorder') }}">View Details</a>
-                                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                <a class="small nav-link stretched-link" href="{{ url('offorder') }}">View Details</a>
+                                <div class="small"><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
                     </div>
@@ -97,7 +103,7 @@
                                     <th>Salary</th>
                                 </tr>
                             </thead>
-                            
+
                             <tbody>
                                 <tr>
                                     <td>Tiger Nixon</td>
