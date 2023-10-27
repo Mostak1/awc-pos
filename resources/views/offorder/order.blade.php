@@ -86,10 +86,10 @@
                         <ol>
                             <div class="row r-text mb-2">
                                 <div class="col-2">
-                                    Item Name
+                                    Item
                                 </div>
                                 <div class="col-2">
-                                    Quantity
+                                    Q
                                 </div>
                                 <div class="col-3">
                                     Price
@@ -279,13 +279,51 @@
                 // Check if an item with the same id already exists
                 var existingItem = $('#orders').find(`.order-item[data-id="${id}"]`);
 
+                  
+             
                 if (existingItem.length > 0) {
                     var quantity = parseInt(existingItem.find('.quantity').val());
                     quantity++;
                     existingItem.find('.quantity').val(quantity);
                     var total = (parseFloat(dis) * quantity).toFixed(2);
                     existingItem.find('.total').text(total);
-                } else {
+                } else if (dis == price) {
+                    var orderItem = `
+                    <li class="order-item mb-2" data-id="${id}">
+                        <div class="row">
+                                        <div class="col-2">
+                                            <div class="order-info d-inline">
+                                                <span class="order-name">${name}</span>
+                                                <span class="order-price d-none">${dis}</span>
+                                                </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
+                                                    <span class="order-q d-none d-print-block"></span>
+                       
+                                        </div>
+                                        <div class="col-3 ">
+                                           
+                                            <span class="">${dis}</span>
+                                            <span >TK</span>
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                            
+                                            <span class="total">${dis}</span>
+                                            <span >TK</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        </div>
+                        </div>
+                    
+                   
+                    </li> `;
+
+
+                    $('#orders').append(orderItem);
+                }else{
                     var orderItem = `
                     <li class="order-item mb-2" data-id="${id}">
                         <div class="row">
