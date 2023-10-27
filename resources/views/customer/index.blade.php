@@ -17,7 +17,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th colspan="13" class="tablebtn text-end">
+                            <th colspan="12" class="tablebtn text-end">
                             </th>
                         </tr>
                         <tr>
@@ -32,7 +32,6 @@
                             <th>Menu</th>
                             <th>Total Meal</th>
                             <th>Consumed Meal</th>
-                            <th>Subscriber</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -51,7 +50,6 @@
                                 <td>{{ $item->menu->name }}</td>
                                 <td>{{ $item->total_meal }}</td>
                                 <td>{{ $item->consumed_meal }}</td>
-                                <td>{{ $item->auth->name }}</td>
                                 <td class="">
                                     <div class="skip d-flex justify-content-center">
 

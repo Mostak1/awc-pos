@@ -85,14 +85,17 @@
                         </div>
                         <ol>
                             <div class="row r-text mb-2">
-                                <div class="col-3">
+                                <div class="col-2">
                                     Item Name
                                 </div>
-                                <div class="col-3">
+                                <div class="col-2">
                                     Quantity
                                 </div>
                                 <div class="col-3">
                                     Price
+                                </div>
+                                <div class="col-2">
+                                    Total
                                 </div>
                             </div>
 
@@ -218,7 +221,13 @@
                                         <span class="id d-none">${ menu.id }</span>
                                         <h5 class="card-title clr name">${ menu.name }</h5>
                                         <div class="card-text ">
-                                            <span>Price: </span><span class="price"> ${ menu.price }</span>TK
+                                            <div class="text-decoration-line-through">
+                                                <span>Price: </span><span class="discount"> ${ menu.price }</span>TK
+                                                </div>
+                                           <div>
+                                            <span>Discount Price:</span>
+                                            <span class="price"> ${menu.price-menu.discount }</span>
+                                            </div>
                                             
                                         </div>
                                         <div class="text-center mt-3">
@@ -264,7 +273,8 @@
                 // $('.select').click(function() {
                 var id = $(this).closest('.col').find('.id').text();
                 var name = $(this).closest('.col').find('.name').text();
-                var price = $(this).closest('.col').find('.price').text();
+                var dis  = $(this).closest('.col').find('.price').text();
+                var price = $(this).closest('.col').find('.discount').text();
 
                 // Check if an item with the same id already exists
                 var existingItem = $('#orders').find(`.order-item[data-id="${id}"]`);
@@ -273,25 +283,36 @@
                     var quantity = parseInt(existingItem.find('.quantity').val());
                     quantity++;
                     existingItem.find('.quantity').val(quantity);
-                    var total = (parseFloat(price) * quantity).toFixed(2);
+                    var total = (parseFloat(dis) * quantity).toFixed(2);
                     existingItem.find('.total').text(total);
                 } else {
                     var orderItem = `
                     <li class="order-item mb-2" data-id="${id}">
                         <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-2">
                                             <div class="order-info d-inline">
                                                 <span class="order-name">${name}</span>
-                                                <span class="order-price d-none">${price}</span>
+                                                <span class="order-price d-none">${dis}</span>
                                                 </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-2">
                                                     <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
                                                     <span class="order-q d-none d-print-block"></span>
                        
                                         </div>
-                                        <div class="col-3">
-                                            <span class="total">${price}</span>
+                                        <div class="col-3 ">
+                                            <div class="text-decoration-line-through">
+                                                
+                                                <span class="">${price}</span>
+                                                <span >TK</span>
+                                                </div>
+                                            <span class="">${dis}</span>
+                                            <span >TK</span>
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                            
+                                            <span class="total">${dis}</span>
                                             <span >TK</span>
                                         </div>
                                         <div class="col-3">
@@ -350,7 +371,6 @@
             })
 
             function payAmount() {
-
 
                 var tbill = parseFloat($('#total-order').text());
                 var tax = parseFloat($('#tax').text());

@@ -25,8 +25,6 @@ return new class extends Migration
             $table->bigInteger('menu_id')->unsigned();
             $table->foreign('menu_id')->references('id')->on('menus');
             $table->set('card_status',['ACTIVE','SUSPEND','BLOCKED'])->nullable();
-            $table->bigInteger('auth_id')->unsigned();
-            $table->foreign('auth_id')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes();
         });

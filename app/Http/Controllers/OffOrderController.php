@@ -32,7 +32,7 @@ class OffOrderController extends Controller
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
-        $items = OffOrder::with('tab', 'user')->whereDate('created_at', $currentDate)->get();
+        $items = OffOrder::with('tab', 'user','offorderdetails')->whereDate('created_at', $currentDate)->get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
         return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));

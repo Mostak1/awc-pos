@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
 
             $table->float("total",10,2);
-            $table->integer('discount');
-            $table->text('reason');
+            $table->integer('discount')->nullable();
+            $table->text('reason')->nullable();
             $table->tinyInteger("active")->unsigned()->default(1);
 
 

@@ -5,12 +5,12 @@
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h4 class="m-0 font-weight-bold text-info">List of Menus</h4>
             <div class="">
-                @if (Auth::check() && Auth::user()->role == 2)
+                
                 <a class="btn btn-sm btn-info" href="{{ url('menus/create') }}">
                     <i class="fa-solid fa-plus"></i>
                     Add
                 </a>
-                @endif
+                
             </div>
         </div>
         <!-- Card Body -->
@@ -52,7 +52,7 @@
                                 <td>{{ $menu->discount }}</td>
                                 <td>
                                     
-                                    @if (Auth::check() && Auth::user()->role == 2)
+                                    
                                     <div class="skip d-flex justify-content-center">
                                         {!! Form::open(['method' => 'delete', 'route' => ['menus.destroy', $menu->id], 'id' => 'deleteform']) !!}
                                         <a href="javascript:void(0)" class="btn btn-danger  btn-sm" title="Delete"
@@ -71,9 +71,7 @@
                                             <i class="fas fa-eye"></i>
                                         </a>
                                     </div>
-                                    @else
-                                    Nothing to Show
-                                    @endif
+                                  
                                 </td>
                             </tr>
                         @endforeach

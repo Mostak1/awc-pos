@@ -19,3 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
+
+Route::get('/menus', [MenuController::class, 'index2']);

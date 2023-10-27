@@ -31,7 +31,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody>
                         @foreach ($items as $offorder)
                             <tr>
@@ -41,30 +41,29 @@
                                 <td>{{ $offorder->discount }}</td>
                                 <td>{{ $offorder->reason }}</td>
                                 <td>{{ $offorder->user->name }}</td>
-                                <td>{{ $offorder->created_at}}</td>
-                                
-                                <td class="skip d-flex justify-content-center">
-                                
-                                    {!! Form::open(['method' => 'delete', 'route' => ['offorder.destroy', $offorder->id], 'id' => 'deleteform']) !!}
-                                    <a href="javascript:void(0)" class="btn btn-danger  btn-sm" title="Delete"
-                                        onclick="event.preventDefault();if (!confirm('Are you sure?')) return; document.getElementById('deleteform').submit();">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </a>
-                                    {!! Form::close() !!}
-                                    &nbsp;
-                                    <a href="{{ url('offorder/' . $offorder->id . '/edit') }}" class="btn btn-info  btn-sm"
-                                        title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    &nbsp;
-                                    <a href="{{ url('offorder/' . $offorder->id) }}" class="btn btn-info  btn-sm"
-                                        title="View">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    
-                                        
-                                   
-                                    
+                                <td>{{ $offorder->created_at }}</td>
+
+                                <td class="">
+                                    <div class="skip d-flex justify-content-center">
+
+                                        {!! Form::open(['method' => 'delete', 'route' => ['offorder.destroy', $offorder->id], 'id' => 'deleteform']) !!}
+                                        <a href="javascript:void(0)" class="btn btn-danger  btn-sm" title="Delete"
+                                            onclick="event.preventDefault();if (!confirm('Are you sure?')) return; document.getElementById('deleteform').submit();">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </a>
+                                        {!! Form::close() !!}
+                                        &nbsp;
+                                        <a href="{{ url('offorder/' . $offorder->id . '/edit') }}"
+                                            class="btn btn-info  btn-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        &nbsp;
+                                        <a href="{{ url('offorder/' . $offorder->id) }}" class="btn btn-info  btn-sm"
+                                            title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </div>
+
                                 </td>
                             </tr>
                         @endforeach

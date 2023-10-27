@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic as Image;
+
+
+
 class MenuController extends Controller
 {
 
@@ -22,6 +24,12 @@ class MenuController extends Controller
         $menus = Menu::with(['category', 'subcategory'])->get();
         return view('menu.index', compact('menus'))->with('user', Auth::user());
     }
+    public function index2()
+    {
+        $menus = Menu::with(['category', 'subcategory'])->get();
+        return response()->json(['menus' => $menus]);
+    }
+
     public function order()
     {
 
@@ -55,13 +63,38 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:subcategories,id',
+            'name' => 'required|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:40', // Max 40kb
+            'details' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'active' => 'boolean',
+            'status' => 'boolean',
+            'featured' => 'boolean',
+        ]);
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extention = $file->extension();
             $filename = Str::random(5) . '.' . $extention;
-            // $request->image->move(public_path('/assets/img/menu/'), $filename);
-            $path = $request->file('image')->storeAs('menu', $filename, 'public');
+
+            $img = \Image::make($file->getRealPath());
+
+            // Resize the image to approximately 40KB
+            $img->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $img->encode('jpg', 60); // Convert to JPEG with quality of 60
+
+            $path = $file->storeAs('menu', $filename, 'public');
         }
+
         $data = [
             'category_id' => $request->category_id,
             'subcategory_id' => $request->subcategory_id,
@@ -75,12 +108,41 @@ class MenuController extends Controller
             'status' => $request->status ?? 1,
             'featured' => $request->featured ?? 0,
         ];
-        // dd($data);
+
         $cat = Menu::create($data);
+
         if ($cat) {
             return back()->with('success', 'Category ' . $cat->id . ' has been created Successfully!');
         }
     }
+    // public function store(Request $request)
+    // {
+    //     if ($request->hasFile('image')) {
+    //         $file = $request->file('image');
+    //         $extention = $file->extension();
+    //         $filename = Str::random(5) . '.' . $extention;
+    //         // $request->image->move(public_path('/assets/img/menu/'), $filename);
+    //         $path = $request->file('image')->storeAs('menu', $filename, 'public');
+    //     }
+    //     $data = [
+    //         'category_id' => $request->category_id,
+    //         'subcategory_id' => $request->subcategory_id,
+    //         'name' => $request->name,
+    //         'image' => $filename ?? '',
+    //         'details' => $request->details,
+    //         'price' => $request->price,
+    //         'quantity' => $request->quantity,
+    //         'discount' => $request->discount,
+    //         'active' => $request->active ?? 1,
+    //         'status' => $request->status ?? 1,
+    //         'featured' => $request->featured ?? 0,
+    //     ];
+    //     // dd($data);
+    //     $cat = Menu::create($data);
+    //     if ($cat) {
+    //         return back()->with('success', 'Category ' . $cat->id . ' has been created Successfully!');
+    //     }
+    // }
 
 
     public function show(Menu $menu)
@@ -117,7 +179,6 @@ class MenuController extends Controller
 
             $filename = Str::random(5) . '.' . $extention;
             $path = $request->file('image')->storeAs('menu', $filename, 'public');
-
         }
         $data = [
             'category_id' => $request->category_id,
@@ -140,14 +201,14 @@ class MenuController extends Controller
                 $logData = [
                     'menu_id' => $menu->id,
                     'user_id' => $uid,
-                    'old' => 'Name Old:'.$old->name,
-                    'new' => 'Name New:'.$request->name,
+                    'old' => 'Name Old:' . $old->name,
+                    'new' => 'Name New:' . $request->name,
                     'methode' => 'Update Name'
                 ];
                 $log = Menulog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
 
@@ -162,21 +223,21 @@ class MenuController extends Controller
                 $log = Menulog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
             if ($request->quantity !== $old->quantity) {
                 $logData = [
                     'menu_id' => $menu->id,
                     'user_id' => $uid,
-                    'old' => 'Quantity Old:'.$old->quantity,
-                    'new' => 'Quantity New:'.$request->quantity,
+                    'old' => 'Quantity Old:' . $old->quantity,
+                    'new' => 'Quantity New:' . $request->quantity,
                     'methode' => 'Update Quantity'
                 ];
                 $log = Menulog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
             if ($request->discount !== $old->discount) {
@@ -190,7 +251,7 @@ class MenuController extends Controller
                 $log = Menulog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
 
@@ -206,7 +267,8 @@ class MenuController extends Controller
             return back()->with('success', $menu->id . ' Deleted!!!!');
         }
     }
-    public function logs(){
+    public function logs()
+    {
         $items = Menulog::with('user')->get();
         return view('menu.log', compact('items'));
     }

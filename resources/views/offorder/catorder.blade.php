@@ -1,9 +1,13 @@
 @extends('layouts.main')
 
-@section('style')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+@section('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .form-check-label {
+            text-transform: capitalize;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -11,7 +15,7 @@
 
         <div class="card card-hover shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between">
-                <h6 class="m-0 font-weight-bold text-info">Dummy Page {{config('setting.c_name')}}</h6>
+                <h6 class="m-0 font-weight-bold text-info">Dummy Page {{ config('setting.c_name') }}</h6>
                 <select class="js-data-example-ajax"></select>
             </div>
 
@@ -19,14 +23,14 @@
                 <section>
 
                     <div class="card  mb-1">
-                        <div class="card-header py-3 d-flex justify-content-between">
-
-                            @foreach ($cats as $item)
-                                <div class="btn btn-outline-success catbtn " id="catbtn"><span
-                                        class="cid">{{ $item->id }}</span>{{ $item->name }}</div>
+                        <label for="password">Assign Category</label>
+                        <select name="roles[]" id="roles" class="form-control select2" multiple>
+                            @foreach ($cats as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
                             @endforeach
-
-                        </div>
+                        </select>
+                        mmmm
+                        <select class="js-data-example-ajax"></select>
                     </div>
                 </section>
 
@@ -53,93 +57,82 @@
         </div>
     </div>
 @endsection
-
 @section('script')
-    <script type="text/javascript">
-        $('.js-data-example-ajax').select2({
-            ajax: {
-                url: 'https://api.github.com/search/repositories',
-                dataType: 'json'
-                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            }
-        });
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
         $(document).ready(function() {
-            // Fetch data from http://127.0.0.1:8000/menu
-
-
-            $('#searchInput').select2({
+            $('.select2').select2();
+            $('.js-data--ajax').select2({
                 ajax: {
-                    url: 'http://127.0.0.1:8000/menu',
+                    url: 'https://api.github.com/search/repositories',
+                    dataType: 'json'
+                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                }
+            });
+            $(".js-data-example-ajax").select2({
+                ajax: {
+                    url: "https://res.awcbd.org/api/menus",
                     dataType: 'json',
-                    processResults: function(data) {
+                    delay: 50,
+                    data: function(params) {
                         return {
-                            results: data
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
                         };
                     },
                     cache: true
                 },
-                minimumInputLength: 1
-                width: "100%",
-                multiple: true,
-                placeholder: "Enter First Name",
-                // templateResult: formatState, // Minimum characters to trigger the search
+                placeholder: 'Search for a repository',
+                minimumInputLength: 1,
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection
             });
 
-
-
-
-            var items = [];
-
-            $.ajax({
-                url: 'http://127.0.0.1:8000/menu', // Replace with your API endpoint
-                method: 'GET', // Use 'POST' for sending data to the server
-                dataType: 'json', // The expected data type
-                success: function(data) {
-
-                    console.log(data);
-                    var menuData = data;
-                    console.log(menuData);
-
-                    var vector = menuData.map(function(item) {
-
-                        var d = {
-                            id: item.id,
-                            text: item.name,
-                        };
-                        items.push(d);
-                        return d;
-                    });
-                    console.log(vector);
-                    $(".prompt").select2({
-                        data: items,
-                        minimumInputLength: 2,
-                        width: "100%",
-                        multiple: true,
-                        placeholder: "Enter First Name",
-                        templateResult: formatState,
-                    });
-                    return items;
-                },
-                error: function(error) {
-
-                    console.error('Error:', error);
+            function formatRepo(repo) {
+                if (repo.loading) {
+                    return repo.text;
                 }
-            });
 
+                var $container = $(
+                    "<div class='select2-result-repository clearfix'>" +
+                    "<div class='select2-result-repository__avatar'><img width='100px' src='https://res.awcbd.org/storage/menu/" +
+                    repo.image +
+                    "' /></div>" +
+                    "<div class='select2-result-repository__meta'>" +
+                    "<div class='select2-result-repository__title'></div>" +
+                    "<div class='select2-result-repository__description'></div>" +
+                    "<div class='select2-result-repository__statistics'>" +
+                    "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> </div>" +
+                    "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> </div>" +
+                    "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> </div>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>"
+                );
 
+                $container.find(".select2-result-repository__title").text(repo.name);
+                $container.find(".select2-result-repository__description").text(repo.details);
+                $container.find(".select2-result-repository__forks").append(repo.price + " Forks");
+                $container.find(".select2-result-repository__stargazers").append(repo.discount + " Stars");
+                $container.find(".select2-result-repository__watchers").append(repo.quantity + " Watchers");
 
-            function formatState(text) {
-                str = "";
-                str +=
-                    "<p style='padding-left: 12px;'>" + text.text + "</p>";
-                var $state = $(str);
-                return $state;
+                return $container;
             }
 
-            function btn_handler() {
-                var data = $(".prompt").select2("data");
-                alert(data[0].text);
+            function formatRepoSelection(repo) {
+                return repo.name || repo.text;
             }
-        });
+
+        })
     </script>
 @endsection

@@ -11,32 +11,34 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function main(){
+    public function main()
+    {
         $user_id = Auth::user()->id;
         $roles = UserRole::where('user_id', $user_id)->get();
         return view('layouts.side_nav', compact('roles'));
     }
-    public function adminHome(){
+    public function adminHome()
+    {
         $currentDate = Carbon::now();
-         // Get date 7 days ago
-         $sevenDaysAgo = Carbon::now()->subDays(7);
+        // Get date 7 days ago
+        $sevenDaysAgo = Carbon::now()->subDays(7);
 
-         // Get date 30 days ago
-         $thirtyDaysAgo = Carbon::now()->subDays(30);
+        // Get date 30 days ago
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
 
 
         $orderCountD = OffOrder::whereDate('created_at', $currentDate)->count();
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)
-            
+
             ->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)
-            
+
             ->sum('discount');
-        
 
 
-            // Count orders for the last 7 days
+
+        // Count orders for the last 7 days
         $orderCountW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])->count();
 
         // Count orders for the last 30 days
@@ -44,43 +46,53 @@ class HomeController extends Controller
 
         // Calculate total sales for the last 7 days
         $totalSalesW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])
-            
+
             ->sum('total');
         $totalDisW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])
-            
+
             ->sum('discount');
 
         // Calculate total sales for the last 30 days
         $totalSalesM = OffOrder::whereBetween('created_at', [$thirtyDaysAgo, $currentDate])
-            
+
             ->sum('total');
         $totalDisM = OffOrder::whereBetween('created_at', [$thirtyDaysAgo, $currentDate])
-            
+
             ->sum('discount');
 
-            $salesCountD = OffOrder::whereDate('created_at', $currentDate)
-            
+        $salesCountD = OffOrder::whereDate('created_at', $currentDate)
+
             ->count();
-            $salesCountW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])
-            
+        $salesCountW = OffOrder::whereBetween('created_at', [$sevenDaysAgo, $currentDate])
+
             ->count();
-            $salesCountM = OffOrder::whereBetween('created_at',[$thirtyDaysAgo, $currentDate])
-            
+        $salesCountM = OffOrder::whereBetween('created_at', [$thirtyDaysAgo, $currentDate])
+
             ->count();
 
-            // dd($orderCountD);
-          
-           
-            // dd($role);
-        return view('dashboard', compact('totalDisM','totalDisD','totalDisW'))
-        ->with('orderCountD', $orderCountD)
-        ->with('totalSalesD', $totalSalesD)
-        ->with('salesCountD', $salesCountD)
-        ->with('orderCountW', $orderCountW)
-        ->with('totalSalesW', $totalSalesW)
-        ->with('salesCountW', $salesCountW)
-        ->with('orderCountM', $orderCountM)
-        ->with('totalSalesM', $totalSalesM)
-        ->with('salesCountM', $salesCountM);
+        // dd($orderCountD);
+        $currentDate = Carbon::now();
+        // dd($currentDate);
+        $orderCountD = OffOrder::whereDate('created_at', $currentDate)->count();
+
+        $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
+        $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
+        
+        $items = OffOrder::with('tab', 'user', 'offorderdetails')->whereDate('created_at', $currentDate)->get();
+        // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
+
+        // return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));
+
+        // dd($role);
+        return view('dashboard', compact('totalDisM', 'totalDisD', 'totalDisW','items'))
+            ->with('orderCountD', $orderCountD)
+            ->with('totalSalesD', $totalSalesD)
+            ->with('salesCountD', $salesCountD)
+            ->with('orderCountW', $orderCountW)
+            ->with('totalSalesW', $totalSalesW)
+            ->with('salesCountW', $salesCountW)
+            ->with('orderCountM', $orderCountM)
+            ->with('totalSalesM', $totalSalesM)
+            ->with('salesCountM', $salesCountM);
     }
 }
