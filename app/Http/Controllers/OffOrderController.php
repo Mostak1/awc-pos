@@ -80,7 +80,7 @@ class OffOrderController extends Controller
             return back()->with('success', 'Order Details Added');
         }catch (Exception $e) {
             DB::rollback();
-            return back()->with('error',  'An error  occurred while processing the order.');
+            return back()->with('error',  'Order Can not submit properly, Please try again.');
         }
     }
     // return view('offorder.order')->with('success','Order Details Added');

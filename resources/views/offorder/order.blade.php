@@ -67,9 +67,9 @@
 
 
                             <div class="fs-3 text-center r-heading">Green Kitchen</div>
-                            <div class="r-text text-center">Islam Tower,Dhanmondi-32(Sukrabad), Mirpur Road,Dhaka-1207 <br>
+                            <div class="r-text text-center">Islam Tower,2nd Floor,102 Shukrabad,Dhanmondi-32,Dhaka-1207 <br>
                                 Mobile No:
-                                09666747470
+                                01979756069
                             </div>
                             <div class="d-flex justify-content-between my-2">
                                 <div class="r-text ">
@@ -89,7 +89,7 @@
                                     Item
                                 </div>
                                 <div class="col-2">
-                                    Q
+                                    Qty
                                 </div>
                                 <div class="col-3">
                                     Price
@@ -131,6 +131,11 @@
                         </div>
                         <div class="">
                             <span>Discount: </span>
+                            <span>20%</span>
+                            
+                        </div>
+                        <div class="">
+                            <span>Special Discount: </span>
                             <span id="discount">0</span>
                             <span>TK</span>
                         </div>
@@ -357,11 +362,7 @@
                                             <button class="pnone btn btn-outline-danger remove-item">Remove</button>
                                         </div>
                         </div>
-                    
-                   
                     </li> `;
-
-
                     $('#orders').append(orderItem);
                 }
 
@@ -404,7 +405,8 @@
                 var tax = parseFloat($('#tax').text());
                 var dis = parseFloat($('#discount').text());
 
-                var pay = tbill - dis;
+                var num = tbill - dis-(tbill*.2);
+                var pay = Math.floor(num / 5) * 5;
                 $('#total-order2').text(pay);
             })
 
@@ -414,13 +416,10 @@
                 var tax = parseFloat($('#tax').text());
                 var dis = parseFloat($('#discount').text());
 
-                var pay = tbill - dis;
+                var num = tbill - dis-(tbill*.2);
+                var pay = Math.floor(num / 5) * 5;
                 $('#total-order2').text(pay);
             }
-
-
-
-
             // order Submitted
 
             $('#submitp').click(function() {
@@ -434,7 +433,22 @@
 
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Input Discount Reason' + discount + reason,
+                        title: 'Input Discount Reason',
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        }
+                    });
+
+                    return;
+                }
+                if (discount == 0 && reason !== "") {
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Apply Discount Or Remove Reason',
                         showCancelButton: false,
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
