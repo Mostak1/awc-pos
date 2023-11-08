@@ -46,7 +46,7 @@ class MenuController extends Controller
     }
     public function catmenu($id)
     {
-        $catmenu = Menu::where('category_id', $id)->get();
+        $catmenu = Menu::with(['category', 'subcategory'])->where('category_id', $id)->get();
 
         return response()->json($catmenu);
     }

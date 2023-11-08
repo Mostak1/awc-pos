@@ -129,11 +129,7 @@
 
 
                         </div>
-                        <div class="">
-                            <span>Discount: </span>
-                            <span>20%</span>
-                            
-                        </div>
+                      
                         <div class="">
                             <span>Special Discount: </span>
                             <span id="discount">0</span>
@@ -231,7 +227,7 @@
                                                 </div>
                                            <div>
                                             <span>Discount Price:</span>
-                                            <span class="price"> ${menu.price-menu.discount }</span>
+                                            <span class="price"> ${menu.price-menu.discount-Math.floor(((menu.category.discount * menu.price)/100)/5)*5 }</span>
                                             </div>
                                             
                                         </div>
@@ -405,9 +401,8 @@
                 var tax = parseFloat($('#tax').text());
                 var dis = parseFloat($('#discount').text());
 
-                var num = tbill - dis-(tbill*.2);
-                var pay = Math.floor(num / 5) * 5;
-                $('#total-order2').text(pay);
+                var num = tbill - dis;
+                $('#total-order2').text(num);
             })
 
             function payAmount() {
@@ -416,9 +411,8 @@
                 var tax = parseFloat($('#tax').text());
                 var dis = parseFloat($('#discount').text());
 
-                var num = tbill - dis-(tbill*.2);
-                var pay = Math.floor(num / 5) * 5;
-                $('#total-order2').text(pay);
+                var num = tbill - dis;
+                $('#total-order2').text(num);
             }
             // order Submitted
 
