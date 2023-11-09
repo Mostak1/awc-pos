@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\OffOrderDetails;
 use App\Models\OrderLog;
+use App\Models\StaffOrder;
 use App\Models\Tab;
 use Exception;
 use Illuminate\Http\Request;
@@ -61,6 +62,13 @@ class OffOrderController extends Controller
         $order->reason = $request->reason;
         $order->save();
 
+        if ($request->staff >0) {
+            $staffor = new StaffOrder();
+            $staffor ->staff_id=$request->staff;
+            $staffor ->off_order_id=$order->id;
+            $staffor ->point=12;
+            $staffor -> save();
+        }
         foreach ($request->items as $item) {
             $orderDetail = new OffOrderDetails();
             $orderDetail->off_order_id = $order->id;

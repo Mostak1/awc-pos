@@ -31,7 +31,7 @@
                 <div class="col-sm-3 mb-3 mb-sm-0">
                     <label for="subcategory_id" class="control-label">Subcategory Name</label>
                     {!! Form::select('subcategory_id', [], null, [
-                        'required',
+                       
                         'class' => 'form-control ',
                         'id' => 'subcategory_id',
                         'placeholder' => 'subcategory_id',

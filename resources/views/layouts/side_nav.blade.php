@@ -114,17 +114,10 @@
                 @if ($user->can('roles.index'))
                     <a class="nav-link" href="{{ url('admins') }}">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                       User Role Set
+                        User Role Set
                     </a>
-                    @endif
-                    <a class="nav-link" href="{{ url('admins') }}">
-                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                       User Role Set
-                    </a>
-                <a class="nav-link" href="{{ url('roles') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Permissions Set On Role
-                </a>
+                @endif
+               
                 @if ($user->can('roles.index'))
                     <a class="nav-link" href="{{ url('roles') }}">
                         <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>

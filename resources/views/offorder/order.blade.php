@@ -1,7 +1,12 @@
 @extends('layouts.main')
-
 @section('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
     <style>
+        .form-check-label {
+            text-transform: capitalize;
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Share+Tech+Mono&display=swap');
 
         .r-text {
@@ -41,12 +46,17 @@
                         <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
                     </div>
                     <div class="card  mb-1">
-                        <div class="card-header py-3 d-flex justify-content-between">
+                        <div class="card-header">
+                            <div class="row row-cols-4 row-cols-md-6 g-3">
 
-                            @foreach ($cats as $item)
-                                <div class="btn btn-outline-success catbtn " id="catbtn"><span
-                                        class="cid d-none">{{ $item->id }}</span>{{ $item->name }}</div>
-                            @endforeach
+                                @foreach ($cats as $item)
+                                    <div class="col">
+
+                                        <div class="btn btn-outline-success catbtn " id="catbtn"><span
+                                                class="cid d-none">{{ $item->id }}</span>{{ $item->name }}</div>
+                                    </div>
+                                @endforeach
+                            </div>
 
                         </div>
                     </div>
@@ -114,22 +124,41 @@
                             <span id="tax">50</span>
                             <span>TK</span>
                         </div> --}}
-                        <div>
+                        <div class="form-row my-2">
+                            <div class="form-group col-md-6 col-sm-6">
+                                <label for="password">Staff Name</label>
+                                <select name="staffs" id="staffs" class="form-control select2">
+                                    @foreach ($staffs as $staff)
+                                        <option value="0">Customer</option>
+                                        <option value="{{ $staff->id }}">{{ $staff->name }} - {{ $staff->employeeId }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="">
 
-                            <div class="d-print-none">
-                                <div class="input-group mb-3">
+                            <div class="d-print-none row">
+                                <div class="col-6">
+
+                                    <input type="text" class="form-control" id="reason"
+                                        placeholder="Reason Of Discount">
+                                </div>
+                                <div class=" col-6">
+                                    <div class=" input-group">
+
+                                    
                                     <input type="text" class="form-control" id="dis_input"
                                         placeholder="Discount Amount In TK" aria-label="Username"
                                         aria-describedby="basic-addon1">
-                                    <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply
-                                        Discount</span>
+                                    <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply</span>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control" id="reason" placeholder="Reason Of Discount">
                             </div>
 
 
                         </div>
-                      
+
                         <div class="">
                             <span>Special Discount: </span>
                             <span id="discount">0</span>
@@ -197,6 +226,12 @@
 @endsection
 
 @section('script')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        })
+    </script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -227,12 +262,14 @@
                                                 </div>
                                            <div>
                                             <span>Discount Price:</span>
-                                            <span class="price"> ${menu.price-menu.discount-Math.floor(((menu.category.discount * menu.price)/100)/5)*5 }</span>
+                                            <span class="price"> ${menu.price-Math.floor(((menu.category.discount * menu.price)/100)/5)*5 }</span>
+                                            <span class="sprice d-none"> ${menu.price-menu.discount-Math.floor(((menu.category.discount * menu.price)/100)/5)*5 }</span>
                                             </div>
                                             
                                         </div>
                                         <div class="text-center mt-3">
                                             <button class="btn btn-outline-danger select">Add</button>
+                                            <button class="btn btn-outline-danger staff">Staff</button>
                                         </div>
                                     </div>
                             </div>
@@ -274,14 +311,14 @@
                 // $('.select').click(function() {
                 var id = $(this).closest('.col').find('.id').text();
                 var name = $(this).closest('.col').find('.name').text();
-                var dis  = $(this).closest('.col').find('.price').text();
+                var dis = $(this).closest('.col').find('.price').text();
                 var price = $(this).closest('.col').find('.discount').text();
 
                 // Check if an item with the same id already exists
                 var existingItem = $('#orders').find(`.order-item[data-id="${id}"]`);
 
-                  
-             
+
+
                 if (existingItem.length > 0) {
                     var quantity = parseInt(existingItem.find('.quantity').val());
                     quantity++;
@@ -324,7 +361,102 @@
 
 
                     $('#orders').append(orderItem);
-                }else{
+                } else {
+                    var orderItem = `
+                    <li class="order-item mb-2" data-id="${id}">
+                        <div class="row">
+                                        <div class="col-2">
+                                            <div class="order-info d-inline">
+                                                <span class="order-name">${name}</span>
+                                                <span class="order-price d-none">${dis}</span>
+                                                </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
+                                                    <span class="order-q d-none d-print-block"></span>
+                       
+                                        </div>
+                                        <div class="col-3 ">
+                                            <div class="text-decoration-line-through">
+                                                
+                                                <span class="">${price}</span>
+                                                <span >TK</span>
+                                                </div>
+                                            <span class="">${dis}</span>
+                                            <span >TK</span>
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                            
+                                            <span class="total">${dis}</span>
+                                            <span >TK</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        </div>
+                        </div>
+                    </li> `;
+                    $('#orders').append(orderItem);
+                }
+
+                updateSubtotal();
+                payAmount();
+            });
+            $(document).on('click', '.staff', function() {
+                // $('.select').click(function() {
+                var id = $(this).closest('.col').find('.id').text();
+                var name = $(this).closest('.col').find('.name').text();
+                var dis = $(this).closest('.col').find('.sprice').text();
+                var price = $(this).closest('.col').find('.discount').text();
+
+                // Check if an item with the same id already exists
+                var existingItem = $('#orders').find(`.order-item[data-id="${id}"]`);
+
+
+
+                if (existingItem.length > 0) {
+                    var quantity = parseInt(existingItem.find('.quantity').val());
+                    quantity++;
+                    existingItem.find('.quantity').val(quantity);
+                    var total = (parseFloat(dis) * quantity).toFixed(2);
+                    existingItem.find('.total').text(total);
+                } else if (dis == price) {
+                    var orderItem = `
+                    <li class="order-item mb-2" data-id="${id}">
+                        <div class="row">
+                                        <div class="col-2">
+                                            <div class="order-info d-inline">
+                                                <span class="order-name">${name}</span>
+                                                <span class="order-price d-none">${dis}</span>
+                                                </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
+                                                    <span class="order-q d-none d-print-block"></span>
+                       
+                                        </div>
+                                        <div class="col-3 ">
+                                           
+                                            <span class="">${dis}</span>
+                                            <span >TK</span>
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                            
+                                            <span class="total">${dis}</span>
+                                            <span >TK</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        </div>
+                        </div>
+                    
+                   
+                    </li> `;
+
+
+                    $('#orders').append(orderItem);
+                } else {
                     var orderItem = `
                     <li class="order-item mb-2" data-id="${id}">
                         <div class="row">
@@ -421,6 +553,7 @@
                 var totalbill = $('#total-order').text();
                 var discount = $('#discount').text();
                 var reason = $('#reason').val();
+                var staff = parseFloat($('#staffs').val());
 
 
                 if (discount > 0 && reason === "") {
@@ -478,7 +611,8 @@
                         items: items,
                         totalbill: totalbill,
                         discount: discount,
-                        reason: reason
+                        reason: reason,
+                        staff: staff,
                     },
                     success: function(response) {
                         if (response.success) {

@@ -24,9 +24,7 @@ Role Page - Admin Panel
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-6 clearfix">
-                @include('components.logout')
-            </div>
+          
         </div>
     </div>
     <!-- page title area end -->

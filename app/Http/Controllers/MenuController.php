@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Menulog;
 use App\Models\OffOrder;
+use App\Models\Staff;
 use App\Models\Subcategory;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -35,9 +36,10 @@ class MenuController extends Controller
 
         $lastOrderId = OffOrder::orderBy('id', 'DESC')->value('id');
         $cats = Category::get();
+        $staffs= Staff::get();
 
         $menus = Menu::with(['category', 'subcategory'])->paginate(12);
-        return view('offorder.order', compact('menus', 'lastOrderId', 'cats'))->with('user', Auth::user());
+        return view('offorder.order', compact('menus', 'lastOrderId', 'cats','staffs'))->with('user', Auth::user());
     }
     public function menu()
     {
@@ -182,7 +184,7 @@ class MenuController extends Controller
         }
         $data = [
             'category_id' => $request->category_id,
-            'subcategory_id' => $request->subcategory_id,
+            'subcategory_id' => $request->subcategory_id ?? $menu->subcategory_id,
             'name' => $request->name,
             'image' => $filename ?? $menu->image,
             'details' => $request->details,
