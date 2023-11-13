@@ -10,7 +10,7 @@ class Staff extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'employeeId',
+        'name', 'employeeId','total_order','total_point'
     ];
  
     public function stafforders(){

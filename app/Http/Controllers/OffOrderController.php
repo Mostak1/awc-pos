@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\OffOrderDetails;
 use App\Models\OrderLog;
+use App\Models\Staff;
 use App\Models\StaffOrder;
 use App\Models\Tab;
 use Exception;
@@ -66,8 +67,15 @@ class OffOrderController extends Controller
             $staffor = new StaffOrder();
             $staffor ->staff_id=$request->staff;
             $staffor ->off_order_id=$order->id;
-            $staffor ->point=12;
+            $staffor ->point=$request->totalbill*.02;
             $staffor -> save();
+
+            $staff = Staff::find($request->staff);
+            if ($staff) {
+                $staff->total_order = $staff->total_order + 1;
+                $staff->total_point = $staff->total_point + $request->totalbill*.02;
+                $staff->save();
+            }
         }
         foreach ($request->items as $item) {
             $orderDetail = new OffOrderDetails();
@@ -79,6 +87,7 @@ class OffOrderController extends Controller
             $menu = Menu::find($item['id']);
             if ($menu) {
                 $menu->quantity = $menu->quantity - $item['quantity'];
+                $menu->hot = $menu->hot + $item['quantity'];
                 $menu->save();
             }
         }

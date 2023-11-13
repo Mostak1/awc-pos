@@ -11,7 +11,7 @@ class Menu extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'category_id', 'subcategory_id', 'name','image', 'details', 'price', 'quantity', 'discount', 'active', 'status', 'featured',
+        'category_id', 'subcategory_id', 'name','image', 'details', 'price', 'quantity', 'discount', 'active', 'status', 'featured','hot',
     ];
 
     public function category(){

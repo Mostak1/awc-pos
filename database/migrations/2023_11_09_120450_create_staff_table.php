@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('employeeId')->unique();
+            $table->string('total_order')->default(0);
+            $table->string('total_point')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

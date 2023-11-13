@@ -10,6 +10,19 @@ class StaffController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function staffinfo()
+    {
+        return view('staff.info');
+    }
+    public function getstaffinfo(Request $request){
+        $staff = Staff::with('stafforders')->where('employeeId', $request->customer_card_number)->first();
+
+        if ($staff) {
+            return redirect()->back()->with('staff',$staff);
+        } else {
+            return redirect()->back()->with('error', 'Customer not found.');
+        }
+    }
     public function index()
     {
         //

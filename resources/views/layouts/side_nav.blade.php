@@ -1,5 +1,5 @@
 <div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav bg-white sidebar text-success-emphasis " id="sidenavAccordion">
+    <nav class="sb-sidenav accordion sb-sidenav text-primary-emphasis aw-bg sidebar text-success-emphasis " id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav mt-2 side-nav">
                 @php
@@ -9,12 +9,12 @@
                 <a class="navbar-brand ps-3 fs-1 text-warning" target="" href="{{ url('/') }}"><img width="150px"
                         src="{{ asset(config('app.logo_path')) }}" alt="Logo">
                 </a>
-                <div class="sb-sidenav-menu-heading wc">Core</div>
+                <div class="sb-sidenav-menu-heading clr">Core</div>
                 <a class="nav-link" href="{{ url('/') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
-                <div class="sb-sidenav-menu-heading wc">Interface</div>
+                <div class="sb-sidenav-menu-heading clr">Interface</div>
 
 
                 @if ($user->can('category.index') || $user->can('subcategory.index') || $user->can('tab.index'))
@@ -61,12 +61,7 @@
                         Food Menu
                     </a>
                 @endif
-                @if ($user->can('card.index'))
-                    <a class="nav-link" href="{{ url('card') }}">
-                        <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
-                        Customer Prepaid Card
-                    </a>
-                @endif
+               
                 @if ($user->can('customer.index'))
                     <a class="nav-link" href="{{ url('customer') }}">
                         <div class="sb-nav-link-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
@@ -102,7 +97,7 @@
 
                 {{-- @endhasanyrole --}}
 
-                <div class="sb-sidenav-menu-heading wc">Report</div>
+                <div class="sb-sidenav-menu-heading clr">Report</div>
                 {{-- @dd($roles) --}}
                 @if ($user->can('users.index'))
                     <a class="nav-link" href="{{ url('users') }}">
@@ -201,13 +196,13 @@
                 {{-- @endif --}}
             </div>
         </div>
-        <div class="sb-sidenav-footer">
+        <div class="sb-sidenav-footer clr">
             <div class="small">Logged in as:</div>
 
             @if (Auth::check())
                 {{ Auth::user()->name }}
             @endif
         </div>
-        <div class="text-muted">Copyright &copy; Green Kitchen 2023</div>
+        <div class=" clr">Copyright &copy; <a href="https://mostaksarker.com/" class="nav-link" target="_blank" rel="noopener noreferrer"> Green Kitchen 2023</a></div>
     </nav>
 </div>

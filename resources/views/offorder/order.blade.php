@@ -61,8 +61,14 @@
                         </div>
                     </div>
                     <div class="">
+
                         <div class="row row-cols-1 row-cols-md-4 g-4" id="menuContainer">
 
+
+
+
+                        </div>
+                        <div class="row row-cols-1 row-cols-md-4 g-4 d-none" id="menuContainer2">
 
 
 
@@ -72,7 +78,8 @@
                 </div>
                 <div class="col-md-4">
                     <div id="print" class="card p-2">
-
+                        {{-- <label for="staffCheckbox">Staff</label>
+                        <input type="checkbox" id="staffCheckbox"> --}}
                         <div class="d-none d-print-block">
 
 
@@ -92,6 +99,9 @@
 
                                 <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}</div>
                             </div>
+                        </div>
+                        <div id="invoiceStaff" class="text-center text-danger fs-4 my-2">
+
                         </div>
                         <ol>
                             <div class="row r-text mb-2">
@@ -126,11 +136,13 @@
                         </div> --}}
                         <div class="form-row my-2">
                             <div class="form-group col-md-6 col-sm-6">
-                                <label for="password">Staff Name</label>
+                                <label for="staffs">Staff Name</label>
                                 <select name="staffs" id="staffs" class="form-control select2">
+                                    <option value="0">Customer</option>
                                     @foreach ($staffs as $staff)
-                                        <option value="0">Customer</option>
-                                        <option value="{{ $staff->id }}">{{ $staff->name }} - {{ $staff->employeeId }}
+                                        <option value="{{ $staff->id }}"
+                                            data-sname="{{ $staff->name }}-{{ $staff->employeeId }}">{{ $staff->name }} -
+                                            {{ $staff->employeeId }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -139,21 +151,21 @@
                         <div class="">
 
                             <div class="d-print-none row">
-                                <div class="col-6">
+                                {{-- <div class="col-6">
 
                                     <input type="text" class="form-control" id="reason"
                                         placeholder="Reason Of Discount">
-                                </div>
-                                <div class=" col-6">
+                                </div> --}}
+                                {{-- <div class=" col-6">
                                     <div class=" input-group">
 
-                                    
-                                    <input type="text" class="form-control" id="dis_input"
-                                        placeholder="Discount Amount In TK" aria-label="Username"
-                                        aria-describedby="basic-addon1">
-                                    <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply</span>
+
+                                        <input type="text" class="form-control" id="dis_input"
+                                            placeholder="Discount Amount In TK" aria-label="Username"
+                                            aria-describedby="basic-addon1">
+                                        <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply</span>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
 
@@ -183,9 +195,13 @@
                         <button class="btn btn-outline-danger pnone mt-5" id="submitp">Submit Order</button>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-outline-info pnone mt-5" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal">
-                            Card Customer
+                            data-bs-target="#exampleModal" id="staffView">
+                            Go TO Staff View
                         </button>
+                        <button type="button" class="btn btn-outline-info mt-5 d-none"  id="customerView">
+                             <i class="fa-solid fa-backward fa-fade"></i>  Back
+                        </button>
+
                     </div>
                 </div>
 
@@ -207,17 +223,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ url('cardcheck') }}">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label">Card Number</label>
-                            <input type="text" class="form-control" id="" name="card_number">
-                        </div>
-                        <button type="submit" class="btn btn-outline-info">Submit</button>
-                    </form>
+                    {{-- <form method="POST" action="{{ url('cardcheck') }}">
+                        @csrf --}}
+                    <div class="mb-3">
+                        <label class="form-label">Manager Password</label>
+                        <input type="password" class="form-control" id="managerPass" name="managerPass">
+                    </div>
+                    {{-- <button type="submit" class="btn btn-outline-info">Submit</button> --}}
+                    <button type="button" class="btn btn-outline-info" id="managerAuth" data-bs-dismiss="modal">Submit</button>
+                    {{-- </form> --}}
                 </div>
                 {{-- <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
                 </div> --}}
             </div>
@@ -240,36 +256,53 @@
         });
         $(document).ready(function() {
             // product show by category
+
+            // Set the inactivity timeout in milliseconds (e.g., 5 minutes)
+            var inactivityTimeout = 3000; // 5 minutes
+
+            var timeout;
+
+            // Function to reset the timeout
+            function resetTimeout() {
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    // Redirect to the previous interface or another page
+                    window.location.href = document.referrer;
+                }, inactivityTimeout);
+            }
+
             function render_quiz_questions(quizzes) {
                 let q = "";
+                let r = "";
                 quizzes.forEach(menu => {
                     let html = '';
 
-
+                    var cDiscount = menu.price - Math.round(((menu.category.discount * menu.price) / 100) /
+                        5) * 5;
+                    var sDiscount = cDiscount - Math.round(((menu.discount * cDiscount) / 100) / 5) * 5;
+                    // var sDiscount = ((menu.discount * cDiscount)/100);
 
                     html +=
 
                         `<div class="col" >
                             <div class="card h-100">
-                                    <img src="{{ asset('storage/menu') }}/${ menu.image }" height="130px"
+                                    <img src="{{ asset('storage/menu') }}/${ menu.image }" height="150px" 
                                         class="card-img-top" alt="${ menu.image }">
                                     <div class="card-body">
                                         <span class="id d-none">${ menu.id }</span>
-                                        <h5 class="card-title clr name">${ menu.name }</h5>
+                                        <h5 class="card-title name">${ menu.name }</h5>
                                         <div class="card-text ">
                                             <div class="text-decoration-line-through">
                                                 <span>Price: </span><span class="discount"> ${ menu.price }</span>TK
                                                 </div>
                                            <div>
                                             <span>Discount Price:</span>
-                                            <span class="price"> ${menu.price-Math.floor(((menu.category.discount * menu.price)/100)/5)*5 }</span>
-                                            <span class="sprice d-none"> ${menu.price-menu.discount-Math.floor(((menu.category.discount * menu.price)/100)/5)*5 }</span>
+                                            <span  class="price customer"> ${cDiscount }</span>
                                             </div>
                                             
                                         </div>
                                         <div class="text-center mt-3">
                                             <button class="btn btn-outline-danger select">Add</button>
-                                            <button class="btn btn-outline-danger staff">Staff</button>
                                         </div>
                                     </div>
                             </div>
@@ -279,9 +312,102 @@
                     q += html;
 
                 });
+                quizzes.forEach(menu => {
+                    let html = '';
+
+                    var cDiscount = menu.price - Math.round(((menu.category.discount * menu.price) / 100) /
+                        5) * 5;
+                    var sDiscount = cDiscount - Math.round(((menu.discount * cDiscount) / 100) / 5) * 5;
+                    // var sDiscount = ((menu.discount * cDiscount)/100);
+
+                    html +=
+
+                        `<div class="col" >
+                            <div class="card h-100">
+                                    <img src="{{ asset('storage/menu') }}/${ menu.image }" height="150px" 
+                                        class="card-img-top" alt="${ menu.image }">
+                                    <div class="card-body">
+                                        <span class="id d-none">${ menu.id }</span>
+                                        <h5 class="card-title name text-danger">${ menu.name }</h5>
+                                        <div class="card-text ">
+                                            <div class="text-decoration-line-through">
+                                                <span>Price: </span><span class="discount"> ${ menu.price }</span>TK
+                                                </div>
+                                           <div>
+                                            <span>Discount Price:</span>
+                                            <span  class="sprice staff"> ${sDiscount}</span>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button class="btn btn-outline-danger staff">Staff</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        `;
+
+                    r += html;
+
+                });
                 $("#menuContainer").html(q);
+                $("#menuContainer2").html(r);
 
             }
+            $('#customerView').click(function() {
+                $('#menuContainer2').addClass('d-none');
+                    $('#menuContainer').removeClass('d-none');
+                    
+                    $('#customerView').addClass('d-none');
+                    $('#staffView').removeClass('d-none');
+
+                    $('.customer').removeClass('d-none');
+                    let sName = $('#staffs').data('sname');
+
+                    $('#invoiceStaff').text('');
+                    $('#orders').text('');
+
+            });
+            $('#managerAuth').click(function() {
+                const managerPass = $('#managerPass').val();
+                console.log(managerPass);
+                // return;
+                if (managerPass === 'A123') {
+                    $('#orders').text('');
+                    $('#menuContainer2').removeClass('d-none');
+                    $('#menuContainer').addClass('d-none');
+                    
+                    $('#customerView').removeClass('d-none');
+                    $('#staffView').addClass('d-none');
+
+                    $('.customer').addClass('d-none');
+                    let sName = $('#staffs').data('sname');
+
+                    $('#invoiceStaff').text('Staff-Invoice');
+
+                    $(document).on('mousemove keydown', function() {
+                        resetTimeout();
+                    });
+                    // resetTimeout();
+                } else {
+
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pleace Contact With Management',
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        }
+                    });
+                }
+
+
+
+            });
+
             // mostak
             $(".catbtn").click(function() {
                 var id = $(this).find('.cid').html();
@@ -513,6 +639,11 @@
                 updateSubtotal();
                 payAmount();
             });
+            $(document).on('click', '.staff', function() {
+                $(this).closest('.order-item').remove();
+                updateSubtotal();
+                payAmount();
+            });
 
             function updateSubtotal() {
                 var subtotal = 0;
@@ -554,13 +685,17 @@
                 var discount = $('#discount').text();
                 var reason = $('#reason').val();
                 var staff = parseFloat($('#staffs').val());
+                var sInvoice = $('#invoiceStaff').text();
+                let selectedOption = $('#staffs').find(':selected');
 
-
-                if (discount > 0 && reason === "") {
+                // Get the values of the 'data-sname' attribute and the text content
+                let sNameAttribute = selectedOption.data('sname');
+                let sNameText = selectedOption.text();
+                if (sInvoice === "Staff-Invoice" && staff === 0) {
 
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Input Discount Reason',
+                        title: 'Input Staff Name',
                         showCancelButton: false,
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
@@ -571,21 +706,22 @@
 
                     return;
                 }
-                if (discount == 0 && reason !== "") {
 
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Apply Discount Or Remove Reason',
-                        showCancelButton: false,
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            confirmButton: 'btn btn-primary'
-                        }
-                    });
+                // if (discount == 0 && reason !== "") {
 
-                    return;
-                }
+                //     Swal.fire({
+                //         icon: 'warning',
+                //         title: 'Apply Discount Or Remove Reason',
+                //         showCancelButton: false,
+                //         showConfirmButton: true,
+                //         confirmButtonText: 'OK',
+                //         customClass: {
+                //             confirmButton: 'btn btn-primary'
+                //         }
+                //     });
+
+                //     return;
+                // }
                 $('#orders .order-item').each(function() {
                     var id = $(this).data('id');
                     var quantity = $(this).find('.order-q').html();
@@ -611,7 +747,7 @@
                         items: items,
                         totalbill: totalbill,
                         discount: discount,
-                        reason: reason,
+                        reason: sNameText,
                         staff: staff,
                     },
                     success: function(response) {

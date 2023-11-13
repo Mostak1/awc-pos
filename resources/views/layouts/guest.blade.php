@@ -67,6 +67,22 @@
             });
         </script>
     @endif
+    @if (session('staff'))
+        <script>
+            Swal.fire({
+                title: 'Customer Information',
+                text: 'There were some errors with your form.',
+                html: `
+                <div class = "text-red-500" >
+                    <p> Name: {{ session('staff.name') }}</p>
+                    <p> ID: {{ session('staff.employeeId') }}</p>
+                    <p> Total Order: {{ session('staff.total_order') }}</p>
+                    <p> Points: {{ session('staff.total_point') }}</p>
+                    </div>
+                    `,
+            });
+        </script>
+    @endif
 </body>
 
 </html>

@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TabController;
@@ -41,6 +42,10 @@ use Illuminate\Support\Facades\Route;
 //     symlink($targetFolder, $linkFolder);
 
 //  });
+Route::get('cardinfo', [CustomerController::class, 'cardinfo']);
+Route::post('getcardinfo', [CustomerController::class, 'getcardinfo'])->name('getcardinfo');
+Route::get('staffinfo', [StaffController::class, 'staffinfo']);
+Route::post('staffinfo', [StaffController::class, 'getstaffinfo'])->name('getstaffinfo');
 Auth::routes();
 Route::resource('admins', AdminsController::class);
 Route::resource('users', UsersController::class);
@@ -77,8 +82,7 @@ Route::get('order', [MenuController::class, 'order'])->name('order');
 Route::get('catmenu/{id}', [MenuController::class, 'catmenu']);
 Route::get('menu', [MenuController::class, 'menu']);
 Route::post('cardcheck', [CustomerController::class, 'cardcheck'])->name('cardcheck');
-Route::get('cardinfo', [CustomerController::class, 'cardinfo']);
-Route::post('getcardinfo', [CustomerController::class, 'getcardinfo'])->name('getcardinfo');
+
 
 // all logs
 Route::get('offorderlog', [OffOrderController::class, 'logs'])->name('offorderlog');

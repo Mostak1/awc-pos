@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string("image");
             $table->float("price",10,2);
             $table->integer("quantity")->unsigned();
+            $table->integer("hot")->unsigned()->default(0);
             $table->integer("discount")->unsigned()->default(0);
             $table->tinyInteger("active")->unsigned()->default(1);
             $table->tinyInteger("status")->unsigned()->default(1);
