@@ -11,9 +11,9 @@ class OffOrderDetails extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'off_order_id', 'menu_id', 'quantity',
+        'off_order_id', 'menu_id', 'quantity','total',
     ];
-    public function offorder()
+    public function off_order()
     {
         return $this->belongsTo(OffOrder::class);
     }

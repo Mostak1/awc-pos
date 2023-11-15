@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete("cascade");
 
             $table->integer("quantity")->unsigned();
+            $table->integer("total")->unsigned();
 
 
 

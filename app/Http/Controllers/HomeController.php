@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\OffOrder;
+use App\Models\OffOrderDetails;
 use App\Models\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -77,14 +78,16 @@ class HomeController extends Controller
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
-        
+
         $items = OffOrder::with('tab', 'user', 'offorderdetails')->whereDate('created_at', $currentDate)->get();
+        $orderDetails = OffOrderDetails::with('menu', 'off_order')->get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
         // return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));
 
         // dd($role);
-        return view('dashboard', compact('totalDisM', 'totalDisD', 'totalDisW','items'))
+
+        return view('dashboard', compact('totalDisM', 'totalDisD', 'totalDisW', 'items', 'orderDetails'))
             ->with('orderCountD', $orderCountD)
             ->with('totalSalesD', $totalSalesD)
             ->with('salesCountD', $salesCountD)
@@ -94,5 +97,11 @@ class HomeController extends Controller
             ->with('orderCountM', $orderCountM)
             ->with('totalSalesM', $totalSalesM)
             ->with('salesCountM', $salesCountM);
+    }
+
+    public function offorderDetailsapi()
+    {
+        $orderDetails = OffOrderDetails::with('menu', 'off_order')->get();
+         return response()->json($orderDetails);
     }
 }

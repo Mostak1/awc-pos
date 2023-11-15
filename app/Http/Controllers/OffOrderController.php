@@ -82,6 +82,7 @@ class OffOrderController extends Controller
             $orderDetail->off_order_id = $order->id;
             $orderDetail->menu_id = $item['id'];
             $orderDetail->quantity = $item['quantity'];
+            $orderDetail->total=$item['total'];
             $orderDetail->save();
 
             $menu = Menu::find($item['id']);

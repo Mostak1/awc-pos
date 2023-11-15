@@ -725,10 +725,12 @@
                 $('#orders .order-item').each(function() {
                     var id = $(this).data('id');
                     var quantity = $(this).find('.order-q').html();
+                    var total = $(this).find('.total').html();
 
                     items.push({
                         id: id,
-                        quantity: quantity
+                        quantity: quantity,
+                        total: total
                     });
                 });
 

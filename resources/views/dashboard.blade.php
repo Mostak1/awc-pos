@@ -149,6 +149,36 @@
                             </div>
                         </div>
                     </div>
+                    <div class="p-4 rounded-4 Larger shadow  bg-white card-hover  my-5">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h4 class="m-0 font-weight-bold text-info">Daily Order</h4>
+
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body mt-4">
+                            <label for="filterDate">Filter by Date:</label>
+                            <input type="date" id="filterDate">
+                            <button onclick="filterData()">Apply Filter</button>
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="orderDetails" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Menu ID</th>
+                                            <th>Menu Name</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 <!-- changed content  ends-->
@@ -157,4 +187,132 @@
         </div>
         <h3>Dashboaard Home</h3>
     </div>
+@endsection
+
+@section('script')
+    {{-- <script>
+        $(document).ready(function() {
+            // Make an AJAX request to your API
+            $.ajax({
+                // url: 'http://localhost/acrh/role-permission/public/orderdetailsapi',
+                url: '{{ url('orderdetailsapi') }}',
+                method: 'GET',
+                success: function(data) {
+                    // Process the received data
+                    // console.log(data);
+                    processData(data);
+                },
+                error: function(error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+
+            // Function to process and display the data
+            function processData(data) {
+                // Create an object to store aggregated data based on menu id
+                var aggregatedData = {};
+
+                // Iterate through each order in the data
+                data.forEach(function(order) {
+                    var menuId = order.menu_id;
+
+                    // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+                    if (!aggregatedData[menuId]) {
+                        aggregatedData[menuId] = {
+                            quantity: order.quantity,
+                            total: order.total
+                        };
+                    } else {
+                        aggregatedData[menuId].quantity += order.quantity;
+                        aggregatedData[menuId].total += order.total;
+                    }
+                });
+
+                // Display the aggregated data in the table
+                var tbody = $('#orderDetails tbody');
+                for (var menuId in aggregatedData) {
+                    var row = '<tr><td>' + menuId + '</td><td>' + aggregatedData[menuId].quantity + '</td><td>' +
+                        aggregatedData[menuId].total + '</td></tr>';
+                    tbody.append(row);
+                }
+            }
+        });
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+            var filterDateInput = $('#filterDate');
+            var tbody = $('#orderDetails tbody');
+
+            // Initial load
+            fetchData();
+
+            // Function to make an AJAX request and process the data
+            function fetchData() {
+                $.ajax({
+                    url: 'http://localhost/acrh/role-permission/public/orderdetailsapi',
+                    method: 'GET',
+                    success: function(data) {
+                        processData(data);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            // Function to process and display the data
+            function processData(data) {
+                // Clear existing rows
+                tbody.empty();
+
+                // Create an object to store aggregated data based on menu id
+                var aggregatedData = {};
+
+                // Iterate through each order in the data
+                data.forEach(function(order) {
+                    var menuId = order.menu_id;
+
+                    // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+                    if (!aggregatedData[menuId]) {
+                        aggregatedData[menuId] = {
+                            menuName: order.menu.name,
+                            date: order.created_at,
+                            quantity: order.quantity,
+                            total: order.total
+                        };
+                    } else {
+                        aggregatedData[menuId].quantity += order.quantity;
+                        aggregatedData[menuId].total += order.total;
+                    }
+                });
+
+                // Display the aggregated data in the table
+                for (var menuId in aggregatedData) {
+                    var row = '<tr><td>' + menuId + '</td><td>' + aggregatedData[menuId].menuName + '</td><td>' +
+                        aggregatedData[menuId].quantity + '</td><td>' + aggregatedData[menuId].total + '</td><td>' +
+                        aggregatedData[menuId].date + '</td></tr>';
+                    tbody.append(row);
+                }
+            }
+
+            // Function to filter data based on the selected date
+            window.filterData = function() {
+                var selectedDate = filterDateInput.val();
+
+                // Make an AJAX request with the selected date as a parameter
+                $.ajax({
+                    url: 'http://localhost/acrh/role-permission/public/orderdetailsapi?date=' +
+                        selectedDate,
+                    method: 'GET',
+                    success: function(data) {
+                        processData(data);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching filtered data:', error);
+                    }
+                });
+            };
+        });
+    </script>
 @endsection

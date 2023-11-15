@@ -51,7 +51,7 @@ Route::resource('admins', AdminsController::class);
 Route::resource('users', UsersController::class);
 Route::resource('roles', RoleController::class);
 Route::resource('permissions', PermissionsController::class);
-
+Route::get('orderdetailsapi',[HomeController::class, 'offorderDetailsapi']);
 
 // only auths are required
 Route::group(['middleware' => ['auth']], function() {
