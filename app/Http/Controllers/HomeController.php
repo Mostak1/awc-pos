@@ -80,7 +80,7 @@ class HomeController extends Controller
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
 
         $items = OffOrder::with('tab', 'user', 'offorderdetails')->whereDate('created_at', $currentDate)->get();
-        $orderDetails = OffOrderDetails::with('menu', 'off_order')->get();
+        $orderDetails = OffOrderDetails::with('menu', 'off_order')->whereDate('created_at', $currentDate)->get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
         // return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));
@@ -101,7 +101,7 @@ class HomeController extends Controller
 
     public function offorderDetailsapi()
     {
-        $orderDetails = OffOrderDetails::with('menu', 'off_order')->get();
-         return response()->json($orderDetails);
+        $orderDetails = OffOrderDetails::with('menu.category', 'off_order')->get();
+        return response()->json($orderDetails);
     }
 }
