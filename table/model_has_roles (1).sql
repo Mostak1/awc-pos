@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 7),
 (2, 'App\\Models\\User', 2),
-(2, 'App\\Models\\User', 3),
+(2, 'App\\Models\\User', 1),
 (3, 'App\\Models\\User', 8),
 (3, 'App\\Models\\User', 10),
 (5, 'App\\Models\\User', 10);

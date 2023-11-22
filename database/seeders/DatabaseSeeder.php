@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
         $this->call(TabsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(RolesTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
+        $this->call(RoleHasPermissionsTableSeeder::class);
+        $this->call(ModelHasRolesTableSeeder::class);
         // php artisan db:seed
     }
 }

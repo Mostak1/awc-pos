@@ -9,14 +9,32 @@
 
         @import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Share+Tech+Mono&display=swap');
 
+        @import url('https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@1,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@700&display=swap');
+
         .r-text {
             font-size: 18px;
         }
 
+        .aw-ul {
+            display: none;
+            margin: 0;
+            padding: 0;
+        }
+
         @media print {
+            @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+
             * {
-                font-family: 'Oranienbaum', serif;
+                /* font-family: 'Oranienbaum', serif; */
                 /* font-family: 'Share Tech Mono', monospace; */
+                /* font-family: 'Philosopher', sans-serif; */
+                /* font-family: 'DotGothic16', sans-serif; */
+                font-family: 'Fira Mono', monospace;
+            }
+
+            .aw-ul {
+                display: block;
             }
 
             .pnone {
@@ -29,7 +47,7 @@
 
             @page {
 
-                margin: .06cm;
+                margin: .4cm;
             }
         }
     </style>
@@ -80,7 +98,7 @@
                     <div id="print" class="card p-2">
                         {{-- <label for="staffCheckbox">Staff</label>
                         <input type="checkbox" id="staffCheckbox"> --}}
-                        <div class="d- d-print-block">
+                        <div class="d-none d-print-block">
 
 
                             <div class="fs-3 text-center r-heading">GREEN KITCHEN</div>
@@ -88,8 +106,8 @@
                                 Phone#
                                 01979756069
                             </div>
-                            <div class="">----------------------------------------------------------------------------
-                            </div>
+                            <div class="aw-ul">----------------------------</div>
+
                             <div class="d-flex justify-content-between my-2">
                                 <div class="r-text ">
                                     Date: @php
@@ -98,7 +116,7 @@
                                     @endphp
 
                                 </div>
-                                <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}</div>
+
                                 <div class="r-text ">
                                     Time: @php
                                         $currentTime = date('H:i A');
@@ -109,13 +127,16 @@
 
 
                             </div>
-                            <div class="fs-2 font-weight-bold">Paid</div>
-                            <div class="">----------------------------------------------------------------------------
+                            <div class="d-flex justify-content-between my-2">
+                                <div class="fs-2 font-weight-bold">Paid</div>
+                                <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}
+                                </div>
                             </div>
                         </div>
                         <div id="invoiceStaff" class="text-center text-danger fs-4 my-2">
 
                         </div>
+                        <div class="aw-ul">----------------------------</div>
 
                         <div class="row r-text mb-2">
                             <div class="col-3">
@@ -131,24 +152,22 @@
                                 Total
                             </div>
                         </div>
-                        <div class="">----------------------------------------------------------------------------
-                        </div>
+                        <div class="aw-ul">----------------------------</div>
+
                         <div class="orders r-text" id="orders">
 
                         </div>
-                        <div class="font-weight-bold">----------------------------------------------------------------------------
-                        </div>
-                        <div class="">----------------------------------------------------------------------------
-                        </div>
+
+                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul">----------------------------</div>
 
                         <div class="mt-4">
                             <span>GROSS Total: </span>
                             <span id="total-order"></span>
                             <span>TK</span>
                         </div>
-                        <div class="">----------------------------------------------------------------------------
-                        </div> <div class="">----------------------------------------------------------------------------
-                        </div>
+                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul">----------------------------</div>
                         {{-- <div>
                             <span>Tax: </span>
                             <span id="tax">50</span>
@@ -201,11 +220,11 @@
                             <span id="total-order2"></span>
                             <span>TK</span>
                         </div>
-                        <div class="">----------------------------------------------------------------------------
-                        </div> <div class="">----------------------------------------------------------------------------
-                        </div>
-                        <div class="d- d-print-block">
-                            THANK YOU, COME AGAIN <br>  Print By:
+
+                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul">----------------------------</div>
+                        <div class="d-none d-print-block">
+                            THANK YOU, COME AGAIN <br> Print By:
                             @if (Auth::Check())
                                 {{ Auth::user()->name }}
                             @endif
@@ -477,7 +496,7 @@
                     existingItem.find('.total').text(total);
                 } else if (dis == price) {
                     var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
+                    <div class="order-item mb-2" data-id="${id}">
                         <div class="row">
                                         <div class="col-3">
                                             <div class="order-info d-inline">
@@ -507,15 +526,15 @@
                         </div>
                     
                    
-                    </li> `;
+                    </div> `;
 
 
                     $('#orders').append(orderItem);
                 } else {
                     var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
+                    <div class="order-item mb-2" data-id="${id}">
                         <div class="row">
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <div class="order-info d-inline">
                                                 <span class="order-name">${name}</span>
                                                 <span class="order-price d-none">${dis}</span>
@@ -541,11 +560,11 @@
                                             <span class="total">${dis}</span>
                                             <span >TK</span>
                                         </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        <div class="col-2">
+                                            <button class="pnone btn btn-outline-danger remove-item"><i class="fa-solid fa-xmark"></i></button>
                                         </div>
                         </div>
-                    </li> `;
+                    </div> `;
                     $('#orders').append(orderItem);
                 }
 
@@ -572,9 +591,9 @@
                     existingItem.find('.total').text(total);
                 } else if (dis == price) {
                     var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
+                    <div class="order-item mb-2" data-id="${id}">
                         <div class="row">
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <div class="order-info d-inline">
                                                 <span class="order-name">${name}</span>
                                                 <span class="order-price d-none">${dis}</span>
@@ -596,21 +615,21 @@
                                             <span class="total">${dis}</span>
                                             <span >TK</span>
                                         </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        <div class="col-2">
+                                            <button class="pnone btn btn-outline-danger remove-item"><i class="fa-solid fa-xmark"></i></button>
                                         </div>
                         </div>
                     
                    
-                    </li> `;
+                    </div> `;
 
 
                     $('#orders').append(orderItem);
                 } else {
                     var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
+                    <div class="order-item mb-2" data-id="${id}">
                         <div class="row">
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <div class="order-info d-inline">
                                                 <span class="order-name">${name}</span>
                                                 <span class="order-price d-none">${dis}</span>
@@ -636,11 +655,11 @@
                                             <span class="total">${dis}</span>
                                             <span >TK</span>
                                         </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        <div class="col-2">
+                                            <button class="pnone btn btn-outline-danger remove-item"><i class="fa-solid fa-xmark"></i></button>
                                         </div>
                         </div>
-                    </li> `;
+                    </div> `;
                     $('#orders').append(orderItem);
                 }
 

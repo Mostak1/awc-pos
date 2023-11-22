@@ -204,8 +204,8 @@ class OffOrderController extends Controller
      */
     public function destroy(OffOrder $offOrder)
     {
+        OffOrderDetails::where('off_order_id', $offOrder->id)->delete();
         if (OffOrder::destroy($offOrder->id)) {
-            OffOrderDetails::where('off_order_id', $offOrder->id)->delete();
             $logData = [
                 'off_order_id' => $offOrder->id,
                 'user_id' => Auth::user()->id,
