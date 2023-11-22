@@ -80,54 +80,74 @@
                     <div id="print" class="card p-2">
                         {{-- <label for="staffCheckbox">Staff</label>
                         <input type="checkbox" id="staffCheckbox"> --}}
-                        <div class="d-none d-print-block">
+                        <div class="d- d-print-block">
 
 
-                            <div class="fs-3 text-center r-heading">Green Kitchen</div>
+                            <div class="fs-3 text-center r-heading">GREEN KITCHEN</div>
                             <div class="r-text text-center">Islam Tower,2nd Floor,102 Shukrabad,Dhanmondi-32,Dhaka-1207 <br>
-                                Mobile No:
+                                Phone#
                                 01979756069
+                            </div>
+                            <div class="">----------------------------------------------------------------------------
                             </div>
                             <div class="d-flex justify-content-between my-2">
                                 <div class="r-text ">
                                     Date: @php
-                                        $currentDateTime = date('Y-m-d H:i:s');
+                                        $currentDateTime = date('Y-m-d');
                                         echo $currentDateTime;
                                     @endphp
 
                                 </div>
-
                                 <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}</div>
+                                <div class="r-text ">
+                                    Time: @php
+                                        $currentTime = date('H:i A');
+                                        echo $currentTime;
+                                    @endphp
+
+                                </div>
+
+
+                            </div>
+                            <div class="fs-2 font-weight-bold">Paid</div>
+                            <div class="">----------------------------------------------------------------------------
                             </div>
                         </div>
                         <div id="invoiceStaff" class="text-center text-danger fs-4 my-2">
 
                         </div>
-                        <ol>
-                            <div class="row r-text mb-2">
-                                <div class="col-2">
-                                    Item
-                                </div>
-                                <div class="col-2">
-                                    Qty
-                                </div>
-                                <div class="col-3">
-                                    Price
-                                </div>
-                                <div class="col-2">
-                                    Total
-                                </div>
+
+                        <div class="row r-text mb-2">
+                            <div class="col-3">
+                                Item
                             </div>
-
-                            <div class="orders r-text" id="orders">
-
+                            <div class="col-2">
+                                Qty
                             </div>
+                            <div class="col-3">
+                                Price
+                            </div>
+                            <div class="col-2">
+                                Total
+                            </div>
+                        </div>
+                        <div class="">----------------------------------------------------------------------------
+                        </div>
+                        <div class="orders r-text" id="orders">
 
-                        </ol>
+                        </div>
+                        <div class="font-weight-bold">----------------------------------------------------------------------------
+                        </div>
+                        <div class="">----------------------------------------------------------------------------
+                        </div>
+
                         <div class="mt-4">
-                            <span>Total Bill: </span>
+                            <span>GROSS Total: </span>
                             <span id="total-order"></span>
                             <span>TK</span>
+                        </div>
+                        <div class="">----------------------------------------------------------------------------
+                        </div> <div class="">----------------------------------------------------------------------------
                         </div>
                         {{-- <div>
                             <span>Tax: </span>
@@ -181,13 +201,16 @@
                             <span id="total-order2"></span>
                             <span>TK</span>
                         </div>
-                        <div class="text-center d-none d-print-block">
-                            Thank You <br> Please Visit Again <br> Print By:
+                        <div class="">----------------------------------------------------------------------------
+                        </div> <div class="">----------------------------------------------------------------------------
+                        </div>
+                        <div class="d- d-print-block">
+                            THANK YOU, COME AGAIN <br>  Print By:
                             @if (Auth::Check())
                                 {{ Auth::user()->name }}
                             @endif
-                            <br>
-                            <img height="70px" src="{{ asset('assets/img/pngegg.png') }}" alt="">
+                            {{-- <br> --}}
+                            {{-- <img height="70px" src="{{ asset('assets/img/pngegg.png') }}" alt=""> --}}
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">
@@ -198,8 +221,8 @@
                             data-bs-target="#exampleModal" id="staffView">
                             Go TO Staff View
                         </button>
-                        <button type="button" class="btn btn-outline-info mt-5 d-none"  id="customerView">
-                             <i class="fa-solid fa-backward fa-fade"></i>  Back
+                        <button type="button" class="btn btn-outline-info mt-5 d-none" id="customerView">
+                            <i class="fa-solid fa-backward fa-fade"></i> Back
                         </button>
 
                     </div>
@@ -230,7 +253,8 @@
                         <input type="password" class="form-control" id="managerPass" name="managerPass">
                     </div>
                     {{-- <button type="submit" class="btn btn-outline-info">Submit</button> --}}
-                    <button type="button" class="btn btn-outline-info" id="managerAuth" data-bs-dismiss="modal">Submit</button>
+                    <button type="button" class="btn btn-outline-info" id="managerAuth"
+                        data-bs-dismiss="modal">Submit</button>
                     {{-- </form> --}}
                 </div>
                 {{-- <div class="modal-footer">
@@ -356,16 +380,16 @@
             }
             $('#customerView').click(function() {
                 $('#menuContainer2').addClass('d-none');
-                    $('#menuContainer').removeClass('d-none');
-                    
-                    $('#customerView').addClass('d-none');
-                    $('#staffView').removeClass('d-none');
+                $('#menuContainer').removeClass('d-none');
 
-                    $('.customer').removeClass('d-none');
-                    let sName = $('#staffs').data('sname');
+                $('#customerView').addClass('d-none');
+                $('#staffView').removeClass('d-none');
 
-                    $('#invoiceStaff').text('');
-                    $('#orders').text('');
+                $('.customer').removeClass('d-none');
+                let sName = $('#staffs').data('sname');
+
+                $('#invoiceStaff').text('');
+                $('#orders').text('');
 
             });
             $('#managerAuth').click(function() {
@@ -376,7 +400,7 @@
                     $('#orders').text('');
                     $('#menuContainer2').removeClass('d-none');
                     $('#menuContainer').addClass('d-none');
-                    
+
                     $('#customerView').removeClass('d-none');
                     $('#staffView').addClass('d-none');
 
@@ -455,12 +479,12 @@
                     var orderItem = `
                     <li class="order-item mb-2" data-id="${id}">
                         <div class="row">
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <div class="order-info d-inline">
                                                 <span class="order-name">${name}</span>
                                                 <span class="order-price d-none">${dis}</span>
-                                                </div>
-                                                </div>
+                                            </div>
+                                        </div>
                                                 <div class="col-2">
                                                     <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
                                                     <span class="order-q d-none d-print-block"></span>
@@ -477,8 +501,8 @@
                                             <span class="total">${dis}</span>
                                             <span >TK</span>
                                         </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
+                                        <div class="col-2">
+                                            <button class="pnone btn btn-outline-danger remove-item"><i class="fa-solid fa-trash"></i></button>
                                         </div>
                         </div>
                     
