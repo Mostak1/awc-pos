@@ -20,4 +20,5 @@ class OffOrderDetails extends Model
     public function menu(){
         return $this->belongsTo(Menu::class);
     }
+    
 }

@@ -106,7 +106,13 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th colspan="6" class="tablebtn text-end">
+                                            <th colspan="8" class="tablebtn text-end">
+                                                <span class="me-2">
+                                                    Cash {{$cash}}, 
+                                                    bKash {{$bkash}}, 
+                                                    Card {{$card}}
+
+                                                </span>
                                                 <span>@php
                                                     $currentDate = date('d M Y');
 
@@ -117,51 +123,47 @@
                                         </tr>
                                         <tr>
                                             <th>Order ({{ $orderCountD }})</th>
-                                            <th>Date</th>
                                             <th>Food Name</th>
+                                            <th>Payment Method ({{$bkash}})</th>
                                             <th>Total Amount ({{ $totalSalesD }} TK)</th>
-                                            <th>Quantity</th>
-
-
-
+                                            <th>Discount ({{ $totalDisD }} TK)</th>
+                                            <th>Reason</th>
+                                            <th>Net Sale: {{ $totalSalesD - $totalDisD }} TK</th>
+                                            <th>Order Slip</th>
 
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @php
-                                            $menuAggregatedData = [];
-                                        @endphp
+                                        @foreach ($items as $offorder)
+                                            <tr>
+                                                <td>{{ $loop->index + 1 }}</td>
+                                                <td>
+                                                    @foreach ($offorder->offorderdetails as $detail)
+                                                        <div class="">
+                                                            <span class="fs-6 me-3">{{ $detail->menu->name }} -</span>
+                                                            <span class="fs-6"> Q: {{ $detail->quantity }} </span>
+                                                        </div>
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $offorder->payment->method }}</td>
+                                                <td>{{ $offorder->total }}</td>
+                                                <td>{{ $offorder->discount }}</td>
+                                                <td>{{ $offorder->reason }}</td>
+                                                <td>{{ $offorder->total - $offorder->discount }}</td>
+                                                <td>
+                                                    {{-- <button class="btn btn-outline-info print-btn"
+                                                        data-id="{{ $offorder->id }}">Print </button> --}}
+                                                    <button type="button" class="btn btn-outline-info print-btn"
+                                                        data-id="{{ $offorder->id }}" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal">
+                                                        Print
+                                                    </button>
 
-                                        @foreach ($orderDetails as $offorder)
-                                            @if (!isset($menuAggregatedData[$offorder->menu_id]))
-                                                @php
-                                                    $menuAggregatedData[$offorder->menu_id] = [
-                                                        'quantity' => 0,
-                                                        'total' => 0,
-                                                    ];
-                                                @endphp
-                                            @endif
-
-                                            @php
-                                                $menuAggregatedData[$offorder->menu_id]['quantity'] += $offorder->quantity;
-                                                $menuAggregatedData[$offorder->menu_id]['total'] += $offorder->total;
-                                            @endphp
-
-                                            {{-- Only display a row for the first occurrence of each menu_id --}}
-                                            @if (!isset($menuAggregatedData[$offorder->menu_id]))
-                                                <tr>
-                                                    <td>{{ $loop->index + 1 }}</td>
-                                                    <td>{{ $offorder->created_at }}</td>
-                                                    <td>{{ $offorder->menu->name }}</td>
-                                                    <td>{{ $menuAggregatedData[$offorder->menu_id]['total'] }}</td>
-                                                    <td>{{ $menuAggregatedData[$offorder->menu_id]['quantity'] }}</td>
-                                                </tr>
-                                            @endif
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
-
-
                                 </table>
                             </div>
                         </div>
@@ -171,7 +173,8 @@
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h4 class="m-0 font-weight-bold text-info">Order Report Table</h4>
-                            <div class="m-0 font-weight-bold btn btn-outline-info" id="submitp"><i class="fa-solid fa-print"></i></div>
+                            <div class="m-0 font-weight-bold btn btn-outline-info" id="submitp"><i
+                                    class="fa-solid fa-print"></i></div>
 
                         </div>
                         <div class="card-body mt-4">
@@ -327,7 +330,155 @@
             </main>
             <!-- footer -->
         </div>
-        <h3>Dashboaard Home</h3>
+    </div>
+    <!-- Button trigger modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Money Receipt</h1>
+                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                </div>
+                <div class="modal-body">
+                    <div id="print" class="card p-2">
+                        <div class=" d-print-block">
+                            <div class="fs-3 text-center r-heading">GREEN KITCHEN</div>
+                            <div class="r-text text-center">Islam Tower,2nd Floor,102 Shukrabad,Dhanmondi-32,Dhaka-1207
+                                <br>
+                                Phone#
+                                01979756069
+                            </div>
+                            <div class="aw-ul">----------------------------</div>
+
+                            <div class="d-flex justify-content-between my-2">
+                                <div class="r-text ">
+                                    Date: @php
+                                        $currentDateTime = date('Y-m-d');
+                                        echo $currentDateTime;
+                                    @endphp
+
+                                </div>
+
+                                <div class="r-text ">
+                                    Time: @php
+                                        $currentTime = date('H:i A');
+                                        echo $currentTime;
+                                    @endphp
+
+                                </div>
+
+
+                            </div>
+                            <div class="d-flex justify-content-between my-2">
+                                <div class="fs-2 font-weight-bold">Paid</div>
+                                <div class="r-text">Invoice ID: 000
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-cols-1 d-none d-print-block">
+                            <div class="col">Payment Methode: <span id="paymentMethod1">Cash</span></div>
+                            <div class="col"> <span id="transactionId1"></span></div>
+                        </div>
+                        <div class="row row-cols-2 d-print-none">
+
+                            <div class="mb-3 col">
+                                <label for="paymentMethod" class="form-label">Select Payment Method</label>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod">
+                                    <option value="cash">Cash</option>
+                                    <option value="bkash">Bkash</option>
+                                    <option value="card">Card</option>
+                                </select>
+                            </div>
+                            <div class="col">
+
+                                <div class="mb-3 d-none" id="bkashInput">
+                                    <label for="transactionId" class="form-label">Transaction ID</label>
+                                    <input type="text" class="form-control" id="transactionId" name="transactionId"
+                                        required>
+                                </div>
+
+                                <div class="mb-3 d-none" id="cardInput">
+                                    <label for="cardLastDigits" class="form-label">Laast 4 digit of Card</label>
+                                    <input type="text" class="form-control" id="cardLastDigits" name="cardLastDigits"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="invoiceStaff" class="text-center text-danger fs-4 my-2">
+
+                        </div>
+                        <div class="aw-ul">----------------------------</div>
+
+                        <div class="row r-text mb-2">
+                            <div class="col-3">
+                                Item
+                            </div>
+                            <div class="col-2">
+                                Qty
+                            </div>
+                            <div class="col-3">
+                                Price
+                            </div>
+                            <div class="col-2">
+                                Total
+                            </div>
+                        </div>
+                        <div class="aw-ul">----------------------------</div>
+
+                        <div class="orders r-text" id="orders">
+
+                        </div>
+
+                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul">----------------------------</div>
+
+                        <div class="mt-4">
+                            <span>GROSS Total: </span>
+                            <span id="total-order"></span>
+                            <span>TK</span>
+                        </div>
+                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul">----------------------------</div>
+
+                        <div class="form-row my-2">
+                            <div class="form-group col-md-6 col-sm-6" id="reason">
+                               
+                            </div>
+                        </div>
+
+
+                        <div class="">
+                            <span>Special Discount: </span>
+                            <span id="discount">0</span>
+                            <span>TK</span>
+                        </div>
+                        <div>
+                            <span>Ammount to Pay: </span>
+                            <span id="total-order2"></span>
+                            <span>TK</span>
+                        </div>
+
+                        <div class="aw-ul text-center">------------------------</div>
+                        
+                        <div class="d-none d-print-block">
+                            THANK YOU, COME AGAIN <br> Print By:
+                            @if (Auth::Check())
+                                {{ Auth::user()->name }}
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -337,6 +488,24 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         $(document).ready(function() {
+            $('.print-btn').click(function() {
+                // alert('working')
+                var orderId = $(this).data('id');
+
+                // Make an AJAX request to fetch order details
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('printrecipt') }}/' + orderId,
+                    success: function(data) {
+                        console.log(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+
             var filterDateInput = $('#filterDate');
             var filterCategoryInput = $('#filterCategory');
             var filterStartDateInput = $('#filterStartDate');
@@ -404,7 +573,19 @@
                     return yyyy + '-' + mm + '-' + dd;
                 }
                 console.log(getCurrentDate());
-                var selectedDate = filterDateInput.val() || getCurrentDate();
+                if (
+                    filterDateInput.val() == '' &&
+                    filterCategoryInput.val() == '' &&
+                    filterStartDateInput.val() == '' &&
+                    filterEndDateInput.val() == '' &&
+                    filterStartTimeInput.val() == '' &&
+                    filterEndTimeInput.val() == ''
+                ) {
+                    var selectedDate = getCurrentDate();
+                } else {
+                    var selectedDate = filterDateInput.val();
+                }
+
 
 
                 // Populate the category filter dropdown dynamically
@@ -418,7 +599,7 @@
                 categorySelect.append('<option value="">All Categories</option>');
                 // Add options based on unique categories
                 uniqueCategories.forEach(category => {
-                    
+
                     categorySelect.append('<option value="' + category + '">' + category + '</option>');
                 });
 
@@ -483,7 +664,8 @@
                             category: order.menu.category.name,
                             date: order.created_at,
                             quantity: order.quantity,
-                            total: order.total
+                            total: order.total,
+                            // cash:order.payment.total
                         };
                     } else {
                         aggregatedData[menuId].quantity += order.quantity;
@@ -729,7 +911,7 @@
             // Printn
             $('#submitp').click(function() {
                 var printContents = $('#printTable').html();
-                
+
                 var originalContents = document.body.innerHTML;
                 document.body.innerHTML = printContents;
                 window.print();

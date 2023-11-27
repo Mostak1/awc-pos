@@ -16,6 +16,7 @@
                 <tr>
                     <th scope="col" width="15%">Name</th>
                     <th scope="col">Guard</th>
+                    <th scope="col">Group</th>
                     <th scope="col"width="1%">Action</th>
                 </tr>
             </thead>
@@ -24,6 +25,7 @@
                     <tr>
                         <td>{{ $permission->name }}</td>
                         <td>{{ $permission->guard_name }}</td>
+                        <td>{{ $permission->group_name }}</td>
                         <td>
                             <div class="skip d-flex justify-content-center">
                                 <a href="{{ route('permissions.edit', $permission->id) }}"

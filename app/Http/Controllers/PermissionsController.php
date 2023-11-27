@@ -14,7 +14,7 @@ class PermissionsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         $permissions = Permission::get();
 
         return view('permissions.index', [
@@ -27,8 +27,8 @@ class PermissionsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function create() 
-    {   
+    public function create()
+    {
         return view('permissions.create');
     }
 
@@ -39,16 +39,18 @@ class PermissionsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $request->validate([
-            'name' => 'required|unique:users,name'
+            'name' => 'required|unique:permissions,name',
+            'group_name' => 'required', // Assuming you have a 'group_name' field in your form
         ]);
 
-        Permission::create($request->only('name'));
+        Permission::create($request->only('name', 'group_name'));
 
         return redirect()->route('permissions.index')
             ->withSuccess(__('Permission created successfully.'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -73,10 +75,11 @@ class PermissionsController extends Controller
     public function update(Request $request, Permission $permission)
     {
         $request->validate([
-            'name' => 'required|unique:permissions,name,'.$permission->id
+            'name' => 'required|unique:permissions,name,' . $permission->id,
+            'group_name' => 'required' 
         ]);
 
-        $permission->update($request->only('name'));
+        $permission->update($request->only('name','group_name'));
 
         return redirect()->route('permissions.index')
             ->withSuccess(__('Permission updated successfully.'));

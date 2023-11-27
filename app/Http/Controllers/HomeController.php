@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\OffOrder;
 use App\Models\OffOrderDetails;
+use App\Models\Payment;
 use App\Models\UserRole;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+
+    public function printrecipt($id)
+    {
+
+        $items = OffOrder::with('tab', 'user', 'offorderdetails.menu.category')->find($id);
+        return response()->json($items);
+    }
     public function main()
     {
         $user_id = Auth::user()->id;
@@ -78,16 +86,19 @@ class HomeController extends Controller
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
-
-        $items = OffOrder::with('tab', 'user', 'offorderdetails')->whereDate('created_at', $currentDate)->get();
+        
+        $bkash = Payment::whereDate('created_at', $currentDate)->where('method','bkash')->sum('total');
+        $cash = Payment::whereDate('created_at', $currentDate)->where('method','cash')->sum('total');
+        $card = Payment::whereDate('created_at', $currentDate)->where('method','card')->sum('total');
+        $items = OffOrder::with('tab', 'user', 'offorderdetails','payment')->whereDate('created_at', $currentDate)->get();
         $orderDetails = OffOrderDetails::with('menu', 'off_order')->whereDate('created_at', $currentDate)->get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
-        // return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));
+        // return view('offorder.dailyreport', compact('items',card 'orderCountD', 'totalSalesD', 'totalDisD'));
 
         // dd($role);
 
-        return view('dashboard', compact('totalDisM', 'totalDisD', 'totalDisW', 'items', 'orderDetails'))
+        return view('dashboard', compact('totalDisM', 'totalDisD', 'totalDisW', 'items', 'orderDetails','bkash','card','cash'))
             ->with('orderCountD', $orderCountD)
             ->with('totalSalesD', $totalSalesD)
             ->with('salesCountD', $salesCountD)
@@ -101,7 +112,7 @@ class HomeController extends Controller
 
     public function offorderDetailsapi()
     {
-        $orderDetails = OffOrderDetails::with('menu.category', 'off_order')->get();
+        $orderDetails = OffOrderDetails::with('menu.category', 'off_order.payment')->get();
         return response()->json($orderDetails);
     }
 }

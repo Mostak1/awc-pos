@@ -23,6 +23,18 @@
                         <span class="text-danger text-left">{{ $errors->first('name') }}</span>
                     @endif
                 </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Group Name</label>
+                    <input value="{{ $permission->group_name }}"  
+                        type="text" 
+                        class="form-control" 
+                        name="group_name" 
+                        placeholder="Group Name" required>
+
+                    @if ($errors->has('group_name'))
+                        <span class="text-danger text-left">{{ $errors->first('group_name') }}</span>
+                    @endif
+                </div>
 
                 <button type="submit" class="btn btn-primary">Save permission</button>
                 <a href="{{ route('permissions.index') }}" class="btn btn-default">Back</a>

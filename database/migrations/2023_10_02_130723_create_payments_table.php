@@ -19,9 +19,9 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('off_orders');
             $table->string('cash');
             $table->string('e_cash');
-            $table->string('methode');
+            $table->string('method');
             $table->string('tranjection_number');
-
+            $table->float("total",10,2);
             $table->timestamps();
             $table->softDeletes();
 

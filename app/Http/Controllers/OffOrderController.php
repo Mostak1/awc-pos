@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\OffOrderDetails;
 use App\Models\OrderLog;
+use App\Models\Payment;
 use App\Models\Staff;
 use App\Models\StaffOrder;
 use App\Models\Tab;
@@ -34,7 +35,7 @@ class OffOrderController extends Controller
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
-        $items = OffOrder::with('tab', 'user','offorderdetails')->whereDate('created_at', $currentDate)->get();
+        $items = OffOrder::with('tab', 'user', 'offorderdetails')->whereDate('created_at', $currentDate)->get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
         return view('offorder.dailyreport', compact('items', 'orderCountD', 'totalSalesD', 'totalDisD'));
@@ -54,49 +55,63 @@ class OffOrderController extends Controller
         DB::beginTransaction();
 
         try {
-        
-        $order = new OffOrder();
-        $order->tab_id = '1';
-        $order->user_id = Auth::user()->id;
-        $order->total = $request->totalbill;
-        $order->discount = $request->discount;
-        $order->reason = $request->reason;
-        $order->save();
 
-        if ($request->staff >0) {
-            $staffor = new StaffOrder();
-            $staffor ->staff_id=$request->staff;
-            $staffor ->off_order_id=$order->id;
-            $staffor ->point=$request->totalbill*.02;
-            $staffor -> save();
+            $order = new OffOrder();
+            $order->tab_id = '1';
+            $order->user_id = Auth::user()->id;
+            $order->total = $request->totalbill;
+            $order->discount = $request->discount;
+            $order->reason = $request->reason;
+            $order->save();
 
-            $staff = Staff::find($request->staff);
-            if ($staff) {
-                $staff->total_order = $staff->total_order + 1;
-                $staff->total_point = $staff->total_point + $request->totalbill*.02;
-                $staff->save();
+            $payment = new Payment();
+            $payment->order_id = $order->id;
+            $payment->cash = $request->paymentMethod === 'cash' ? 1 : 0;
+            $payment->e_cash = in_array($request->paymentMethod, ['bkash', 'card']) ? 1 : 0;
+            $payment->method = $request->paymentMethod;
+            $payment->total = $request->totalbill;
+
+            // Set transaction number only for 'bkash' payments
+            if ($request->paymentMethod === 'bkash' || $request->paymentMethod === 'card') {
+                $payment->tranjection_number = $request->transactionId;
             }
-        }
-        foreach ($request->items as $item) {
-            $orderDetail = new OffOrderDetails();
-            $orderDetail->off_order_id = $order->id;
-            $orderDetail->menu_id = $item['id'];
-            $orderDetail->quantity = $item['quantity'];
-            $orderDetail->total=$item['total'];
-            $orderDetail->save();
 
-            $menu = Menu::find($item['id']);
-            if ($menu) {
-                $menu->quantity = $menu->quantity - $item['quantity'];
-                $menu->hot = $menu->hot + $item['quantity'];
-                $menu->save();
+            $payment->save();
+
+            if ($request->staff > 0) {
+                $staffor = new StaffOrder();
+                $staffor->staff_id = $request->staff;
+                $staffor->off_order_id = $order->id;
+                $staffor->point = $request->totalbill * .02;
+                $staffor->save();
+
+                $staff = Staff::find($request->staff);
+                if ($staff) {
+                    $staff->total_order = $staff->total_order + 1;
+                    $staff->total_point = $staff->total_point + $request->totalbill * .02;
+                    $staff->save();
+                }
             }
-        }
-        
+            foreach ($request->items as $item) {
+                $orderDetail = new OffOrderDetails();
+                $orderDetail->off_order_id = $order->id;
+                $orderDetail->menu_id = $item['id'];
+                $orderDetail->quantity = $item['quantity'];
+                $orderDetail->total = $item['total'];
+                $orderDetail->save();
+
+                $menu = Menu::find($item['id']);
+                if ($menu) {
+                    $menu->quantity = $menu->quantity - $item['quantity'];
+                    $menu->hot = $menu->hot + $item['quantity'];
+                    $menu->save();
+                }
+            }
+
             DB::commit();
 
             return back()->with('success', 'Order Details Added');
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             return back()->with('error',  'Order Can not submit properly, Please try again.');
         }
@@ -158,7 +173,7 @@ class OffOrderController extends Controller
                 $log = OrderLog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
 
@@ -173,7 +188,7 @@ class OffOrderController extends Controller
                 $log = OrderLog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
 
@@ -188,7 +203,7 @@ class OffOrderController extends Controller
                 $log = OrderLog::create($logData);
                 if ($log) {
                 } else {
-                    return back()->with('info',$log . "Not Insert!");
+                    return back()->with('info', $log . "Not Insert!");
                 }
             }
 
@@ -214,7 +229,7 @@ class OffOrderController extends Controller
             $log = OrderLog::create($logData);
             if ($log) {
             } else {
-                return back()->with('info',$log . "Not Insert!");
+                return back()->with('info', $log . "Not Insert!");
             }
             return back()->with('success', $offOrder->id . ' Deleted!!!!');
         } else {
@@ -225,7 +240,8 @@ class OffOrderController extends Controller
 
 
     // log methode 
-    public function logs(){
+    public function logs()
+    {
         $items = OrderLog::with('user')->get();
         return view('offorder.log', compact('items'));
     }

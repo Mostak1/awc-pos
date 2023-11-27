@@ -42,6 +42,8 @@ use Illuminate\Support\Facades\Route;
 //     symlink($targetFolder, $linkFolder);
 
 //  });
+
+Route::get('printrecipt/{id}', [HomeController::class,'printrecipt']);
 Route::get('cardinfo', [CustomerController::class, 'cardinfo']);
 Route::post('getcardinfo', [CustomerController::class, 'getcardinfo'])->name('getcardinfo');
 Route::get('staffinfo', [StaffController::class, 'staffinfo']);
@@ -76,6 +78,7 @@ Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.
 
 
 Route::get('offorderdaily', [OffOrderController::class, 'dailyreport'])->name('offorderdaily');
+
 Route::get('dailyreport', [OffOrderDetailsController::class, 'dailyreport'])->name('dailyreport');
 Route::get('subcats/{cid}', [SubcategoryController::class, 'subcats']);
 Route::get('order', [MenuController::class, 'order'])->name('order');

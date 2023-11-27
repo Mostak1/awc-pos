@@ -96,18 +96,13 @@
                 </div>
                 <div class="col-md-4">
                     <div id="print" class="card p-2">
-                        {{-- <label for="staffCheckbox">Staff</label>
-                        <input type="checkbox" id="staffCheckbox"> --}}
                         <div class="d-none d-print-block">
-
-
                             <div class="fs-3 text-center r-heading">GREEN KITCHEN</div>
                             <div class="r-text text-center">Islam Tower,2nd Floor,102 Shukrabad,Dhanmondi-32,Dhaka-1207 <br>
                                 Phone#
                                 01979756069
                             </div>
-                            <div class="aw-ul">----------------------------</div>
-
+                           
                             <div class="d-flex justify-content-between my-2">
                                 <div class="r-text ">
                                     Date: @php
@@ -133,10 +128,40 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row row-cols-1 d-none d-print-block">
+                            <div class="col">Payment Methode: <span id="paymentMethod1">Cash</span></div>
+                            <div class="col"> <span id="transactionId1"></span></div>
+                        </div>
+                        <div class="row row-cols-2 d-print-none">
+
+                            <div class="mb-3 col">
+                                <label for="paymentMethod" class="form-label">Select Payment Method</label>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod">
+                                    <option value="cash">Cash</option>
+                                    <option value="bkash">Bkash</option>
+                                    <option value="card">Card</option>
+                                </select>
+                            </div>
+                            <div class="col">
+
+                                <div class="mb-3 d-none" id="bkashInput">
+                                    <label for="transactionId" class="form-label">Transaction ID</label>
+                                    <input type="text" class="form-control" id="transactionId" name="transactionId"
+                                        required>
+                                </div>
+
+                                <div class="mb-3 d-none" id="cardInput">
+                                    <label for="cardLastDigits" class="form-label">Laast 4 digit of Card</label>
+                                    <input type="text" class="form-control" id="cardLastDigits" name="cardLastDigits"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="invoiceStaff" class="text-center text-danger fs-4 my-2">
 
                         </div>
-                        <div class="aw-ul">----------------------------</div>
+                   
 
                         <div class="row r-text mb-2">
                             <div class="col-3">
@@ -152,27 +177,21 @@
                                 Total
                             </div>
                         </div>
-                        <div class="aw-ul">----------------------------</div>
+                      
 
                         <div class="orders r-text" id="orders">
 
                         </div>
 
-                        <div class="aw-ul">----------------------------</div>
-                        <div class="aw-ul">----------------------------</div>
+                    
 
                         <div class="mt-4">
                             <span>GROSS Total: </span>
                             <span id="total-order"></span>
                             <span>TK</span>
                         </div>
-                        <div class="aw-ul">----------------------------</div>
-                        <div class="aw-ul">----------------------------</div>
-                        {{-- <div>
-                            <span>Tax: </span>
-                            <span id="tax">50</span>
-                            <span>TK</span>
-                        </div> --}}
+                    
+
                         <div class="form-row my-2">
                             <div class="form-group col-md-6 col-sm-6">
                                 <label for="staffs">Staff Name</label>
@@ -187,49 +206,26 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="">
-
-                            <div class="d-print-none row">
-                                {{-- <div class="col-6">
-
-                                    <input type="text" class="form-control" id="reason"
-                                        placeholder="Reason Of Discount">
-                                </div> --}}
-                                {{-- <div class=" col-6">
-                                    <div class=" input-group">
 
 
-                                        <input type="text" class="form-control" id="dis_input"
-                                            placeholder="Discount Amount In TK" aria-label="Username"
-                                            aria-describedby="basic-addon1">
-                                        <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply</span>
-                                    </div>
-                                </div> --}}
-                            </div>
-
-
-                        </div>
-
-                        <div class="">
+                        {{-- <div class="">
                             <span>Special Discount: </span>
                             <span id="discount">0</span>
                             <span>TK</span>
-                        </div>
+                        </div> --}}
                         <div>
                             <span>Ammount to Pay: </span>
                             <span id="total-order2"></span>
                             <span>TK</span>
                         </div>
 
-                        <div class="aw-ul">----------------------------</div>
-                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul text-center">----------------</div>
                         <div class="d-none d-print-block">
                             THANK YOU, COME AGAIN <br> Print By:
                             @if (Auth::Check())
                                 {{ Auth::user()->name }}
                             @endif
-                            {{-- <br> --}}
-                            {{-- <img height="70px" src="{{ asset('assets/img/pngegg.png') }}" alt=""> --}}
+
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">
@@ -299,7 +295,31 @@
         });
         $(document).ready(function() {
             // product show by category
+            $("#paymentMethod").change(function() {
+                var selectedMethod = $(this).val();
+                $("#paymentMethod1").text("");
+                $("#paymentMethod1").text(selectedMethod);
+                // Hide all input fields initially
+                $("#bkashInput, #cardInput").hide();
 
+                if (selectedMethod === "bkash") {
+                    $("#bkashInput").show();
+                    // $('#bkashInput').addClass('d-none');
+                    $('#bkashInput').removeClass('d-none');
+                    $("#cardInput input").val(""); // Clear card input if visible
+                    $('#transactionId').on('input', function() {
+                        $('#transactionId1').text('Transaction ID: '+ $(this).val());
+                    });
+                    $("#transactionId1").text(trid);
+                } else if (selectedMethod === "card") {
+                    $("#cardInput").show();
+                    $('#cardInput').removeClass('d-none');
+                    $("#bkashInput input").val(""); // Clear bkash input if visible
+                    $('#cardLastDigits').on('input', function() {
+                        $('#transactionId1').text('Card Last 4 Digit: ' +$(this).val());
+                    });
+                }
+            });
             // Set the inactivity timeout in milliseconds (e.g., 5 minutes)
             var inactivityTimeout = 3000; // 5 minutes
 
@@ -701,13 +721,13 @@
             }
 
             $('#apply_dis').click(function() {
-                var disc = parseInt($('#dis_input').val());
-                $('#discount').text(disc);
+                // var disc = parseInt($('#dis_input').val());
+                // $('#discount').text(disc);
                 var tbill = parseFloat($('#total-order').text());
                 var tax = parseFloat($('#tax').text());
-                var dis = parseFloat($('#discount').text());
+                // var dis = parseFloat($('#discount').text());
 
-                var num = tbill - dis;
+                var num = tbill ;
                 $('#total-order2').text(num);
             })
 
@@ -715,9 +735,9 @@
 
                 var tbill = parseFloat($('#total-order').text());
                 var tax = parseFloat($('#tax').text());
-                var dis = parseFloat($('#discount').text());
+                // var dis = parseFloat($('#discount').text());
 
-                var num = tbill - dis;
+                var num = tbill;
                 $('#total-order2').text(num);
             }
             // order Submitted
@@ -725,7 +745,7 @@
             $('#submitp').click(function() {
                 var items = [];
                 var totalbill = $('#total-order').text();
-                var discount = $('#discount').text();
+                // var discount = $('#discount').text();
                 var reason = $('#reason').val();
                 var staff = parseFloat($('#staffs').val());
                 var sInvoice = $('#invoiceStaff').text();
@@ -749,7 +769,37 @@
 
                     return;
                 }
+                // payment method selection
+                var selectedMethod = $("#paymentMethod").val();
 
+                if (selectedMethod === "cash") {
+                    Swal.fire("Processing cash payment");
+                } else if (selectedMethod === "bkash") {
+                    var transactionId = $("#transactionId").val();
+                    if (transactionId.trim() === "") {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please enter transaction ID for Bkash",
+                        });
+                        return;
+                    } else {
+                        Swal.fire("Processing Bkash payment with Transaction ID: " + transactionId);
+                    }
+                } else if (selectedMethod === "card") {
+                    var cardLastDigits = $("#cardLastDigits").val();
+                    if (cardLastDigits.trim() === "" || isNaN(cardLastDigits) || cardLastDigits.length !==
+                        4) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Please enter valid last 4 digits of the card",
+                        });
+                        return;
+                    } else {
+                        Swal.fire("Processing Card payment with Last 4 Digits: " + cardLastDigits);
+                    }
+                }
                 // if (discount == 0 && reason !== "") {
 
                 //     Swal.fire({
@@ -791,9 +841,11 @@
                     data: {
                         items: items,
                         totalbill: totalbill,
-                        discount: discount,
+                        discount: 0,
                         reason: sNameText,
                         staff: staff,
+                        paymentMethod: selectedMethod,
+                        transactionId: transactionId || cardLastDigits || 'Cash',
                     },
                     success: function(response) {
                         if (response.success) {
