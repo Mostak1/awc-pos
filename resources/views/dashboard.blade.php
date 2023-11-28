@@ -108,9 +108,9 @@
                                         <tr>
                                             <th colspan="8" class="tablebtn text-end">
                                                 <span class="me-2">
-                                                    Cash {{$cash}}, 
-                                                    bKash {{$bkash}}, 
-                                                    Card {{$card}}
+                                                    Cash {{ $cash }},
+                                                    bKash {{ $bkash }},
+                                                    Card {{ $card }}
 
                                                 </span>
                                                 <span>@php
@@ -124,7 +124,7 @@
                                         <tr>
                                             <th>Order ({{ $orderCountD }})</th>
                                             <th>Food Name</th>
-                                            <th>Payment Method ({{$bkash}})</th>
+                                            <th>Payment Method ({{ $bkash }})</th>
                                             <th>Total Amount ({{ $totalSalesD }} TK)</th>
                                             <th>Discount ({{ $totalDisD }} TK)</th>
                                             <th>Reason</th>
@@ -205,7 +205,15 @@
                                                         <option value="">All Categories</option>
                                                     </select>
                                                 </div>
-
+                                                <div class="col">
+                                                    <label class="form-label" for="filterStaff">Filter by
+                                                        Staff/Customer:</label>
+                                                    <select class="form-select" id="filterStaff">
+                                                        <option value="">Select</option>
+                                                        <option value="1">Staff</option>
+                                                        <option value="2">Customer</option>
+                                                    </select>
+                                                </div>
                                                 <div class="col">
                                                     <label class="form-label" for="filterDateRange">Filter by Date
                                                         Range:</label>
@@ -292,6 +300,7 @@
                                                         <option value="">All Categories</option>
                                                     </select>
                                                 </div>
+                                                
 
                                                 <div class="col">
                                                     <label class="form-label" for="filterDateRange1">Filter by Date
@@ -446,7 +455,7 @@
 
                         <div class="form-row my-2">
                             <div class="form-group col-md-6 col-sm-6" id="reason">
-                               
+
                             </div>
                         </div>
 
@@ -463,7 +472,7 @@
                         </div>
 
                         <div class="aw-ul text-center">------------------------</div>
-                        
+
                         <div class="d-none d-print-block">
                             THANK YOU, COME AGAIN <br> Print By:
                             @if (Auth::Check())
@@ -488,6 +497,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         $(document).ready(function() {
+
+
+            function orderPrint(items) {
+                let q = "";
+                items.forEach(order => {
+                    let html = '';
+
+                });
+            }
             $('.print-btn').click(function() {
                 // alert('working')
                 var orderId = $(this).data('id');
@@ -497,6 +515,7 @@
                     type: 'GET',
                     url: '{{ url('printrecipt') }}/' + orderId,
                     success: function(data) {
+                        orderPrint(data);
                         console.log(data);
                     },
                     error: function(xhr, status, error) {
@@ -513,6 +532,7 @@
             var filterStartTimeInput = $('#filterStartTime');
             var filterEndTimeInput = $('#filterEndTime');
             var tbody = $('#orderDetails tbody');
+            var staff = $('#filterStaff');
 
             var tfoot = $('#totalsale');
             // Initial load
@@ -541,6 +561,7 @@
                         endDate: filterEndDateInput.val(),
                         startTime: filterStartTimeInput.val(),
                         endTime: filterEndTimeInput.val(),
+                        staff: staff.val(),
                     },
                     success: function(data) {
                         // console.log(data);
@@ -553,6 +574,7 @@
                         filterEndDateInput.val('');
                         filterStartTimeInput.val('');
                         filterEndTimeInput.val('');
+                        staff.val('');
                     },
                     error: function(error) {
                         console.error('Error fetching data:', error);
@@ -579,7 +601,8 @@
                     filterStartDateInput.val() == '' &&
                     filterEndDateInput.val() == '' &&
                     filterStartTimeInput.val() == '' &&
-                    filterEndTimeInput.val() == ''
+                    filterEndTimeInput.val() == '' &&
+                    staff.val() == '' 
                 ) {
                     var selectedDate = getCurrentDate();
                 } else {
@@ -617,6 +640,10 @@
                         .val()) {
                         return false;
                     }
+                    if (order.off_order.active == staff.val() ) {
+                        return false;
+                    }
+
 
                     // Date range filter
                     if (filterStartDateInput.val() && filterEndDateInput.val()) {
@@ -656,8 +683,10 @@
                 // Iterate through each order in the filtered data
                 filteredData.forEach(function(order) {
                     var menuId = order.menu_id;
-
+                    var reason = order.off_order.reason;
+                    console.log(menuId, reason);
                     // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+
                     if (!aggregatedData[menuId]) {
                         aggregatedData[menuId] = {
                             menuName: order.menu.name,
@@ -665,12 +694,13 @@
                             date: order.created_at,
                             quantity: order.quantity,
                             total: order.total,
-                            // cash:order.payment.total
+                            
                         };
                     } else {
                         aggregatedData[menuId].quantity += order.quantity;
                         aggregatedData[menuId].total += order.total;
                     }
+                    
                 });
 
                 // ...

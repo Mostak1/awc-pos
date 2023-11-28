@@ -1,660 +1,740 @@
 @extends('layouts.main')
-
-@section('css')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-
-    <style>
-        .form-check-label {
-            text-transform: capitalize;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Share+Tech+Mono&display=swap');
-
-        .r-text {
-            font-size: 18px;
-        }
-
-        @media print {
-            * {
-                font-family: 'Oranienbaum', serif;
-                /* font-family: 'Share Tech Mono', monospace; */
-                font-weight: 900 !important;
-            }
-
-            .pnone {
-                display: none;
-            }
-
-            .r-text {
-                font-size: 13px;
-            }
-
-            @page {
-
-                margin: .08cm;
-            }
-        }
-    </style>
+@section('style')
 @endsection
 @section('content')
-    <div class="my-5">
-        <div class="card">
-            <div class="row m-3">
+    <div class="container">
 
-                <div class="col-md-8">
-                    <!--<div class="input-group mb-3">-->
-                    <!--    <input type="text" class="form-control" placeholder="Search Product" aria-label="Username"-->
-                    <!--        aria-describedby="basic-addon1">-->
-                    <!--    <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>-->
-                    <!--</div>-->
-                    <div class="card  mb-1">
-                        <div class="card-header py-3">
-                            <div class="row row-cols-4 row-cols-md-5 g-3">
 
-                                @foreach ($cats as $item)
-                                    <div class="col">
+        <div id="layoutSidenav_content">
+            <main>
+                <!-- changed content -->
+                <div class="px-4">
+                    <h1 class="mt-4">Dashboard</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                    {{-- @dd(Auth::user()->remember_token) --}}
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="p-4  h-100 rounded-4 Larger shadow bg-white text-info mb-4">
 
-                                        <div class="btn btn-outline-success catbtn " id="catbtn"><span
-                                                class="cid d-none">{{ $item->id }}</span>{{ $item->name }}</div>
+                                <div class="card-body">
+                                    <i class="fa-solid fa-calendar"></i>
+                                    Daily Order {{ $orderCountD ?? 00 }}
+
+                                    <div class="card-body">
+                                        <i class="fa-solid fa-weight-scale"></i>
+                                        Daily Sell = {{ $totalSalesD ?? 00 }}TK From {{ $salesCountD ?? 00 }} Orders
+                                        <br> <span><i class="fa-solid fa-tags"></i> Daily Discount =
+                                            {{ $totalDisD ?? 00 }}TK
+                                        </span>
+                                        <br><span><i class="fa-solid fa-cart-arrow-down"></i> Net Sales =
+                                            {{ $totalSalesD - $totalDisD ?? 00 }}TK</span>
                                     </div>
-                                @endforeach
+                                </div>
+
+                                <a class="nav-link" href="{{ url('offorder') }}">View Details</a>
+
+
                             </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="p-4  h-100 rounded-4 Larger shadow  bg-white text-warning mb-4">
+
+                                <div class="p-4-body">
+                                    <i class="fa-regular fa-calendar-check"></i>
+                                    Weekly Order {{ $orderCountW ?? 00 }}
+                                    <div class="card-body">
+                                        <i class="fa-solid fa-weight-scale"></i>
+                                        Weekly Sell = {{ $totalSalesW ?? 00 }}TK From {{ $salesCountW ?? 00 }} Orders
+                                        <br> <span><i class="fa-solid fa-tags"></i> Weekly Discount =
+                                            {{ $totalDisW ?? 00 }}TK
+                                        </span>
+                                        <br><span><i class="fa-solid fa-cart-arrow-down"></i> Net Sales =
+                                            {{ $totalSalesW - $totalDisW ?? 00 }}TK</span>
+                                    </div>
+                                </div>
+
+                                <div class=" d-flex align-items-center justify-content-between p-4">
+                                    <a class=" nav-link " href="{{ url('offorder') }}">View Details</a>
+                                    <div class="small "><i class="fas fa-angle-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="p-4  h-100 rounded-4 Larger shadow bg-white text-success mb-4">
+
+                                <div class="card-body">
+                                    <i class="fa-regular fa-calendar-days"></i>
+                                    Monthly Order {{ $orderCountM ?? 00 }}
+
+                                    <div class="card-body">
+                                        <i class="fa-solid fa-weight-scale"></i>
+                                        Monthly Sell = {{ $totalSalesM ?? 00 }}TK From {{ $salesCountM ?? 00 }} Orders
+                                        <br> <span><i class="fa-solid fa-tags"></i> Monthly Discount =
+                                            {{ $totalDisM ?? 00 }}TK
+                                        </span>
+                                        <br><span><i class="fa-solid fa-cart-arrow-down"></i> Monthly Sales =
+                                            {{ $totalSalesM - $totalDisM ?? 00 }}TK</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="p-4  h-100 rounded-4 shadow bg-white text-danger mb-4">
+                                <div class="card-body">Danger Card</div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-4 Larger shadow  bg-white card-hover  my-5">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h4 class="m-0 font-weight-bold text-info">Daily Order</h4>
+
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body mt-4">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="6" class="tablebtn text-end">
+                                                <span>@php
+                                                    $currentDate = date('d M Y');
+
+                                                    echo $currentDate; // 5 OCT 2023
+
+                                                @endphp</span>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>Order ({{ $orderCountD }})</th>
+                                            <th>Food Name</th>
+                                            <th>Total Amount ({{ $totalSalesD }} TK)</th>
+                                            <th>Discount ({{ $totalDisD }} TK)</th>
+                                            <th>Reason</th>
+                                            <th>Net Sale: {{ $totalSalesD - $totalDisD }} TK</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach ($items as $offorder)
+                                            <tr>
+                                                <td>{{ $loop->index + 1 }}</td>
+                                                <td>
+                                                    @foreach ($offorder->offorderdetails as $detail)
+                                                        <div class="">
+                                                            <span class="fs-6 me-3">{{ $detail->menu->name }} -</span>
+                                                            <span class="fs-6"> Q: {{ $detail->quantity }} </span>
+                                                        </div>
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $offorder->total }}</td>
+                                                <td>{{ $offorder->discount }}</td>
+                                                <td>{{ $offorder->reason }}</td>
+                                                <td>{{ $offorder->total - $offorder->discount }}</td>
+
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-4 Larger shadow  bg-white card-hover  my-5">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h4 class="m-0 font-weight-bold text-info">Order Report Table</h4>
+                            <div class="m-0 font-weight-bold btn btn-outline-info" id="submitp"><i class="fa-solid fa-print"></i></div>
+
+                        </div>
+                        <div class="card-body mt-4">
+                           
+                            <div class="accordion accordion-flush" id="accordionFlushExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                            aria-controls="flush-collapseOne">
+                                            Apply Filter
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                        data-bs-parent="#accordionFlushExample">
+                                        <div class="accordion-body">
+
+
+                                            <div class="row row-cols-4 g-4 mb-2">
+                                                <div class="col">
+                                                    <label class="form-label" for="filterDate">Filter by Date:</label>
+                                                    <input class="form-control" type="date" id="filterDate">
+                                                </div>
+ @if (Auth::check() && Auth::user()->role == 2)
+                                                <div class="col">
+                                                    <label class="form-label" for="filterCategory">Filter by
+                                                        Category:</label>
+                                                    <select class="form-select" id="filterCategory">
+                                                        <option value="">All Categories</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col">
+                                                    <label class="form-label" for="filterDateRange">Filter by Date
+                                                        Range:</label>
+                                                    <input class="form-control mb-1" type="date" id="filterStartDate">
+                                                    <input class="form-control" type="date" id="filterEndDate">
+                                                </div>
+                                                <div class="col">
+                                                    <label class="form-label" for="filterTimeRange">Filter by Time
+                                                        Range:</label>
+                                                    <input class="form-control mb-1" type="time" id="filterStartTime">
+                                                    <input class="form-control" type="time" id="filterEndTime">
+                                                </div>
+                                                 @endif
+                                                <div class="col">
+                                                    <button class="btn btn-outline-info" type="button"
+                                                        id="applyFilters">Apply Filters</button>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="table-responsive" id="printTable">
+                                 <div class="text-center fs-2 d-none d-print-block">Green-Kitchen Daily Report</div>
+                               
+                                <table class="table table-bordered" id="orderDetails" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Menu Name</th>
+                                            <th>Category</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                            <!-- Add more table headers based on your new filters -->
+                                        </tr>
+                                    </thead>
+                                    {{-- <tbody id="tableBody">
+
+                                    </tbody> --}}
+
+                                </table>
+                                <div id="totalsale">
+                                </div>
+                            </div>
+
 
                         </div>
                     </div>
-                    <div class="">
-                        <div class="row row-cols-1 row-cols-md-4 g-4" id="menuContainer">
+
+                    <div class="p-4 rounded-4 Larger shadow  bg-white card-hover  my-5">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h4 class="m-0 font-weight-bold text-info">Order Report Chart Product Vs Sale Quantity</h4>
+
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body mt-4">
+                             @if (Auth::check() && Auth::user()->role == 2)
+                            <div class="accordion accordion-flush" id="accordionFlushExample1">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#flush-collapseOne1"
+                                            aria-expanded="false" aria-controls="flush-collapseOne1">
+                                            Apply Filter
+                                        </button>
+                                    </h2>
+                                    <div id="flush-collapseOne1" class="accordion-collapse collapse"
+                                        data-bs-parent="#accordionFlushExample1">
+                                        <div class="accordion-body">
 
 
+                                            <div class="row row-cols-4 g-4 mb-2">
+                                                <div class="col">
+                                                    <label class="form-label" for="filterDate1">Filter by Date:</label>
+                                                    <input class="form-control" value="{{ $currentDate }}"
+                                                        type="date" id="filterDate1">
+                                                </div>
+
+                                                <div class="col">
+                                                    <label class="form-label" for="filterCategory1">Filter by
+                                                        Category:</label>
+                                                    <select class="form-select" id="filterCategory1">
+                                                        <option value="">All Categories</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col">
+                                                    <label class="form-label" for="filterDateRange1">Filter by Date
+                                                        Range:</label>
+                                                    <input class="form-control mb-1" type="date"
+                                                        id="filterStartDate1">
+                                                    <input class="form-control" type="date" id="filterEndDate1">
+                                                </div>
+                                                <div class="col">
+                                                    <label class="form-label" for="filterTimeRange1">Filter by Time
+                                                        Range:</label>
+                                                    <input class="form-control mb-1" type="time"
+                                                        id="filterStartTime1">
+                                                    <input class="form-control" type="time" id="filterEndTime1">
+                                                </div>
+                                                <div class="col">
+                                                    <button class="btn btn-outline-info" type="button"
+                                                        id="applyFilters1">Apply Filters</button>
+                                                </div>
+                                            </div>
 
 
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                             @endif
+                            <div>
+                                <canvas id="myChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="col-md-4">
-                    <div id="print" class="card p-2">
-                        <div class="btn btn-outline-info d-print-none" id="staffCheckbox"> Staff</div>
-                        <div class="d-none d-print-block">
-
-
-                            <div class="fs-3 text-center r-heading">Green Kitchen</div>
-                            <div class="r-text text-center">Islam Tower,Dhanmondi-32(Sukrabad), Mirpur Road,Dhaka-1207 <br>
-                                Mobile No:
-                                09666747470
-                            </div>
-                            <div class="d-flex justify-content-between my-2">
-                                <div class="r-text ">
-                                    Date: @php
-                                        $currentDateTime = date('Y-m-d H:i:s');
-                                        echo $currentDateTime;
-                                    @endphp
-
-                                </div>
-
-                                <div class="r-text">Invoice ID: 000{{ $lastOrderId + 1 }}</div>
-                            </div>
-                        </div>
-                        <ol>
-                            <div class="row r-text mb-2">
-                                <div class="col-2">
-                                    Item
-                                </div>
-                                <div class="col-2">
-                                    Qty
-                                </div>
-                                <div class="col-3">
-                                    Price
-                                </div>
-                                <div class="col-2">
-                                    Total
-                                </div>
-                            </div>
-
-                            <div class="orders r-text" id="orders">
-
-                            </div>
-
-                        </ol>
-                        <div class="mt-4">
-                            <span>Total Bill: </span>
-                            <span id="total-order"></span>
-                            <span>TK</span>
-                        </div>
-                        {{-- <div>
-                            <span>Tax: </span>
-                            <span id="tax">50</span>
-                            <span>TK</span>
-                        </div> --}}
-                        <div class="form-row my-2">
-                            <div class="form-group col-md-6 col-sm-6">
-                                <label for="staffs">Staff Name</label>
-                                <select name="staffs" id="staffs" class="form-control select2">
-                                    <option value="0">Customer</option>
-                                    @foreach ($staffs as $staff)
-                                        <option value="{{ $staff->id }}"
-                                            data-sname="{{ $staff->name }}-{{ $staff->employeeId }}">{{ $staff->name }} -
-                                            {{ $staff->employeeId }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <!--<div>-->
-
-                        <!--    <div class="d-print-none">-->
-                        <!--        <div class="input-group mb-3">-->
-                        <!--            <input type="text" class="form-control" id="dis_input"-->
-                        <!--                placeholder="Discount Amount In TK" aria-label="Username"-->
-                        <!--                aria-describedby="basic-addon1">-->
-                        <!--            <span class="input-group-text btn btn-outline-danger" id="apply_dis">Apply-->
-                        <!--                Discount</span>-->
-                        <!--        </div>-->
-                        <!--        <input type="text" class="form-control" id="reason" placeholder="Reason Of Discount">-->
-                        <!--    </div>-->
-
-
-                        <!--</div>-->
-
-                        <div class="">
-                            <span>Special Discount: </span>
-                            <span id="discount">0</span>
-                            <span>TK</span>
-                        </div>
-                        <div>
-                            <span>Ammount to Pay: </span>
-                            <span id="total-order2"></span>
-                            <span>TK</span>
-                        </div>
-                        <div class="text-center d-none d-print-block">
-                            Thank You <br> Please Visit Again <br> Print By:
-                            @if (Auth::Check())
-                                {{ Auth::user()->name }}
-                            @endif
-                            <br>
-                            <img height="70px" src="{{ asset('assets/img/pngegg.png') }}" alt="">
-                        </div>
-                    </div>
-                    <button class="btn btn-outline-danger pnone mt-5" id="submitp">Submit Order</button>
-                </div>
-
-            </div>
-
+                <!-- changed content  ends-->
+            </main>
+            <!-- footer -->
         </div>
-
+        <h3>Dashboaard Home</h3>
     </div>
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <!-- DataTables JavaScript -->
+    {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.9/js/buttons.print.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
-        })
+            var filterDateInput = $('#filterDate');
+            var filterCategoryInput = $('#filterCategory');
+            var filterStartDateInput = $('#filterStartDate');
+            var filterEndDateInput = $('#filterEndDate');
+            var filterStartTimeInput = $('#filterStartTime');
+            var filterEndTimeInput = $('#filterEndTime');
+            var tbody = $('#orderDetails tbody');
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': jQuery('meta[name="X-CSRF-TOKEN"]').attr('content')
+            var tfoot = $('#totalsale');
+            // Initial load
+            fetchData();
+
+            // Apply filters button click event
+            $('#applyFilters').on('click', function() {
+                fetchData(); // Reload data when the Apply Filters button is clicked
+
+
+            });
+
+            // Function to make an AJAX request and process the data
+            function fetchData() {
+                // Destroy existing DataTable instance (if it exists)
+                if ($.fn.DataTable.isDataTable('#orderDetails')) {
+                    $('#orderDetails').DataTable().destroy();
+                }
+                $.ajax({
+                    url: '{{ url('orderdetailsapi') }}',
+                    method: 'GET',
+                    data: {
+                        date: filterDateInput.val(),
+                        category: filterCategoryInput.val(),
+                        startDate: filterStartDateInput.val(),
+                        endDate: filterEndDateInput.val(),
+                        startTime: filterStartTimeInput.val(),
+                        endTime: filterEndTimeInput.val(),
+                    },
+                    success: function(data) {
+                        // console.log(data);
+                        processData(data);
+
+                        // Reset filter input values after processing the data
+                        filterDateInput.val('');
+                        filterCategoryInput.val('');
+                        filterStartDateInput.val('');
+                        filterEndDateInput.val('');
+                        filterStartTimeInput.val('');
+                        filterEndTimeInput.val('');
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+
+            }
+
+
+            // Function to process and display the data
+            function processData(data) {
+                function getCurrentDate() {
+                    var today = new Date();
+                    var dd = String(today.getDate()).padStart(2, '0');
+                    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                    var yyyy = today.getFullYear();
+
+                    return yyyy + '-' + mm + '-' + dd;
+                }
+                console.log(getCurrentDate());
+                if (
+                    filterDateInput.val() == '' &&
+                    filterCategoryInput.val() == '' &&
+                    filterStartDateInput.val() == '' &&
+                    filterEndDateInput.val() == '' &&
+                    filterStartTimeInput.val() == '' &&
+                    filterEndTimeInput.val() == ''
+                ) {
+                    var selectedDate = getCurrentDate();
+                } else {
+                    var selectedDate = filterDateInput.val();
+                }
+
+
+                // Populate the category filter dropdown dynamically
+                var uniqueCategories = [...new Set(data.map(order => order.menu.category.name))];
+                var categorySelect = $('#filterCategory');
+
+
+
+
+                // categorySelect.empty();
+                categorySelect.append('<option value="">All Categories</option>');
+                // Add options based on unique categories
+                uniqueCategories.forEach(category => {
+                    
+                    categorySelect.append('<option value="' + category + '">' + category + '</option>');
+                });
+
+                // Filter data based on the selected date and additional criteria
+                var filteredData = data.filter(function(order) {
+                    var orderDate = order.created_at.split('T')[0];
+
+                    // Assuming date format from the API is in 'YYYY-MM-DD'
+                    if (selectedDate && orderDate !== selectedDate) {
+                        return false;
+                    }
+
+                    // Add more conditions for other filters (category, date range, time range)
+                    if (filterCategoryInput.val() && order.menu.category.name !== filterCategoryInput
+                        .val()) {
+                        return false;
+                    }
+
+                    // Date range filter
+                    if (filterStartDateInput.val() && filterEndDateInput.val()) {
+                        var orderDateTime = new Date(order.created_at);
+                        var filterStartDate = new Date(filterStartDateInput.val());
+                        var filterEndDate = new Date(filterEndDateInput.val());
+
+                        if (orderDateTime < filterStartDate || orderDateTime > filterEndDate) {
+                            return false;
+                        }
+                    }
+
+                    // Time range filter
+                    if (filterStartTimeInput.val() && filterEndTimeInput.val()) {
+                        var orderTime = order.created_at.split('T')[1].substring(0, 5);
+                        var filterStartTime = filterStartTimeInput.val();
+                        var filterEndTime = filterEndTimeInput.val();
+
+                        if (orderTime < filterStartTime || orderTime > filterEndTime) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+
+                });
+
+                // Clear existing rows
+                tbody.empty();
+                tfoot.empty();
+                filterCategoryInput.val('');
+                // Clear existing options
+
+                // Create an object to store aggregated data based on menu id
+                var aggregatedData = {};
+
+                // Iterate through each order in the filtered data
+                filteredData.forEach(function(order) {
+                    var menuId = order.menu_id;
+
+                    // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+                    if (!aggregatedData[menuId]) {
+                        aggregatedData[menuId] = {
+                            menuName: order.menu.name,
+                            category: order.menu.category.name,
+                            date: order.created_at,
+                            quantity: order.quantity,
+                            total: order.total
+                        };
+                    } else {
+                        aggregatedData[menuId].quantity += order.quantity;
+                        aggregatedData[menuId].total += order.total;
+                    }
+                });
+
+                // ...
+                console.log(aggregatedData);
+                console.log(data);
+
+                var filterdataArray = $.map(aggregatedData, function(value) {
+                    return value;
+                });
+
+                console.log(filterdataArray);
+
+                $('#orderDetails').DataTable({
+                    data: filterdataArray,
+                    columns: [{
+                            data: 'menuName'
+                        },
+                        {
+                            data: 'category'
+                        },
+                        {
+                            data: 'quantity'
+                        },
+                        {
+                            data: 'total'
+                        },
+                        {
+                            data: 'date'
+                        }
+                    ],
+                    buttons: [
+                        'copy',
+                        'excel',
+                        'pdf',
+                        'print' // Add the 'print' button for printing
+                    ]
+
+                });
+                var subTotalQuantity = 0;
+                var subTotalTotal = 0;
+
+                for (var menuId in aggregatedData) {
+                    subTotalQuantity += aggregatedData[menuId].quantity;
+                    subTotalTotal += aggregatedData[menuId].total;
+                }
+
+                // Append a new row at the bottom with the sub-total
+                var subTotalRow = '<div class="sub-total"><span >Total Quantity: </span><span class="me-2">' +
+                    subTotalQuantity + 'Pices </span><span>Total Sale: </span><span>' + subTotalTotal +
+                    'TK </span></div>';
+                tfoot.append(subTotalRow);
+
+
             }
         });
         $(document).ready(function() {
-            // product show by category
-            function render_quiz_questions(quizzes) {
-                let q = "";
-                quizzes.forEach(menu => {
-                    let html = '';
+            var filterDateInput1 = $('#filterDate1');
+            var filterCategoryInput1 = $('#filterCategory1');
+            var filterStartDateInput1 = $('#filterStartDate1');
+            var filterEndDateInput1 = $('#filterEndDate1');
+            var filterStartTimeInput1 = $('#filterStartTime1');
+            var filterEndTimeInput1 = $('#filterEndTime1');
 
-                    var cDiscount = menu.price - Math.round(((menu.category.discount * menu.price) / 100) /
-                        5) * 5;
-                    var sDiscount = cDiscount - Math.round(((menu.discount * cDiscount) / 100) / 5) * 5;
+            var myChart; // Declare myChart outside the fetchData function
 
-                    html +=
+            // Initial load
+            fetchData1();
 
-                        `<div class="col" >
-                            <div class="card h-100">
-                                    <img src="{{ asset('storage/menu') }}/${ menu.image }" height="130px"
-                                        class="card-img-top" alt="${ menu.image }">
-                                    <div class="card-body">
-                                        <span class="id d-none">${ menu.id }</span>
-                                        <h5 class="card-title clr name">${ menu.name }</h5>
-                                        <div class="card-text ">
-                                           <div class="text-decoration-line-through">
-                                                <span>Price: </span><span class="price"> ${ menu.price }</span>TK
-                                                </div>
-                                           <div>
-                                            <span>Discount Price:</span>
-                                           <span  class="price customer"> ${cDiscount }</span>
-                                            <span  class="sprice d-none staff"> ${sDiscount}</span>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="text-center mt-3">
-                                            <button class="btn btn-outline-danger select">Add</button>
-                                             <button class="btn btn-outline-danger d-none staff">Staff</button>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                        `;
-
-                    q += html;
-
-                });
-                $("#menuContainer").html(q);
-
-            } <
-            !--staff controlle js-- >
-            $('#staffCheckbox').click(function() {
-
-                $('.staff').removeClass('d-none');
-                $('.select').addClass('d-none');
-                $('.customer').addClass('d-none');
-                let sName = $('#staffs').data('sname');
-
-                $('#invoiceStaff').text('Staff-Invoice');
+            // Apply filters button click event
+            $('#applyFilters1').on('click', function() {
+                fetchData1(); // Reload data when the Apply Filters button is clicked
 
 
             });
-            // mostak
-            $(".catbtn").click(function() {
-                var id = $(this).find('.cid').html();
-                console.log(id);
-                $.ajax({
-                        method: "GET",
-                        url: "{{ url('catmenu') }}/" + (id ?? 1),
 
-
-                        dataType: "json",
-                        success: function(response) {
-                            render_quiz_questions(response);
-                        }
-                    })
-                    .done(function(data) {
-                        if (data.length != 0) {
-                            //show the quiz
-                        } else {
-                            console.log("no quiz in the databaes");
-                        }
-                    });
-            });
-            $("#catbtn").trigger('click');
-
-            // select product from card and input into menu
-            $(document).on('click', '.select', function() {
-                // $('.select').click(function() {
-                var id = $(this).closest('.col').find('.id').text();
-                var name = $(this).closest('.col').find('.name').text();
-                var price = $(this).closest('.col').find('.price').text();
-                var dis = $(this).closest('.col').find('.discount').text();
-
-                // Check if an item with the same id already exists
-                var existingItem = $('#orders').find(`.order-item[data-id="${id}"]`);
-
-                if (existingItem.length > 0) {
-                    var quantity = parseInt(existingItem.find('.quantity').val());
-                    quantity++;
-                    existingItem.find('.quantity').val(quantity);
-                    var total = (parseFloat(price) * quantity).toFixed(2);
-                    existingItem.find('.total').text(total);
-                } else if (dis == price) {
-                    var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
-                        <div class="row">
-                                        <div class="col-2">
-                                            <div class="order-info d-inline">
-                                                <span class="order-name">${name}</span>
-                                                <span class="order-price d-none">${dis}</span>
-                                                </div>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
-                                                    <span class="order-q d-none d-print-block"></span>
-                       
-                                        </div>
-                                        <div class="col-3 ">
-                                           
-                                            <span class="">${dis}</span>
-                                            <span >TK</span>
-                                            
-                                        </div>
-                                        <div class="col-2">
-                                            
-                                            <span class="total">${dis}</span>
-                                            <span >TK</span>
-                                        </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
-                                        </div>
-                        </div>
-                    
-                   
-                    </li> `;
-
-
-                    $('#orders').append(orderItem);
-                } else {
-                    var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
-                        <div class="row">
-                                        <div class="col-2">
-                                            <div class="order-info d-inline">
-                                                <span class="order-name">${name}</span>
-                                                <span class="order-price d-none">${dis}</span>
-                                                </div>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
-                                                    <span class="order-q d-none d-print-block"></span>
-                       
-                                        </div>
-                                        <div class="col-3 ">
-                                            <div class="text-decoration-line-through">
-                                                
-                                                <span class="">${price}</span>
-                                                <span >TK</span>
-                                                </div>
-                                            <span class="">${dis}</span>
-                                            <span >TK</span>
-                                            
-                                        </div>
-                                        <div class="col-2">
-                                            
-                                            <span class="total">${dis}</span>
-                                            <span >TK</span>
-                                        </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
-                                        </div>
-                        </div>
-                    
-                   
-                    </li> `;
-
-
-                    $('#orders').append(orderItem);
-                }
-                updateSubtotal();
-                payAmount();
-            });
-
-            $(document).on('click', '.staff', function() {
-                // $('.select').click(function() {
-                var id = $(this).closest('.col').find('.id').text();
-                var name = $(this).closest('.col').find('.name').text();
-                var dis = $(this).closest('.col').find('.sprice').text();
-                var price = $(this).closest('.col').find('.discount').text();
-
-                // Check if an item with the same id already exists
-                var existingItem = $('#orders').find(`.order-item[data-id="${id}"]`);
-
-
-
-                if (existingItem.length > 0) {
-                    var quantity = parseInt(existingItem.find('.quantity').val());
-                    quantity++;
-                    existingItem.find('.quantity').val(quantity);
-                    var total = (parseFloat(dis) * quantity).toFixed(2);
-                    existingItem.find('.total').text(total);
-                } else if (dis == price) {
-                    var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
-                        <div class="row">
-                                        <div class="col-2">
-                                            <div class="order-info d-inline">
-                                                <span class="order-name">${name}</span>
-                                                <span class="order-price d-none">${dis}</span>
-                                                </div>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
-                                                    <span class="order-q d-none d-print-block"></span>
-                       
-                                        </div>
-                                        <div class="col-3 ">
-                                           
-                                            <span class="">${dis}</span>
-                                            <span >TK</span>
-                                            
-                                        </div>
-                                        <div class="col-2">
-                                            
-                                            <span class="total">${dis}</span>
-                                            <span >TK</span>
-                                        </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
-                                        </div>
-                        </div>
-                    
-                   
-                    </li> `;
-
-
-                    $('#orders').append(orderItem);
-                } else {
-                    var orderItem = `
-                    <li class="order-item mb-2" data-id="${id}">
-                        <div class="row">
-                                        <div class="col-2">
-                                            <div class="order-info d-inline">
-                                                <span class="order-name">${name}</span>
-                                                <span class="order-price d-none">${dis}</span>
-                                                </div>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
-                                                    <span class="order-q d-none d-print-block"></span>
-                       
-                                        </div>
-                                        <div class="col-3 ">
-                                            <div class="text-decoration-line-through">
-                                                
-                                                <span class="">${price}</span>
-                                                <span >TK</span>
-                                                </div>
-                                            <span class="">${dis}</span>
-                                            <span >TK</span>
-                                            
-                                        </div>
-                                        <div class="col-2">
-                                            
-                                            <span class="total">${dis}</span>
-                                            <span >TK</span>
-                                        </div>
-                                        <div class="col-3">
-                                            <button class="pnone btn btn-outline-danger remove-item">Remove</button>
-                                        </div>
-                        </div>
-                    </li> `;
-                    $('#orders').append(orderItem);
-                }
-
-                updateSubtotal();
-                payAmount();
-            });
-
-            $(document).on('input', '.quantity', function() {
-                var quantity = $(this).val();
-                var price = $(this).closest('.order-item').find('.order-price').text();
-                var total = (parseFloat(price) * parseInt(quantity)).toFixed(2);
-                $(this).closest('.order-item').find('.total').text(total);
-
-                updateSubtotal();
-                payAmount();
-            });
-
-            $(document).on('click', '.remove-item', function() {
-                $(this).closest('.order-item').remove();
-                updateSubtotal();
-                payAmount();
-            });
-            $(document).on('click', '.staff', function() {
-                $(this).closest('.order-item').remove();
-                updateSubtotal();
-                payAmount();
-            });
-
-            function updateSubtotal() {
-                var subtotal = 0;
-                $('#orders .order-item').each(function() {
-                    var price = parseFloat($(this).find('.order-price').text());
-                    var quantity = parseInt($(this).find('.quantity').val());
-                    $(this).find('.order-q').text(quantity);
-                    subtotal += (price * quantity);
-                });
-
-                $('#total-order').text(subtotal.toFixed(2));
-            }
-
-            $('#apply_dis').click(function() {
-                var disc = parseInt($('#dis_input').val());
-                $('#discount').text(disc);
-                var tbill = parseFloat($('#total-order').text());
-                var tax = parseFloat($('#tax').text());
-                var dis = parseFloat($('#discount').text());
-
-                var num = tbill - dis;
-                $('#total-order2').text(num);
-            })
-
-            function payAmount() {
-
-
-                var tbill = parseFloat($('#total-order').text());
-                var tax = parseFloat($('#tax').text());
-                var dis = parseFloat($('#discount').text());
-
-                var num = tbill - dis;
-                $('#total-order2').text(num);
-            }
-
-
-
-
-            // order Submitted
-
-            $('#submitp').click(function() {
-                var items = [];
-                var totalbill = $('#total-order').text();
-                var discount = $('#discount').text();
-                var reason = $('#reason').val();
-                var staff = parseFloat($('#staffs').val());
-                var sInvoice = $('#invoiceStaff').text();
-                let selectedOption = $('#staffs').find(':selected');
-                let sNameAttribute = selectedOption.data('sname');
-                let sNameText = selectedOption.text();
-                if (sInvoice === "Staff-Invoice" && staff === 0) {
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Input Staff Name',
-                        showCancelButton: false,
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            confirmButton: 'btn btn-primary'
-                        }
-                    });
-
-                    return;
-                }
-                if (discount > 0 && reason === "") {
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Input Discount Reason' + discount + reason,
-                        showCancelButton: false,
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            confirmButton: 'btn btn-primary'
-                        }
-                    });
-
-                    return;
-                }
-                if (discount == 0 && reason !== "") {
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Apply Discount Or Remove Reason',
-                        showCancelButton: false,
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            confirmButton: 'btn btn-primary'
-                        }
-                    });
-
-                    return;
-                }
-
-                $('#orders .order-item').each(function() {
-                    var id = $(this).data('id');
-                    var quantity = $(this).find('.order-q').html();
-
-                    items.push({
-                        id: id,
-                        quantity: quantity
-                    });
-                });
-
-                let csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                });
+            // Function to make an AJAX request and process the data
+            function fetchData1() {
 
                 $.ajax({
-                    url: '{{ url('offorder') }}',
-                    type: 'POST',
+                    url: '{{ url('orderdetailsapi') }}',
+                    method: 'GET',
                     data: {
-                        items: items,
-                        totalbill: totalbill,
-                        discount: discount,
-                        reason: reason
+                        date: filterDateInput1.val(),
+                        category: filterCategoryInput1.val(),
+                        startDate: filterStartDateInput1.val(),
+                        endDate: filterEndDateInput1.val(),
+                        startTime: filterStartTimeInput1.val(),
+                        endTime: filterEndTimeInput1.val(),
                     },
-                    success: function(response) {
-                        if (response.success) {
-                            console.log(response.data);
-                        }
+                    success: function(data) {
+                        // console.log(data);
+                        processData1(data);
+
+                        // Reset filter input values after processing the data
+                        // filterDateInput1.val('');
+                        // filterCategoryInput1.val('');
+                        // filterStartDateInput1.val('');
+                        // filterEndDateInput1.val('');
+                        // filterStartTimeInput1.val('');
+                        // filterEndTimeInput1.val('');
                     },
                     error: function(error) {
-                        console.log(error);
+                        console.error('Error fetching data:', error);
                     }
                 });
 
-                // print section
+            }
 
-                var printContents = $('#print').html();
-                $(".order-q").removeClass("d-none");
+
+            // Function to process and display the data
+            function processData1(data) {
+                var selectedDate1 = filterDateInput1.val();
+
+
+                // Populate the category filter dropdown dynamically
+                var uniqueCategories1 = [...new Set(data.map(order => order.menu.category.name))];
+                var categorySelect1 = $('#filterCategory1');
+
+
+
+
+
+                // Add options based on unique categories
+                uniqueCategories1.forEach(category => {
+                    categorySelect1.append('<option value="' + category + '">' + category + '</option>');
+                });
+
+                // Filter data based on the selected date and additional criteria
+                var filteredData1 = data.filter(function(order) {
+                    var orderDate1 = order.created_at.split('T')[0];
+
+                    // Assuming date format from the API is in 'YYYY-MM-DD'
+                    if (selectedDate1 && orderDate1 !== selectedDate1) {
+                        return false;
+                    }
+
+                    // Add more conditions for other filters (category, date range, time range)
+                    if (filterCategoryInput1.val() && order.menu.category.name !== filterCategoryInput1
+                        .val()) {
+                        return false;
+                    }
+
+                    // Date range filter
+                    if (filterStartDateInput1.val() && filterEndDateInput1.val()) {
+                        var orderDateTime1 = new Date(order.created_at);
+                        var filterStartDate1 = new Date(filterStartDateInput1.val());
+                        var filterEndDate1 = new Date(filterEndDateInput1.val());
+
+                        if (orderDateTime1 < filterStartDate1 || orderDateTime1 > filterEndDate1) {
+                            return false;
+                        }
+                    }
+
+                    // Time range filter
+                    if (filterStartTimeInput1.val() && filterEndTimeInput1.val()) {
+                        var orderTime1 = order.created_at.split('T')[1].substring(0, 5);
+                        var filterStartTime1 = filterStartTimeInput1.val();
+                        var filterEndTime1 = filterEndTimeInput1.val();
+
+                        if (orderTime1 < filterStartTime1 || orderTime1 > filterEndTime1) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+
+                });
+
+
+
+                // Create an object to store aggregated data based on menu id
+                var aggregatedData1 = {};
+
+                // Iterate through each order in the filtered data
+                filteredData1.forEach(function(order) {
+                    var menuId1 = order.menu_id;
+
+                    // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+                    if (!aggregatedData1[menuId1]) {
+                        aggregatedData1[menuId1] = {
+                            menuName1: order.menu.name,
+                            category1: order.menu.category.name,
+                            date1: order.created_at,
+                            quantity1: order.quantity,
+                            total1: order.total
+                        };
+                    } else {
+                        aggregatedData1[menuId1].quantity1 += order.quantity;
+                        aggregatedData1[menuId1].total1 += order.total;
+                    }
+                });
+
+                // ...
+
+
+
+
+                // Convert aggregated data to arrays for Chart.js
+                var labels = [];
+                var quantities = [];
+
+                for (var menuId1 in aggregatedData1) {
+                    labels.push(aggregatedData1[menuId1].menuName1);
+                    quantities.push(aggregatedData1[menuId1].quantity1);
+                }
+
+                // Destroy the existing chart instance (if it exists)
+                if (myChart) {
+                    myChart.destroy();
+                }
+
+                // Create a bar chart using Chart.js
+                var ctx = document.getElementById('myChart').getContext('2d');
+                myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Quantity Sold',
+                            data: quantities,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: .5
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+            }
+
+
+            // Printn
+            $('#submitp').click(function() {
+                var printContents = $('#printTable').html();
+                
                 var originalContents = document.body.innerHTML;
                 document.body.innerHTML = printContents;
                 window.print();
                 document.body.innerHTML = originalContents;
 
 
-                $("#orders").empty();
+                // $("#orders").empty();
                 location.reload();
-
             });
-            // Printn
-            // $('#submitp').click(function() {
-            //     var printContents = $('#print').html();
-            //     $(".order-q").removeClass("d-none");
-            //     var originalContents = document.body.innerHTML;
-            //     document.body.innerHTML = printContents;
-            //     window.print();
-            //     document.body.innerHTML = originalContents;
-
-
-            //     $("#orders").empty();
-            //     location.reload();
-            // });
-
-
         });
     </script>
 @endsection
+

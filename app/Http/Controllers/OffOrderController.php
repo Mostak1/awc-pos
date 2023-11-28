@@ -62,6 +62,12 @@ class OffOrderController extends Controller
             $order->total = $request->totalbill;
             $order->discount = $request->discount;
             $order->reason = $request->reason;
+            if ($request->reason == 'Customer') {
+                $order->active =1;
+            } else {
+                $order->active =2;
+            }
+            
             $order->save();
 
             $payment = new Payment();

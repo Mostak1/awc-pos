@@ -487,9 +487,9 @@
                     })
                     .done(function(data) {
                         if (data.length != 0) {
-                            //show the quiz
+                           
                         } else {
-                            console.log("no quiz in the databaes");
+                            console.log("no Data in the databaes");
                         }
                     });
             });
