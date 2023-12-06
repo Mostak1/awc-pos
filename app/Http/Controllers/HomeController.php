@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\OffOrder;
 use App\Models\OffOrderDetails;
 use App\Models\Payment;
@@ -83,6 +84,7 @@ class HomeController extends Controller
         $currentDate = Carbon::now();
         // dd($currentDate);
         $orderCountD = OffOrder::whereDate('created_at', $currentDate)->count();
+        $orderCountDstaff = OffOrder::whereDate('created_at', $currentDate)->where('active',2)->count();
 
         $totalSalesD = OffOrder::whereDate('created_at', $currentDate)->sum('total');
         $totalDisD = OffOrder::whereDate('created_at', $currentDate)->sum('discount');
@@ -92,13 +94,15 @@ class HomeController extends Controller
         $card = Payment::whereDate('created_at', $currentDate)->where('method','card')->sum('total');
         $items = OffOrder::with('tab', 'user', 'offorderdetails','payment')->whereDate('created_at', $currentDate)->get();
         $orderDetails = OffOrderDetails::with('menu', 'off_order')->whereDate('created_at', $currentDate)->get();
+
+        $categories = Category::get();
         // $items = OffOrderDetails::with(['offorder.user', 'menu'])->whereDate('created_at', $currentDate)->get();
 
         // return view('offorder.dailyreport', compact('items',card 'orderCountD', 'totalSalesD', 'totalDisD'));
 
         // dd($role);
 
-        return view('dashboard', compact('totalDisM', 'totalDisD', 'totalDisW', 'items', 'orderDetails','bkash','card','cash'))
+        return view('dashboard', compact('orderCountDstaff','totalDisM', 'totalDisD', 'totalDisW', 'items', 'orderDetails','bkash','card','cash','categories'))
             ->with('orderCountD', $orderCountD)
             ->with('totalSalesD', $totalSalesD)
             ->with('salesCountD', $salesCountD)
@@ -111,6 +115,17 @@ class HomeController extends Controller
     }
 
     public function offorderDetailsapi()
+    {
+        $orderDetails = OffOrderDetails::with('menu.category', 'off_order.payment')->get();
+        return response()->json($orderDetails);
+    }
+    public function stafforder()
+    {
+        $currentDate = Carbon::now();
+        $orderDetails = OffOrderDetails::whereDate('created_at', $currentDate)->with('menu.category', 'off_order.payment')->get();
+        return response()->json($orderDetails);
+    }
+    public function customerorder()
     {
         $orderDetails = OffOrderDetails::with('menu.category', 'off_order.payment')->get();
         return response()->json($orderDetails);

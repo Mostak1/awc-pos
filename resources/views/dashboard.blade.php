@@ -1,5 +1,28 @@
 @extends('layouts.main')
-@section('style')
+@section('css')
+    <style>
+        @media print {
+
+            table,
+            .ptext {
+                font-size: 10pt;
+                margin-bottom: 1px;
+            }
+
+            th,
+            td {
+                padding: 0px;
+                height: 4px;
+
+            }
+
+
+
+            @page {
+                margin: 0.1in;
+            }
+        }
+    </style>
 @endsection
 @section('content')
     <div class="container">
@@ -8,6 +31,9 @@
         <div id="layoutSidenav_content">
             <main>
                 <!-- changed content -->
+                @php
+                    $user = Auth::guard('web')->user();
+                @endphp
                 <div class="px-4">
                     <h1 class="mt-4">Dashboard</h1>
                     <ol class="breadcrumb mb-4">
@@ -178,75 +204,88 @@
 
                         </div>
                         <div class="card-body mt-4">
-                            <div class="accordion accordion-flush" id="accordionFlushExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#flush-collapseOne" aria-expanded="false"
-                                            aria-controls="flush-collapseOne">
-                                            Apply Filter
-                                        </button>
-                                    </h2>
-                                    <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                        data-bs-parent="#accordionFlushExample">
-                                        <div class="accordion-body">
+                            @if ($user->can('category.index') || $user->can('subcategory.index') || $user->can('tab.index'))
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                                Apply Filter
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                            data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
 
 
-                                            <div class="row row-cols-4 g-4 mb-2">
-                                                <div class="col">
-                                                    <label class="form-label" for="filterDate">Filter by Date:</label>
-                                                    <input class="form-control" type="date" id="filterDate">
-                                                </div>
+                                                <div class="row row-cols-4 g-4 mb-2">
+                                                    <div class="col">
+                                                        <label class="form-label" for="filterDate">Filter by Date:</label>
+                                                        <input class="form-control" type="date" id="filterDate">
+                                                    </div>
 
-                                                <div class="col">
-                                                    <label class="form-label" for="filterCategory">Filter by
-                                                        Category:</label>
-                                                    <select class="form-select" id="filterCategory">
-                                                        <option value="">All Categories</option>
-                                                    </select>
+                                                    <div class="col">
+                                                        <label class="form-label" for="filterCategory">Filter by
+                                                            Category:</label>
+                                                        <select class="form-select" id="filterCategory">
+                                                            <option value="">All Categories</option>
+                                                            @foreach ($categories as $category)
+                                                                <option value="{{ $category->name }}">
+                                                                    {{ $category->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label class="form-label" for="filterStaff">Filter by
+                                                            Staff/Customer:</label>
+                                                        <select class="form-select" id="filterStaff">
+                                                            <option value="">Select</option>
+                                                            <option value="1">Staff</option>
+                                                            <option value="2">Customer</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <label class="form-label" for="filterDateRange">Filter by Date
+                                                            Range:</label>
+                                                        <input class="form-control mb-1" type="date"
+                                                            id="filterStartDate">
+                                                        <input class="form-control" type="date" id="filterEndDate">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label class="form-label" for="filterTimeRange">Filter by Time
+                                                            Range:</label>
+                                                        <input class="form-control mb-1" type="time"
+                                                            id="filterStartTime">
+                                                        <input class="form-control" type="time" id="filterEndTime">
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    <label class="form-label" for="filterStaff">Filter by
-                                                        Staff/Customer:</label>
-                                                    <select class="form-select" id="filterStaff">
-                                                        <option value="">Select</option>
-                                                        <option value="1">Staff</option>
-                                                        <option value="2">Customer</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col">
-                                                    <label class="form-label" for="filterDateRange">Filter by Date
-                                                        Range:</label>
-                                                    <input class="form-control mb-1" type="date" id="filterStartDate">
-                                                    <input class="form-control" type="date" id="filterEndDate">
-                                                </div>
-                                                <div class="col">
-                                                    <label class="form-label" for="filterTimeRange">Filter by Time
-                                                        Range:</label>
-                                                    <input class="form-control mb-1" type="time" id="filterStartTime">
-                                                    <input class="form-control" type="time" id="filterEndTime">
-                                                </div>
-                                                <div class="col">
+                                                <span class="me-4">
                                                     <button class="btn btn-outline-info" type="button"
                                                         id="applyFilters">Apply Filters</button>
-                                                </div>
+                                                </span>
+                                                <span class="">
+                                                    <button class="btn btn-outline-info" type="button"
+                                                        id="clearFilters">Clear Filters</button>
+                                                </span>
+
+
                                             </div>
-
-
                                         </div>
                                     </div>
+
                                 </div>
-
-                            </div>
-
-                            <div class="table-responsive" id="printTable">
+                            @endif
+                            <div class="table-responsive" id="">
                                 <div class="text-center fs-2 d-none d-print-block">Green-Kitchen Daily Report</div>
+                                <div class="text-center fs-3" id="filterHead"></div>
                                 <table class="table table-bordered" id="orderDetails" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Menu Name</th>
                                             <th>Category</th>
                                             <th>Quantity</th>
+                                            <th>Price</th>
                                             <th>Total</th>
                                             <th>Date</th>
                                             <!-- Add more table headers based on your new filters -->
@@ -264,7 +303,77 @@
 
                         </div>
                     </div>
+                    <div class="card p-4 d-none d-print-block">
+                        <div class="row fs-6" id="printTable">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <div class="text-center fs-5">Green-Kitchen Daily Report</div>
+                                    <div class="py-1 ptext d-flex flex-row align-items-center justify-content-between">
+                                        <span class="m-0 font-weight-bold ">Date: @php
+                                            $currentDate = date('d M Y');
 
+                                            echo $currentDate; // 5 OCT 2023
+
+                                        @endphp
+                                        </span>
+                                        <span>
+                                            Total Order: {{ $orderCountD }}
+                                        </span>
+                                        <span>
+                                            Total Sale: {{ $totalSalesD }}TK ; Cash: {{ $cash }}TK; Bkash:
+                                            {{ $bkash }}TK; Card: {{ $card }}TK
+                                        </span>
+                                    </div>
+                                    <div class="text-center fs-5">Staff </div>
+
+                                    <table class="table table-bordered" id="stafforderdetails" width="100%"
+                                        cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Menu Name</th>
+                                                <th>Category</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total</th>
+
+                                                <!-- Add more table headers based on your new filters -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <div id="stafftotal">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="table-responsive" id="">
+                                    <div class="text-center fs-5">Customer</div>
+                                    <div class="text-center fs-3" id="filterHead"></div>
+                                    <table class="table table-bordered" id="customerdata" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Menu Name</th>
+                                                <th>Category</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <div id="customertotal">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
                     <div class="p-4 rounded-4 Larger shadow  bg-white card-hover  my-5">
                         <!-- Card Header - Dropdown -->
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -298,9 +407,21 @@
                                                         Category:</label>
                                                     <select class="form-select" id="filterCategory1">
                                                         <option value="">All Categories</option>
+                                                        @foreach ($categories as $category)
+                                                            <option value="{{ $category->name }}">{{ $category->name }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
-                                                
+                                                <div class="col">
+                                                    <label class="form-label" for="filterStaff">Filter by
+                                                        Staff/Customer:</label>
+                                                    <select class="form-select" id="filterStaff1">
+                                                        <option value="">Select</option>
+                                                        <option value="1">Staff</option>
+                                                        <option value="2">Customer</option>
+                                                    </select>
+                                                </div>
 
                                                 <div class="col">
                                                     <label class="form-label" for="filterDateRange1">Filter by Date
@@ -316,11 +437,15 @@
                                                         id="filterStartTime1">
                                                     <input class="form-control" type="time" id="filterEndTime1">
                                                 </div>
-                                                <div class="col">
-                                                    <button class="btn btn-outline-info" type="button"
-                                                        id="applyFilters1">Apply Filters</button>
-                                                </div>
                                             </div>
+                                            <span class="me-3">
+                                                <button class="btn btn-outline-info" type="button"
+                                                    id="applyFilters1">Apply Filters</button>
+                                            </span>
+                                            <span class="">
+                                                <button class="btn btn-outline-info" type="button"
+                                                    id="clearFilters1">Clear Filters</button>
+                                            </span>
 
 
                                         </div>
@@ -420,7 +545,7 @@
                         <div id="invoiceStaff" class="text-center text-danger fs-4 my-2">
 
                         </div>
-                        <div class="aw-ul">----------------------------</div>
+                        <div class="aw-ul text-center">----------------------</div>
 
                         <div class="row r-text mb-2">
                             <div class="col-3">
@@ -436,22 +561,18 @@
                                 Total
                             </div>
                         </div>
-                        <div class="aw-ul">----------------------------</div>
 
                         <div class="orders r-text" id="orders">
 
                         </div>
 
-                        <div class="aw-ul">----------------------------</div>
-                        <div class="aw-ul">----------------------------</div>
 
                         <div class="mt-4">
                             <span>GROSS Total: </span>
                             <span id="total-order"></span>
                             <span>TK</span>
                         </div>
-                        <div class="aw-ul">----------------------------</div>
-                        <div class="aw-ul">----------------------------</div>
+
 
                         <div class="form-row my-2">
                             <div class="form-group col-md-6 col-sm-6" id="reason">
@@ -471,7 +592,7 @@
                             <span>TK</span>
                         </div>
 
-                        <div class="aw-ul text-center">------------------------</div>
+                        <div class="aw-ul text-center">----------------------</div>
 
                         <div class="d-none d-print-block">
                             THANK YOU, COME AGAIN <br> Print By:
@@ -504,7 +625,44 @@
                 items.forEach(order => {
                     let html = '';
 
+                    html += `
+                    <div class="order-item mb-2" data-id="${id}">
+                        <div class="row">
+                                        <div class="col-3">
+                                            <div class="order-info d-inline">
+                                                <span class="order-name">${name}</span>
+                                                <span class="order-price d-none">${dis}</span>
+                                                </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input type="number" class="quantity pnone" style="width:50px"  value="1" min="1">
+                                                    <span class="order-q d-none d-print-block"></span>
+                       
+                                        </div>
+                                        <div class="col-3 ">
+                                            <div class="text-decoration-line-through">
+                                                
+                                                <span class="">${price}</span>
+                                                <span >TK</span>
+                                                </div>
+                                            <span class="">${dis}</span>
+                                            <span >TK</span>
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                            
+                                            <span class="total">${dis}</span>
+                                            <span >TK</span>
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="pnone btn btn-outline-danger remove-item"><i class="fa-solid fa-xmark"></i></button>
+                                        </div>
+                        </div>
+                    </div> 
+                    `;
+
                 });
+                $("#orders").html(q);
             }
             $('.print-btn').click(function() {
                 // alert('working')
@@ -541,10 +699,28 @@
             // Apply filters button click event
             $('#applyFilters').on('click', function() {
                 fetchData(); // Reload data when the Apply Filters button is clicked
+                var stafffilter = staff.val();
+                if (stafffilter == 1) {
+                    // Handle the case when stafffilter is 0
+                    $('#filterHead').text('Staff Report');
+                } else if (stafffilter == 2) {
+                    $('#filterHead').text('Customer Report');
 
-
+                }
             });
 
+            // clear filter
+            $('#clearFilters').click(function() {
+                // Reset filter input values after processing the data
+                filterDateInput.val('');
+                filterCategoryInput.val('');
+                filterStartDateInput.val('');
+                filterEndDateInput.val('');
+                filterStartTimeInput.val('');
+                filterEndTimeInput.val('');
+                staff.val('');
+                $('#filterHead').text('');
+            })
             // Function to make an AJAX request and process the data
             function fetchData() {
                 // Destroy existing DataTable instance (if it exists)
@@ -566,15 +742,17 @@
                     success: function(data) {
                         // console.log(data);
                         processData(data);
+                        staffdata(data);
+                        customerdata(data);
 
                         // Reset filter input values after processing the data
-                        filterDateInput.val('');
-                        filterCategoryInput.val('');
-                        filterStartDateInput.val('');
-                        filterEndDateInput.val('');
-                        filterStartTimeInput.val('');
-                        filterEndTimeInput.val('');
-                        staff.val('');
+                        // filterDateInput.val('');
+                        // filterCategoryInput.val('');
+                        // filterStartDateInput.val('');
+                        // filterEndDateInput.val('');
+                        // filterStartTimeInput.val('');
+                        // filterEndTimeInput.val('');
+                        // staff.val('');
                     },
                     error: function(error) {
                         console.error('Error fetching data:', error);
@@ -602,7 +780,7 @@
                     filterEndDateInput.val() == '' &&
                     filterStartTimeInput.val() == '' &&
                     filterEndTimeInput.val() == '' &&
-                    staff.val() == '' 
+                    staff.val() == ''
                 ) {
                     var selectedDate = getCurrentDate();
                 } else {
@@ -618,13 +796,13 @@
 
 
 
-                // categorySelect.empty();
-                categorySelect.append('<option value="">All Categories</option>');
-                // Add options based on unique categories
-                uniqueCategories.forEach(category => {
+                // // categorySelect.empty();
+                // categorySelect.append('<option value="">All Categories</option>');
+                // // Add options based on unique categories
+                // uniqueCategories.forEach(category => {
 
-                    categorySelect.append('<option value="' + category + '">' + category + '</option>');
-                });
+                //     categorySelect.append('<option value="' + category + '">' + category + '</option>');
+                // });
 
                 // Filter data based on the selected date and additional criteria
                 var filteredData = data.filter(function(order) {
@@ -640,7 +818,7 @@
                         .val()) {
                         return false;
                     }
-                    if (order.off_order.active == staff.val() ) {
+                    if (order.off_order.active == staff.val()) {
                         return false;
                     }
 
@@ -666,15 +844,11 @@
                             return false;
                         }
                     }
-
                     return true;
-
                 });
-
                 // Clear existing rows
                 tbody.empty();
                 tfoot.empty();
-                filterCategoryInput.val('');
                 // Clear existing options
 
                 // Create an object to store aggregated data based on menu id
@@ -688,19 +862,37 @@
                     // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
 
                     if (!aggregatedData[menuId]) {
-                        aggregatedData[menuId] = {
-                            menuName: order.menu.name,
-                            category: order.menu.category.name,
-                            date: order.created_at,
-                            quantity: order.quantity,
-                            total: order.total,
-                            
-                        };
+                        var cDiscount = order.menu.price - Math.round(((order.menu.category.discount * order
+                                .menu.price) / 100) /
+                            5) * 5;
+                        var sDiscount = cDiscount - Math.round(((order.menu.discount * cDiscount) / 100) /
+                            5) * 5;
+
+                        if (order.off_order.active == 2) {
+                            aggregatedData[menuId] = {
+                                menuName: order.menu.name,
+                                category: order.menu.category.name,
+                                date: order.created_at,
+                                quantity: order.quantity,
+                                price: sDiscount,
+                                total: order.total,
+                            };
+                        } else if (order.off_order.active == 1) {
+                            aggregatedData[menuId] = {
+                                menuName: order.menu.name,
+                                category: order.menu.category.name,
+                                date: order.created_at,
+                                quantity: order.quantity,
+                                price: cDiscount,
+                                total: order.total,
+                            };
+                        }
+
                     } else {
                         aggregatedData[menuId].quantity += order.quantity;
                         aggregatedData[menuId].total += order.total;
                     }
-                    
+
                 });
 
                 // ...
@@ -723,6 +915,9 @@
                         },
                         {
                             data: 'quantity'
+                        },
+                        {
+                            data: 'price'
                         },
                         {
                             data: 'total'
@@ -755,7 +950,208 @@
 
 
             }
+            // Function to process and display the Staff  data for current date
+            function staffdata(data) {
+                function getCurrentDate() {
+                    var today = new Date();
+                    var dd = String(today.getDate()).padStart(2, '0');
+                    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                    var yyyy = today.getFullYear();
+
+                    return yyyy + '-' + mm + '-' + dd;
+                }
+                console.log(getCurrentDate());
+
+                var selectedDate = getCurrentDate();
+                var filteredData = data.filter(function(order) {
+                    var orderDate = order.created_at.split('T')[0];
+
+                    // Assuming date format from the API is in 'YYYY-MM-DD'
+                    if (selectedDate && orderDate !== selectedDate) {
+                        return false;
+                    }
+                    if (order.off_order.active == 1) {
+                        return false;
+                    }
+                    return true;
+
+                });
+                // Create an object to store aggregated data based on menu id
+                var aggregatedData = {};
+
+                // Iterate through each order in the filtered data
+                filteredData.forEach(function(order) {
+                    var menuId = order.menu_id;
+                    var reason = order.off_order.reason;
+                    console.log(menuId, reason);
+                    // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+
+                    if (!aggregatedData[menuId]) {
+                        var cDiscount = order.menu.price - Math.round(((order.menu.category.discount * order
+                                .menu.price) / 100) /
+                            5) * 5;
+                        var sDiscount = cDiscount - Math.round(((order.menu.discount * cDiscount) / 100) /
+                            5) * 5;
+
+
+                        aggregatedData[menuId] = {
+                            menuName: order.menu.name,
+                            category: order.menu.category.name,
+                            date: order.created_at,
+                            quantity: order.quantity,
+                            price: sDiscount,
+                            total: order.total,
+                        };
+
+
+                    } else {
+                        aggregatedData[menuId].quantity += order.quantity;
+                        aggregatedData[menuId].total += order.total;
+                    }
+
+                });
+
+                // ...
+                console.log(aggregatedData);
+                console.log(data);
+
+                var filterdataArray = $.map(aggregatedData, function(value) {
+                    return value;
+                });
+
+                console.log('filterdataArray');
+                console.log(filterdataArray);
+                var tableBody = $('#stafforderdetails tbody');
+                $.each(filterdataArray, function(index, data) {
+                    var row = $('<tr>');
+                    row.append($('<td>').text(data.menuName));
+                    row.append($('<td>').text(data.category));
+                    row.append($('<td>').text(data.quantity));
+                    row.append($('<td>').text(data.price));
+                    row.append($('<td>').text(data.total));
+
+                    // Add more cells if there are additional properties in your data
+
+                    tableBody.append(row);
+                });
+
+                var subTotalQuantity = 0;
+                var subTotalTotal = 0;
+
+                for (var menuId in aggregatedData) {
+                    subTotalQuantity += aggregatedData[menuId].quantity;
+                    subTotalTotal += aggregatedData[menuId].total;
+                }
+
+                // Append a new row at the bottom with the sub-total
+                var subTotalRow =
+                    '<div class="sub-total"><span >Total Quantity: </span><span class="me-2">' +
+                    subTotalQuantity + 'Pices </span><span>Total Sale: </span><span>' + subTotalTotal +
+                    'TK </span></div>';
+                $('#stafftotal').append(subTotalRow);
+            }
+            // Function to process and display the Customer data for current date
+            function customerdata(data) {
+                function getCurrentDate() {
+                    var today = new Date();
+                    var dd = String(today.getDate()).padStart(2, '0');
+                    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                    var yyyy = today.getFullYear();
+
+                    return yyyy + '-' + mm + '-' + dd;
+                }
+                console.log(getCurrentDate());
+
+                var selectedDate = getCurrentDate();
+                var filteredData = data.filter(function(order) {
+                    var orderDate = order.created_at.split('T')[0];
+
+                    // Assuming date format from the API is in 'YYYY-MM-DD'
+                    if (selectedDate && orderDate !== selectedDate) {
+                        return false;
+                    }
+                    if (order.off_order.active == 2) {
+                        return false;
+                    }
+                    return true;
+
+                });
+                // Create an object to store aggregated data based on menu id
+                var aggregatedData = {};
+
+                // Iterate through each order in the filtered data
+                filteredData.forEach(function(order) {
+                    var menuId = order.menu_id;
+                    var reason = order.off_order.reason;
+                    console.log(menuId, reason);
+                    // If menu id is not in aggregatedData, add it; otherwise, update quantity and total
+
+                    if (!aggregatedData[menuId]) {
+                        var cDiscount = order.menu.price - Math.round(((order.menu.category.discount * order
+                                .menu.price) / 100) /
+                            5) * 5;
+                        var sDiscount = cDiscount - Math.round(((order.menu.discount * cDiscount) / 100) /
+                            5) * 5;
+
+
+                        aggregatedData[menuId] = {
+                            menuName: order.menu.name,
+                            category: order.menu.category.name,
+                            date: order.created_at,
+                            quantity: order.quantity,
+                            price: cDiscount,
+                            total: order.total,
+                        };
+
+
+                    } else {
+                        aggregatedData[menuId].quantity += order.quantity;
+                        aggregatedData[menuId].total += order.total;
+                    }
+
+                });
+
+                // ...
+                console.log(aggregatedData);
+                console.log(data);
+
+                var filterdataArray = $.map(aggregatedData, function(value) {
+                    return value;
+                });
+
+                console.log('filterdataArray');
+                console.log(filterdataArray);
+                var tableBody = $('#customerdata tbody');
+                $.each(filterdataArray, function(index, data) {
+                    var row = $('<tr>');
+                    row.append($('<td>').text(data.menuName));
+                    row.append($('<td>').text(data.category));
+                    row.append($('<td>').text(data.quantity));
+                    row.append($('<td>').text(data.price));
+                    row.append($('<td>').text(data.total));
+
+                    // Add more cells if there are additional properties in your data
+
+                    tableBody.append(row);
+                });
+
+                var subTotalQuantity = 0;
+                var subTotalTotal = 0;
+
+                for (var menuId in aggregatedData) {
+                    subTotalQuantity += aggregatedData[menuId].quantity;
+                    subTotalTotal += aggregatedData[menuId].total;
+                }
+
+                // Append a new row at the bottom with the sub-total
+                var subTotalRow =
+                    '<div class="sub-total"><span >Total Quantity: </span><span class="me-2">' +
+                    subTotalQuantity + 'Pices </span><span>Total Sale: </span><span>' + subTotalTotal +
+                    'TK </span></div>';
+                $('#customertotal').append(subTotalRow);
+            }
         });
+
         $(document).ready(function() {
             var filterDateInput1 = $('#filterDate1');
             var filterCategoryInput1 = $('#filterCategory1');
@@ -763,7 +1159,7 @@
             var filterEndDateInput1 = $('#filterEndDate1');
             var filterStartTimeInput1 = $('#filterStartTime1');
             var filterEndTimeInput1 = $('#filterEndTime1');
-
+            var staff1 = $('#filterStaff1');
             var myChart; // Declare myChart outside the fetchData function
 
             // Initial load
@@ -775,7 +1171,18 @@
 
 
             });
+            // clear filter
+            $('#clearFilters1').click(function() {
+                // Reset filter input values after processing the data
+                filterDateInput1.val('');
+                filterCategoryInput1.val('');
+                filterStartDateInput1.val('');
+                filterEndDateInput1.val('');
+                filterStartTimeInput1.val('');
+                filterEndTimeInput1.val('');
+                staff1.val('');
 
+            })
             // Function to make an AJAX request and process the data
             function fetchData1() {
 
@@ -823,10 +1230,10 @@
 
 
 
-                // Add options based on unique categories
-                uniqueCategories1.forEach(category => {
-                    categorySelect1.append('<option value="' + category + '">' + category + '</option>');
-                });
+                // // Add options based on unique categories
+                // uniqueCategories1.forEach(category => {
+                //     categorySelect1.append('<option value="' + category + '">' + category + '</option>');
+                // });
 
                 // Filter data based on the selected date and additional criteria
                 var filteredData1 = data.filter(function(order) {
@@ -838,18 +1245,22 @@
                     }
 
                     // Add more conditions for other filters (category, date range, time range)
-                    if (filterCategoryInput1.val() && order.menu.category.name !== filterCategoryInput1
+                    if (filterCategoryInput1.val() && order.menu.category.name !==
+                        filterCategoryInput1
                         .val()) {
                         return false;
                     }
-
+                    if (order.off_order.active == staff1.val()) {
+                        return false;
+                    }
                     // Date range filter
                     if (filterStartDateInput1.val() && filterEndDateInput1.val()) {
                         var orderDateTime1 = new Date(order.created_at);
                         var filterStartDate1 = new Date(filterStartDateInput1.val());
                         var filterEndDate1 = new Date(filterEndDateInput1.val());
 
-                        if (orderDateTime1 < filterStartDate1 || orderDateTime1 > filterEndDate1) {
+                        if (orderDateTime1 < filterStartDate1 || orderDateTime1 >
+                            filterEndDate1) {
                             return false;
                         }
                     }
